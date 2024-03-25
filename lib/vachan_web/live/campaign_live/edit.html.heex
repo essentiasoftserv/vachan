@@ -1,0 +1,46 @@
+<div class="w-5/6 m-auto">
+  <.header>
+    edit / new view
+  </.header>
+
+  <div class="p-5 ">
+    <.simple_form for={@form} phx-change="validate" phx-submit="submit">
+      <div class="grid grid-cols-1 gap-x-8 gap-y-10 border-b border-gray-900/10 pb-12 md:grid-cols-3">
+        <.input field={@form[:name]} type="text" label="Campaign Name" placeholder="CTOs 1">
+        </.input>
+        <.input
+          field={@form[:sender_name]}
+          type="text"
+          label="Sender's Name"
+          placeholder="Mr Awesome Mishra"
+        >
+        </.input>
+        <.input
+          field={@form[:sender_email]}
+          type="email"
+          label="Sender's Email"
+          placeholder="awesome.mishra@example.com"
+        >
+        </.input>
+        <.input
+          field={@form[:subject]}
+          type="text"
+          label="Subject Template"
+          placeholder="Are you facing touble with X."
+        >
+        </.input>
+        <.input
+          field={@form[:text_body]}
+          type="textarea"
+          label="Body Template"
+          placeholder="Hello {{salutation}} {{first_name}} ... "
+        >
+        </.input>
+      </div>
+
+      <:actions>
+        <.button phx-disable-with="Saving...">Save list</.button>
+      </:actions>
+    </.simple_form>
+  </div>
+</div>

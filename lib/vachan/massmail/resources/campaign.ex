@@ -5,6 +5,8 @@ defmodule Vachan.Massmail.Campaign do
     description "Campaigns are used to send mass emails to a list of recipients."
   end
 
+  @possible_status [:draft, :scheduled, :sending, :sent, :paused, :cancelled, :failed]
+
   postgres do
     table "campaigns"
     repo Vachan.Repo
@@ -34,16 +36,35 @@ defmodule Vachan.Massmail.Campaign do
     integer_primary_key :id
 
     attribute :name, :string, allow_nil?: false
+
+    attribute :sender_name, :string, allow_nil?: false
+    attribute :sender_email, :string, allow_nil?: false
+    attribute :reply_to_email, :string, allow_nil?: false
+    attribute :reply_to_name, :string, allow_nil?: false
+
+    attribute :subject, :string, allow_nil?: false
+    attribute :text_body, :string, allow_nil?: false
+
+    attribute :status, :atom do
+      allow_nil? false
+      default :draft
+      constraints one_of: @possible_status
+    end
+
+    attribute :active, :boolean, allow_nil?: false, default: true
+
     create_timestamp :created_at
     update_timestamp :updated_at
-
-    # add relationship to message template
-    #
   end
 
   relationships do
     has_many :messages, Vachan.Massmail.Message
-    has_many :templates, Vachan.Massmail.Template
     belongs_to :list, Vachan.Crm.List, api: Vachan.Crm, attribute_type: :integer
+  end
+
+  validations do
+    validate match(:sender_email, ~r/^[^\s]+@[^\s]+$/),
+      on: [:create, :update],
+      message: "Invalid email"
   end
 end

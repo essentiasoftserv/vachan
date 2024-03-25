@@ -30,11 +30,18 @@ defmodule Vachan.Massmail.Message do
     end
   end
 
+  @possible_status [:sent, :failed, :queued, :cancelled]
+
   attributes do
     uuid_primary_key :id
     attribute :subject, :string, allow_nil?: false
     attribute :body, :string, allow_nil?: false
-    attribute :status, :string, allow_nil?: false
+
+    attribute :status, :atom do
+      allow_nil? false
+      constraints one_of: @possible_status
+    end
+
     create_timestamp :created_at
     update_timestamp :updated_at
   end
