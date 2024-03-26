@@ -1,8 +1,25 @@
 <.header>
-Campaigns
-<:actions>
-  <.link patch={~p"/campaigns/new"}>
-    <.button>New Campaign</.button>
-  </.link>
-</:actions>
+  Campaigns
+  <:actions>
+    <.link patch={~p"/campaigns/new"}>
+      <.button>New Campaign</.button>
+    </.link>
+  </:actions>
 </.header>
+
+<.table
+  id="campaigns"
+  rows={@streams.campaigns}
+  row_click={fn {_id, campaign} -> JS.navigate(~p"/campaigns/#{campaign}") end}
+>
+  <:col :let={{_id, campaign}} label="Campaign Name"><%= campaign.name %></:col>
+  <:col :let={{_id, campaign}} label="Subject"><%= campaign.subject %></:col>
+  <:col :let={{_id, campaign}} label="Status"><%= campaign.status %></:col>
+
+  <:action :let={{_id, campaign}}>
+    <div class="sr-only">
+      <.link navigate={~p"/campaigns/#{campaign}"}>Show</.link>
+    </div>
+    <.link patch={~p"/campaigns/#{campaign}/edit"}>Edit</.link>
+  </:action>
+</.table>

@@ -39,8 +39,8 @@ defmodule Vachan.Massmail.Campaign do
 
     attribute :sender_name, :string, allow_nil?: false
     attribute :sender_email, :string, allow_nil?: false
-    attribute :reply_to_email, :string, allow_nil?: false
-    attribute :reply_to_name, :string, allow_nil?: false
+    attribute :reply_to_email, :string, allow_nil?: true
+    attribute :reply_to_name, :string, allow_nil?: true
 
     attribute :subject, :string, allow_nil?: false
     attribute :text_body, :string, allow_nil?: false
