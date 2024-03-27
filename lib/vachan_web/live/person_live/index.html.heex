@@ -1,6 +1,8 @@
 <.header>
   Listing People
   <:actions>
+    <.search_bar>
+    </.search_bar>
     <.link patch={~p"/people/new"}>
       <.button>New Person</.button>
     </.link>
@@ -59,3 +61,5 @@
   on_cancel={JS.patch(~p"/people")}
 >
 </.modal>
+<.page_navigation_next_prev>
+</.page_navigation_next_prev>

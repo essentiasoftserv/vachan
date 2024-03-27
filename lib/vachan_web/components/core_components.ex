@@ -202,7 +202,7 @@ defmodule VachanWeb.CoreComponents do
   def simple_form(assigns) do
     ~H"""
     <.form :let={f} for={@for} as={@as} {@rest}>
-      <div class="mt-10 space-y-8 bg-white">
+      <div class="mt-10 space-y-8 bg-white p-4">
         <%= render_slot(@inner_block, f) %>
         <div :for={action <- @actions} class="mt-2 flex items-center justify-between gap-6">
           <%= render_slot(action, f) %>
@@ -428,7 +428,10 @@ defmodule VachanWeb.CoreComponents do
 
   def header(assigns) do
     ~H"""
-    <header class={[@actions != [] && "flex items-center justify-between gap-6", @class]}>
+    <header class={[
+      @actions != [] && "flex items-center justify-between gap-6 bg-white -mt-1 py-3 px-12",
+      @class
+    ]}>
       <div>
         <h1 class="text-lg font-semibold leading-8 text-zinc-800">
           <%= render_slot(@inner_block) %>
@@ -437,7 +440,7 @@ defmodule VachanWeb.CoreComponents do
           <%= render_slot(@subtitle) %>
         </p>
       </div>
-      <div class="flex-none"><%= render_slot(@actions) %></div>
+      <div class="flex gap-12"><%= render_slot(@actions) %></div>
     </header>
     """
   end
@@ -474,12 +477,14 @@ defmodule VachanWeb.CoreComponents do
       end
 
     ~H"""
-    <div class="overflow-y-auto px-4 sm:overflow-visible sm:px-0">
-      <table class="w-[40rem] mt-11 sm:w-full">
+    <div class="overflow-y-auto px-4 sm:overflow-visible sm:px-0 rounded-none p-0 bg-white border-t-0 border-collapse table-fixed shadow-inner border-b border-gray-300">
+      <table class="w-[40rem] mt-5 sm:w-full">
         <thead class="text-sm text-left leading-6 text-zinc-500">
           <tr>
-            <th :for={col <- @col} class="p-0 pb-4 pr-6 font-normal"><%= col[:label] %></th>
-            <th :if={@action != []} class="relative p-0 pb-4">
+            <th :for={col <- @col} class="p-0 pb-4 pr-6 py-3 px-12 uppercase text-xs font-semibold">
+              <%= col[:label] %>
+            </th>
+            <th :if={@action != []} class="relative p-0 pb-4 uppercase text-xs font-semibold">
               <span class="sr-only"><%= gettext("Actions") %></span>
             </th>
           </tr>
@@ -489,11 +494,11 @@ defmodule VachanWeb.CoreComponents do
           phx-update={match?(%Phoenix.LiveView.LiveStream{}, @rows) && "stream"}
           class="relative divide-y divide-zinc-100 border-t border-zinc-200 text-sm leading-6 text-zinc-700"
         >
-          <tr :for={row <- @rows} id={@row_id && @row_id.(row)} class="group hover:bg-zinc-50">
+          <tr :for={row <- @rows} id={@row_id && @row_id.(row)} class="group hover:bg-zinc-50 ">
             <td
               :for={{col, i} <- Enum.with_index(@col)}
               phx-click={@row_click && @row_click.(row)}
-              class={["relative p-0", @row_click && "hover:cursor-pointer"]}
+              class={["relative px-14", @row_click && "hover:cursor-pointer"]}
             >
               <div class="block py-4 pr-6">
                 <span class="absolute -inset-y-px right-0 -left-4 group-hover:bg-zinc-50 sm:rounded-l-xl" />
@@ -502,7 +507,7 @@ defmodule VachanWeb.CoreComponents do
                 </span>
               </div>
             </td>
-            <td :if={@action != []} class="relative w-14 p-0">
+            <td :if={@action != []} class="relative w-14 px-14">
               <div class="relative whitespace-nowrap py-4 text-right text-sm font-medium">
                 <span class="absolute -inset-y-px -right-4 left-0 group-hover:bg-zinc-50 sm:rounded-r-xl" />
                 <span
@@ -536,10 +541,10 @@ defmodule VachanWeb.CoreComponents do
 
   def list(assigns) do
     ~H"""
-    <div class="mt-14">
-      <dl class="-my-4 divide-y divide-zinc-100">
-        <div :for={item <- @item} class="flex gap-4 py-4 text-sm leading-6 sm:gap-8">
-          <dt class="w-1/4 flex-none text-zinc-500"><%= item.title %></dt>
+    <div class="mt-14 flex justify-center">
+      <dl class="-my-4 divide-y divide-zinc-100 block p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+        <div :for={item <- @item} class="flex gap-10 py-4 text-sm leading-6 sm:gap-80">
+          <dt class="flex-none text-zinc-500"><%= item.title %></dt>
           <dd class="text-zinc-700"><%= render_slot(item) %></dd>
         </div>
       </dl>
@@ -568,6 +573,72 @@ defmodule VachanWeb.CoreComponents do
         <%= render_slot(@inner_block) %>
       </.link>
     </div>
+    """
+  end
+
+  def search_bar(assigns) do
+    ~H"""
+    <div class="relative">
+      <input
+        type="text"
+        placeholder="Search"
+        class="border border-gray-300 focus:outline-none focus:border-blue-500 rounded-md py-2 pl-14 pr-6 block w-full appearance-none leading-normal"
+      />
+      <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+        <svg
+          class="w-4 h-4 text-gray-500 dark:text-gray-400"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 20 20"
+        >
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+          />
+        </svg>
+      </div>
+    </div>
+    """
+  end
+
+  def page_navigation_next_prev(assigns) do
+    ~H"""
+    <nav aria-label="Page navigation example" class="float-right m-6">
+      <ul class="inline-flex -space-x-px text-sm">
+        <li>
+          <a
+            href="#"
+            class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+          >
+            Previous
+          </a>
+        </li>
+
+        <%= for i <- 1..5 do %>
+          <li>
+            <a
+              href="#"
+              class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+            >
+              <%= i %>
+            </a>
+          </li>
+        <% end %>
+
+        <li>
+          <a
+            href="#"
+            class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+          >
+            Next
+          </a>
+        </li>
+      </ul>
+    </nav>
     """
   end
 

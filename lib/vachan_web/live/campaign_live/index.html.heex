@@ -1,10 +1,14 @@
 <.header>
   Campaigns
   <:actions>
+    <.search_bar>
+    </.search_bar>
     <.link patch={~p"/campaigns/new"}>
       <.button>New Campaign</.button>
     </.link>
+    
   </:actions>
+  
 </.header>
 
 <.table
@@ -23,3 +27,5 @@
     <.link patch={~p"/campaigns/#{campaign}/edit"}>Edit</.link>
   </:action>
 </.table>
+<.page_navigation_next_prev>
+</.page_navigation_next_prev>

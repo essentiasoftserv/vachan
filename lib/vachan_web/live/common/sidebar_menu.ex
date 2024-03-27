@@ -41,11 +41,11 @@ defmodule VachanWeb.SidebarMenuLiveComponent do
   def render(assigns) do
     ~H"""
     <aside
-      class="fixed top-0 left-0 z-40 w-64 h-screen pt-14 transition-transform -translate-x-full bg-white border-r border-gray-200 md:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
+      class="bg-customBackground fixed top-0 left-0 z-40 w-64 h-screen pt-14 transition-transform -translate-x-full border-r border-gray-200 md:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
       aria-label="Sidenav"
       id="drawer-navigation"
     >
-      <div class="overflow-y-auto py-5 px-3 h-full bg-white dark:bg-gray-800">
+      <div class="overflow-y-auto py-5 px-3 h-full bg-customBackground dark:bg-gray-800">
         <ul class="space-y-2">
           <li>
             <.menu_item label="People" path={~p"/people"}>
@@ -81,9 +81,9 @@ defmodule VachanWeb.SidebarMenuLiveComponent do
               </svg>
             </.menu_item>
           </li>
-      </ul>
+        </ul>
       </div>
-      <div class="hidden absolute bottom-0 left-0 justify-center p-4 space-x-4 w-full lg:flex bg-white dark:bg-gray-800 z-20">
+      <div class="hidden absolute bottom-0 left-0 justify-center p-4 space-x-4 w-full lg:flex bg-customBackground dark:bg-gray-800 z-20">
         <a
           href="#"
           class="inline-flex justify-center p-2 text-gray-500 rounded cursor-pointer dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
