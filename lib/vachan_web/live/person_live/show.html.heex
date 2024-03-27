@@ -14,7 +14,7 @@
   <:item title="Email"><%= @person.email %></:item>
 </.list>
 
-<.back navigate={~p"/people"}>Back to people</.back>
+<.back navigate={~p"/people"}><.button>Back to people</.button></.back>
 
 <.modal
   :if={@live_action == :edit}

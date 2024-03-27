@@ -20,6 +20,8 @@ defmodule VachanWeb.CampaignLive.Show do
         <:item title="Campaign Name"><%= @campaign.name %></:item>
         <:item title="Email Subject"><%= @campaign.subject %></:item>
       </.list>
+      <.back navigate={~p"/campaigns"}><.button>Back to campaigns</.button></.back>
+
     </div>
     """
   end

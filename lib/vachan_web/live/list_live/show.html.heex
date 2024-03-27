@@ -12,7 +12,8 @@
   <:item title="Name"><%= @list.name %></:item>
 </.list>
 
-<.back navigate={~p"/lists"}>Back to lists</.back>
+<.back navigate={~p"/lists"}><.button>Back to lists</.button></.back>
+
 
 <.modal :if={@live_action == :edit} id="list-modal" show on_cancel={JS.patch(~p"/lists/#{@list}")}>
   <.live_component
