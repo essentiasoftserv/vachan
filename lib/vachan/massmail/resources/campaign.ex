@@ -15,15 +15,52 @@ defmodule Vachan.Massmail.Campaign do
   code_interface do
     define_for Vachan.Massmail
 
-    define :create, action: :create
-    define :update, action: :update
     define :destroy, action: :destroy
     define :read_all, action: :read
     define :get_by_id, args: [:id], action: :by_id
   end
 
   actions do
-    defaults [:create, :read, :update, :destroy]
+    defaults [:read, :destroy]
+
+    create :create do
+      primary? true
+
+      accept [
+        :name,
+        :sender_name,
+        :sender_email,
+        :reply_to_email,
+        :reply_to_name,
+        :subject,
+        :text_body,
+        :status
+      ]
+
+      argument :list_id, :integer do
+        allow_nil? false
+      end
+
+      change manage_relationship(:list_id, :list, type: :append)
+    end
+
+    update :update do
+      primary? true
+
+      accept [
+        :name,
+        :sender_name,
+        :sender_email,
+        :subject,
+        :text_body
+      ]
+
+      argument :list_id, :integer do
+        allow_nil? false
+      end
+
+      change manage_relationship(:list_id, :list, type: :append)
+    end
 
     read :by_id do
       argument :id, :integer, allow_nil?: false

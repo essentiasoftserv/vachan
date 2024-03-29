@@ -1,4 +1,5 @@
 defmodule VachanWeb.CampaignLive.Show do
+  alias Vachan.Massmail
   use VachanWeb, :live_view
 
   alias Vachan.Massmail.Campaign
@@ -11,7 +12,7 @@ defmodule VachanWeb.CampaignLive.Show do
         Person <%= @campaign.name %>
         <:subtitle>This is a campaign record from your database.</:subtitle>
         <:actions>
-          <.link patch={~p"/campaigns/#{@campaign}/show/edit"} phx-click={JS.push_focus()}>
+          <.link patch={~p"/campaigns/#{@campaign}/edit"} phx-click={JS.push_focus()}>
             <.button>Edit campaign</.button>
           </.link>
         </:actions>
@@ -19,9 +20,11 @@ defmodule VachanWeb.CampaignLive.Show do
       <.list>
         <:item title="Campaign Name"><%= @campaign.name %></:item>
         <:item title="Email Subject"><%= @campaign.subject %></:item>
+        <:item title="list"><%= @campaign.list %></:item>
       </.list>
-      <.back navigate={~p"/campaigns"}><.button>Back to campaigns</.button></.back>
-
+      <.back navigate={~p"/campaigns"}>
+        <.button>Back to campaigns</.button>
+      </.back>
     </div>
     """
   end
@@ -29,6 +32,8 @@ defmodule VachanWeb.CampaignLive.Show do
   @impl true
   def mount(%{"id" => id}, _session, socket) do
     campaign = Campaign.get_by_id!(id)
+    IO.inspect(Massmail.load(campaign, :list))
+
     # Message.read_all_for_campaign!(campaign)
     messages = []
 
