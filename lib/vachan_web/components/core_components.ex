@@ -429,7 +429,7 @@ defmodule VachanWeb.CoreComponents do
   def header(assigns) do
     ~H"""
     <header class={[
-      @actions != [] && "flex items-center justify-between gap-6 bg-white -mt-1 py-3 px-12",
+      @actions != [] && "flex items-center justify-between gap-6 bg-white -mt-1 py-3 px-12 shadow",
       @class
     ]}>
       <div>
@@ -477,7 +477,7 @@ defmodule VachanWeb.CoreComponents do
       end
 
     ~H"""
-    <div class="overflow-y-auto px-4 sm:overflow-visible sm:px-0 rounded-none p-0 bg-white border-t-0 border-collapse table-fixed shadow-inner border-b border-gray-300">
+    <%!-- <div class="overflow-y-auto px-4 sm:overflow-visible sm:px-0 rounded-none p-0 bg-white border-t-0 border-collapse table-fixed shadow-inner shadow border-b border-gray-300">
       <table class="w-[40rem] mt-5 sm:w-full">
         <thead class="text-sm text-left leading-6 text-zinc-500">
           <tr>
@@ -521,6 +521,57 @@ defmodule VachanWeb.CoreComponents do
           </tr>
         </tbody>
       </table>
+    </div> --%>
+
+    <div class="container mx-auto  pt-5 shadow">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead>
+          <tr>
+            <th
+              :for={col <- @col}
+              class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+            >
+              <%= col[:label] %>
+            </th>
+            <th
+              :if={@action != []}
+              class="relative px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+            >
+              <span class="sr-only"><%= gettext("Actions") %></span>
+            </th>
+          </tr>
+        </thead>
+        <tbody
+          id={@id}
+          phx-update={match?(%Phoenix.LiveView.LiveStream{}, @rows) && "stream"}
+          class="bg-white divide-y divide-gray-200"
+        >
+          <tr :for={row <- @rows} id={@row_id && @row_id.(row)} class="group hover:bg-zinc-50">
+            <td
+              :for={{col, i} <- Enum.with_index(@col)}
+              phx-click={@row_click && @row_click.(row)}
+              class={["relative px-8 py-2", @row_click && "hover:cursor-pointer"]}
+            >
+              <span class={["relative text-sm", i == 0 && "font text-sm text-zinc-900"]}>
+                <%= render_slot(col, @row_item.(row)) %>
+              </span>
+            </td>
+
+            <td
+              :if={@action != []}
+              phx-click={@row_click && @row_click.(row)}
+              class={["relative px-8 py-2", @row_click && "hover:cursor-pointer"]}
+            >
+              <span
+                :for={action <- @action}
+                class="relative ml-4 font-bold text-sm text-zinc-900 hover:text-zinc-700"
+              >
+                <%= render_slot(action, @row_item.(row)) %>
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
     """
   end
@@ -541,14 +592,74 @@ defmodule VachanWeb.CoreComponents do
 
   def list(assigns) do
     ~H"""
-    <div class="mt-14 flex justify-center">
+    <div
+      class="flex flex-wrap justify-center bg-white mt-12 shadow	"
+      style="    width: 50%;
+    margin: auto; transform: translateY(50px);"
+    >
+      <dl style="width:80%;" class="p-2">
+        <%!-- <%= for i <- 1..5 do %> --%>
+        <div :for={item <- @item} class="flex items-center mx-4">
+          <dt class="font-semibold mb-2 mr-0" style="width: 100%;">
+            <%= item.title %>
+          </dt>
+          <dd class="text-gray-700 mb-4" style="width: 100%;">
+            <%= render_slot(item) %>
+          </dd>
+        </div>
+        <%!-- <% end %> --%>
+      </dl>
+    </div>
+
+    <%!-- <div style="background: whte;
+      margin: auto;
+      width: 50%; transform: translateY(50px);"> --%>
+    <%!-- <dl class="border border-gray-200 rounded-lg p-4" style="background: white;
+      margin: auto;
+      width: 50%; transform: translateY(50px);">
+          <div class="flex" :for={item <- @item}>
+            <dt class="text-lg font-semibold text-gray-800"><%= item.title %></dt>
+            <dd class="ml-2 text-gray-600"><%= render_slot(item) %></dd>
+          </div>
+        </dl> --%>
+    <%!-- </div> --%>
+    <%!-- <div class="mt-14 flex justify-center">
       <dl class="-my-4 divide-y divide-zinc-100 block p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
         <div :for={item <- @item} class="flex gap-10 py-4 text-sm leading-6 sm:gap-80">
           <dt class="flex-none text-zinc-500"><%= item.title %></dt>
           <dd class="text-zinc-700"><%= render_slot(item) %></dd>
         </div>
       </dl>
-    </div>
+    </div> --%>
+    <%!-- <div style="background: whte;
+      margin: auto;
+      width: 50%; transform: translateY(50px);">
+        <dl style="font-size: 0;
+            text-align: center;">
+            <div  :for={item <- @item}>
+          <dt style="        width: 48%;
+              width: calc(50% - 10px);
+              margin: 8px 0;
+              display: inline-block;
+              font-size: 16px;
+              vertical-align: middle; text-align: right;
+              padding-right: 10px;">
+              <%= item.title %>
+          </dt>
+          <dd style="        width: 48%;
+              width: calc(50% - 10px);
+              margin: 8px 0;
+              display: inline-block;
+              font-size: 16px;
+              vertical-align: middle;font-size: 18px;
+              font-weight: 300;
+              text-align: left;
+              padding-left: 10px">
+              <%= render_slot(item) %>
+          </dd>
+          </div>
+        </dl>
+      </div> --%>
     """
   end
 
