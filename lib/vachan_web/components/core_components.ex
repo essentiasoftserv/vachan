@@ -543,11 +543,10 @@ defmodule VachanWeb.CoreComponents do
 
   def list(assigns) do
     ~H"""
-    <div class="justify-center bg-white mt-10 shadow space-y-4 w-2/4 translate-x-28">
-      <div class="pr-6 pt-2 float-right"><%= render_slot(@actions) %></div>
-      <dl class="pt-12 pb-3 w-4/5">
+    <div class="justify-center bg-white mt-10 shadow space-y-4 w-2/4 translate-x-12">
+      <dl class="pt-2 pb-2 w-4/5">
         <div :for={item <- @item} class="flex items-center mx-4">
-          <dt class="font-semibold mb-2 mr-0 w-full">
+          <dt class="font-semibold mb-2 mr-0 w-2/5">
             <%= item.title %>
           </dt>
           <dd class="text-gray-700 mb-4 w-full">
