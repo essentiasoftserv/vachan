@@ -1,4 +1,4 @@
-<.header>
+<%!-- <.header>
   Person <%= @person.id %>
   <:subtitle>This is a person record from your database.</:subtitle>
   <:actions>
@@ -6,15 +6,22 @@
       <.button>Edit person</.button>
     </.link>
   </:actions>
-</.header>
+</.header> --%>
 
 <.list>
   <:item title="First Name"><%= @person.first_name %></:item>
   <:item title="Last Name"><%= @person.last_name %></:item>
   <:item title="Email"><%= @person.email %></:item>
+  <:actions>
+    <.link patch={~p"/people/#{@person}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit person</.button>
+    </.link>
+  </:actions>
 </.list>
 
-<.back navigate={~p"/people"}><.button>Back to people</.button></.back>
+<.back navigate={~p"/people"}>
+  <.button>Back to people</.button>
+</.back>
 
 <.modal
   :if={@live_action == :edit}

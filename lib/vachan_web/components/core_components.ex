@@ -590,76 +590,23 @@ defmodule VachanWeb.CoreComponents do
     attr :title, :string, required: true
   end
 
+  slot :actions
+
   def list(assigns) do
     ~H"""
-    <div
-      class="flex flex-wrap justify-center bg-white mt-12 shadow	"
-      style="    width: 50%;
-    margin: auto; transform: translateY(50px);"
-    >
-      <dl style="width:80%;" class="p-2">
-        <%!-- <%= for i <- 1..5 do %> --%>
+    <div class="justify-center bg-white mt-10 shadow space-y-4 w-2/4 translate-x-28">
+      <div class="pr-6 pt-2 float-right"><%= render_slot(@actions) %></div>
+      <dl class="pt-12 pb-3 w-4/5">
         <div :for={item <- @item} class="flex items-center mx-4">
-          <dt class="font-semibold mb-2 mr-0" style="width: 100%;">
+          <dt class="font-semibold mb-2 mr-0 w-full">
             <%= item.title %>
           </dt>
-          <dd class="text-gray-700 mb-4" style="width: 100%;">
+          <dd class="text-gray-700 mb-4 w-full">
             <%= render_slot(item) %>
           </dd>
         </div>
-        <%!-- <% end %> --%>
       </dl>
     </div>
-
-    <%!-- <div style="background: whte;
-      margin: auto;
-      width: 50%; transform: translateY(50px);"> --%>
-    <%!-- <dl class="border border-gray-200 rounded-lg p-4" style="background: white;
-      margin: auto;
-      width: 50%; transform: translateY(50px);">
-          <div class="flex" :for={item <- @item}>
-            <dt class="text-lg font-semibold text-gray-800"><%= item.title %></dt>
-            <dd class="ml-2 text-gray-600"><%= render_slot(item) %></dd>
-          </div>
-        </dl> --%>
-    <%!-- </div> --%>
-    <%!-- <div class="mt-14 flex justify-center">
-      <dl class="-my-4 divide-y divide-zinc-100 block p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-        <div :for={item <- @item} class="flex gap-10 py-4 text-sm leading-6 sm:gap-80">
-          <dt class="flex-none text-zinc-500"><%= item.title %></dt>
-          <dd class="text-zinc-700"><%= render_slot(item) %></dd>
-        </div>
-      </dl>
-    </div> --%>
-    <%!-- <div style="background: whte;
-      margin: auto;
-      width: 50%; transform: translateY(50px);">
-        <dl style="font-size: 0;
-            text-align: center;">
-            <div  :for={item <- @item}>
-          <dt style="        width: 48%;
-              width: calc(50% - 10px);
-              margin: 8px 0;
-              display: inline-block;
-              font-size: 16px;
-              vertical-align: middle; text-align: right;
-              padding-right: 10px;">
-              <%= item.title %>
-          </dt>
-          <dd style="        width: 48%;
-              width: calc(50% - 10px);
-              margin: 8px 0;
-              display: inline-block;
-              font-size: 16px;
-              vertical-align: middle;font-size: 18px;
-              font-weight: 300;
-              text-align: left;
-              padding-left: 10px">
-              <%= render_slot(item) %>
-          </dd>
-          </div>
-        </dl>
-      </div> --%>
     """
   end
 

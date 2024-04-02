@@ -1,19 +1,15 @@
-<.header>
-  List <%= @list.id %>
-  <:subtitle>This is a list record from your database.</:subtitle>
+<.list>
   <:actions>
     <.link patch={~p"/lists/#{@list}/show/edit"} phx-click={JS.push_focus()}>
       <.button>Edit list</.button>
     </.link>
   </:actions>
-</.header>
-
-<.list>
   <:item title="Name"><%= @list.name %></:item>
 </.list>
 
-<.back navigate={~p"/lists"}><.button>Back to lists</.button></.back>
-
+<.back navigate={~p"/lists"}>
+  <.button>Back to lists</.button>
+</.back>
 
 <.modal :if={@live_action == :edit} id="list-modal" show on_cancel={JS.patch(~p"/lists/#{@list}")}>
   <.live_component
