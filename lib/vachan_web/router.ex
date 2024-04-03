@@ -75,7 +75,13 @@ defmodule VachanWeb.Router do
     scope "/dev" do
       pipe_through :browser
 
-      live_dashboard "/dashboard", metrics: VachanWeb.Telemetry
+      live_dashboard "/dashboard",
+        metrics: VachanWeb.Telemetry,
+        additional_pages: [
+          oban: Oban.LiveDashboard
+        ]
+
+      # live_dashboard "/dashboard", metrics: VachanWeb.Telemetry
       forward "/mailbox", Plug.Swoosh.MailboxPreview
     end
   end

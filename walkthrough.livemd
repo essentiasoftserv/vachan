@@ -169,3 +169,91 @@ Enum.map(Vachan.Crm.load!(p1, :lists).lists, fn x -> x.id end)
 ```elixir
 Enum.map(Vachan.Crm.load!(p1, :lists).lists, fn x -> x.name end)
 ```
+
+```elixir
+Oban.Job.new(%{campaign_id: 1},
+  queue: :enqueue_emails,
+  worker: Vachan.Massmail.Workers.EnqueueEmails
+)
+|> Oban.insert()
+```
+
+```elixir
+c =
+  Vachan.Massmail.Campaign.get_by_id!(1)
+  |> Vachan.Massmail.load!(:list)
+
+r = Vachan.Crm.load!(c.list, :people)
+```
+
+```elixir
+r = Vachan.Crm.load(c.list, :people)
+```
+
+```elixir
+j = %Oban.Job{
+  id: 62,
+  state: "executing",
+  queue: "hydrate_emails",
+  worker: "Vachan.Massmail.Workers.HydrateEmails",
+  args: %{"campaign_id" => 1, "recipient_id" => "feb084af-fd20-4fdb-950a-d960186405a4"},
+  meta: %{},
+  tags: [],
+  errors: [],
+  attempt: 1,
+  attempted_by: ["studio", "7d1755df-1e4a-4ae0-b9ca-575df6bda29b"],
+  max_attempts: 20,
+  priority: 0,
+  attempted_at: ~U[2024-04-02 12:05:48.385075Z],
+  cancelled_at: nil,
+  completed_at: nil,
+  discarded_at: nil,
+  inserted_at: ~U[2024-04-02 12:05:48.376859Z],
+  scheduled_at: ~U[2024-04-02 12:05:48.376859Z],
+  conf: %Oban.Config{
+    dispatch_cooldown: 5,
+    engine: Oban.Engines.Basic,
+    get_dynamic_repo: nil,
+    insert_trigger: true,
+    log: false,
+    name: Oban,
+    node: "studio",
+    notifier: {Oban.Notifiers.Postgres, []},
+    peer: {Oban.Peers.Postgres, []},
+    plugins: [],
+    prefix: "public",
+    queues: [
+      default: [limit: 10],
+      enqueue_emails: [limit: 2],
+      hydrate_emails: [limit: 2],
+      send_emails: [limit: 2]
+    ],
+    repo: Vachan.Repo,
+    shutdown_grace_period: 15000,
+    stage_interval: 1000,
+    testing: :disabled
+  },
+  conflict?: false,
+  replace: nil,
+  unique: nil,
+  unsaved_error: nil
+}
+```
+
+```elixir
+%Oban.Job{args: %{"campaign_id" => campaign_id, "recepient_id" => recepient_id}} = j
+```
+
+```elixir
+%Oban.Job{args: %{"campaign_id" => campaign_id}} = j
+```
+
+```elixir
+args = %{"campaign_id" => 1, "recipient_id" => "feb084af-fd20-4fdb-950a-d960186405a4"}
+%{"campaign_id" => campaign_id, "recepient_id" => recepient_id} = args
+```
+
+```elixir
+args = %{"campaign_id" => 1, "recipient_id" => "feb084af-fd20-4fdb-950a-d9601864054"}
+%{"campaign_id" => campaign_id, "recipient_id" => recipient_id} = args
+```

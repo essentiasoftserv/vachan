@@ -20,7 +20,7 @@ config :ash, :compatible_foreign_key_types, [
 
 config :vachan, Oban,
   repo: Vachan.Repo,
-  queues: [default: 10]
+  queues: [default: 10, enqueue_emails: 2, hydrate_emails: 2, send_emails: 2]
 
 config :vachan,
   ecto_repos: [Vachan.Repo],

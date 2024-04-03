@@ -1,29 +1,68 @@
 defmodule Vachan.Massmail.Workers.EnqueueEmails do
   use Oban.Worker,
-    queue: :enqueue_emails,
-    max_attempts: 3,
-    max_age: 1_800,
-    max_errors: 3
+    queue: :enqueue_emails
 
   alias Vachan.Massmail
   alias Vachan.Crm
 
   @impl true
-  def perform(%Oban.Job{args: args}) do
-    campaign_id = Keyword.fetch!(args, :campaign_id)
-    campaign = Massmail.Campaign.get_by_id!(campaign_id)
+  def perform(%Oban.Job{args: %{"campaign_id" => campaign_id} = _args}) do
+    campaign =
+      Massmail.Campaign.get_by_id!(campaign_id)
+      |> Massmail.load!(:list)
 
-    recepient_list = Massmail.load!(campaign, :list)
-    recepients = Crm.load!(recepient_list, :people)
+    recepients = Crm.load!(campaign.list, :people)
 
-    recepients
+    recepients.people
     |> Enum.map(
-      &Massmail.Message.create!(%{
-        campaign_id: campaign_id,
-        recepient_id: &1.id,
-        status: :queued
-      })
+      &(Oban.Job.new(%{campaign_id: campaign_id, recepient_id: &1.id},
+          queue: :hydrate_emails,
+          worker: Vachan.Massmail.Workers.HydrateEmails
+        )
+        |> Oban.insert())
     )
+
+    :ok
+  end
+end
+
+defmodule Vachan.Massmail.Workers.HydrateEmails do
+  use Oban.Worker,
+    queue: :hydrate_emails
+
+  alias Vachan.Massmail
+  alias Vachan.Crm
+
+  # @impl true
+  # def perform(%Oban.Job{args: args}) do
+  #   IO.inspect(args)
+  # end
+
+  @impl true
+  def perform(%Oban.Job{
+        args: %{"campaign_id" => campaign_id, "recepient_id" => recepient_id} = _args
+      }) do
+    campaign = Massmail.Campaign.get_by_id!(campaign_id)
+    recepient = Crm.Person.get_by_id!(recepient_id)
+
+    body = EEx.eval_string(campaign.text_body, person: recepient)
+    subject = EEx.eval_string(campaign.subject, person: recepient)
+
+    message =
+      Massmail.Message.create!(%{
+        campaign_id: campaign_id,
+        recepient_id: recepient_id,
+        status: :queued,
+        subject: subject,
+        body: body
+      })
+
+    Oban.Job.new(
+      %{message_id: message.id},
+      queue: :send_emails,
+      worker: Vachan.Massmail.Workers.SendEmails
+    )
+    |> Oban.insert()
 
     :ok
   end
@@ -31,19 +70,32 @@ end
 
 defmodule Vachan.Massmail.Workers.SendEmails do
   use Oban.Worker,
-    queue: :send_mails,
-    max_attempts: 3,
-    max_age: 1_800,
-    max_errors: 3
+    queue: :send_emails
+
+  import Swoosh.Email
 
   alias Vachan.Massmail
+  alias Vachan.Crm
 
   @impl true
-  def perform(%Oban.Job{args: args}) do
-    message_id = Keyword.fetch!(args, :message_id)
-    message = Massmail.Message.get_by_id!(message_id)
+  def perform(%Oban.Job{args: %{"message_id" => message_id} = args}) do
+    message =
+      Massmail.Message.get_by_id!(message_id)
+      |> Massmail.load!(:campaign)
+      |> Massmail.load!(:recepient)
 
-    case Massmail.send_email(message) do
+    campaign = message.campaign
+    recepient = message.recepient
+
+    email =
+      new()
+      |> from({campaign.sender_name, campaign.sender_email})
+      |> to({recepient.name, recepient.email})
+      |> subject(message.subject)
+      |> html_body(message.body)
+      |> text_body(message.body)
+
+    case Vachan.Mailer.deliver(email) do
       {:ok, _} -> Massmail.Message.update!(message, %{status: :sent})
       {:error, _} -> Massmail.Message.update!(message, %{status: :failed})
     end
