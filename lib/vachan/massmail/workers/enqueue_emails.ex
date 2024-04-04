@@ -50,8 +50,8 @@ defmodule Vachan.Massmail.Workers.HydrateEmails do
 
     message =
       Massmail.Message.create!(%{
-        campaign_id: campaign_id,
-        recepient_id: recepient_id,
+        campaign_id: campaign.id,
+        recepient_id: recepient.id,
         status: :queued,
         subject: subject,
         body: body
@@ -90,7 +90,7 @@ defmodule Vachan.Massmail.Workers.SendEmails do
     email =
       new()
       |> from({campaign.sender_name, campaign.sender_email})
-      |> to({recepient.name, recepient.email})
+      |> to({recepient.first_name <> " " <> recepient.last_name, recepient.email |> to_string})
       |> subject(message.subject)
       |> html_body(message.body)
       |> text_body(message.body)

@@ -21,16 +21,26 @@ defmodule Vachan.Massmail.Message do
   end
 
   actions do
-    defaults [:create, :read, :update, :destroy]
+    defaults [ :read, :update, :destroy]
 
     read :by_id do
       argument :id, :uuid, allow_nil?: false
       get? true
       filter expr(id == ^arg(:id))
     end
+
+    create :create do
+      accept [:subject, :body, :status]
+      argument :campaign_id, :integer, allow_nil?: false
+      argument :recepient_id, :uuid, allow_nil?: false
+
+      change manage_relationship(:campaign_id, :campaign, type: :replace)
+      change manage_relationship(:recepient_id, :recepient, type: :replace)
+    end
+
   end
 
-  @possible_status [:sent, :failed, :queued, :cancelled]
+  @possible_status [:created, :sent, :failed, :queued, :cancelled]
 
   attributes do
     uuid_primary_key :id
@@ -40,6 +50,7 @@ defmodule Vachan.Massmail.Message do
     attribute :status, :atom do
       allow_nil? false
       constraints one_of: @possible_status
+      default :created
     end
 
     create_timestamp :created_at
