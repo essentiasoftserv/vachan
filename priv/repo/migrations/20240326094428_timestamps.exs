@@ -1,4 +1,4 @@
-defmodule Vachan.Repo.Migrations.Timestamps do
+defmodule Vachan.Repo.Migrations.ReplyNotNull do
   @moduledoc """
   Updates resources based on their most recent snapshots.
 
