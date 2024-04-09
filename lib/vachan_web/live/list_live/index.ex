@@ -45,4 +45,19 @@ defmodule VachanWeb.ListLive.Index do
 
     {:noreply, stream_delete(socket, :lists, list)}
   end
+
+  @impl true
+  def handle_event("search", %{"query" => query}, socket) do
+    lists = search_list_by_first_name(query)
+    {:noreply, stream(socket, :lists, lists, reset: true)}
+  end
+
+  defp search_list_by_first_name(query) when is_binary(query) do
+    {:ok, lists} = List.read_all()
+    capitalized_query = String.capitalize(query)
+    matching_list_data =
+      Enum.filter(lists, fn list ->
+        String.contains?(String.capitalize(list.name), capitalized_query)
+      end)
+  end
 end
