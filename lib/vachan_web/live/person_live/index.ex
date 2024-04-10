@@ -92,7 +92,7 @@ defmodule VachanWeb.PersonLive.Index do
   end
 
   defp get_page(people, page) do
-    Enum.slice(people, (page - 1) * @page_limit, page * @page_limit)
+    Enum.slice(people, ((page - 1) * @page_limit)..(page * @page_limit))
   end
 
   @impl true
