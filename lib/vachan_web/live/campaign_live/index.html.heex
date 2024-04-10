@@ -13,7 +13,7 @@
 
 <.table
   id="campaigns"
-  rows={@streams.campaigns}
+  rows={@streams.current_page_campaigns}
   row_click={fn {_id, campaign} -> JS.navigate(~p"/campaigns/#{campaign}") end}
 >
   <:col :let={{_id, campaign}} label="Campaign Name"><%= campaign.name %></:col>
@@ -28,4 +28,14 @@
   </:action>
 </.table>
 <.page_navigation_next_prev>
+  <:item title="Showing"><%= @current_page %></:item>
+  <:item title="to"><%= @current_page %></:item>
+  <:item title="of"><%= @page_limit %></:item>
+  <:item title="Entries"><%= @total_count %></:item>
+  <:prev_btn disabled={@current_page == 1}>
+    Previous
+  </:prev_btn>
+  <:next_btn disabled={@current_page * @page_limit >= @total_count}>
+    Next
+  </:next_btn>
 </.page_navigation_next_prev>

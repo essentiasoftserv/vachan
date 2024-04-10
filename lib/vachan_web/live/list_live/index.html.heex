@@ -1,8 +1,7 @@
 <.header>
   Listing People
   <:actions>
-    <.search_bar>
-    </.search_bar>
+    <.search_bar></.search_bar>
     <.link patch={~p"/lists/new"}>
       <.button>New List</.button>
     </.link>
@@ -11,7 +10,7 @@
 
 <.table
   id="lists"
-  rows={@streams.lists}
+  rows={@streams.current_page_list}
   row_click={fn {_id, list} -> JS.navigate(~p"/lists/#{list}") end}
 >
   <:col :let={{_id, list}} label="List Name"><%= list.name %></:col>
@@ -43,4 +42,14 @@
   />
 </.modal>
 <.page_navigation_next_prev>
+  <:item title="Showing"><%= @current_page %></:item>
+  <:item title="to"><%= @current_page %></:item>
+  <:item title="of"><%= @page_limit %></:item>
+  <:item title="Entries"><%= @total_count %></:item>
+  <:prev_btn disabled={@current_page == 1}>
+    Previous
+  </:prev_btn>
+  <:next_btn disabled={@current_page * @page_limit >= @total_count}>
+    Next
+  </:next_btn>
 </.page_navigation_next_prev>

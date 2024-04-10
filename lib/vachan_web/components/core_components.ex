@@ -614,40 +614,41 @@ defmodule VachanWeb.CoreComponents do
     """
   end
 
+  slot :item, required: true do
+    attr :title, :string, required: true
+  end
+
+  slot :actions
+  slot :next_btn, required: true
+  slot :prev_btn, required: true
+  # attr :name, :string, required: true
   def page_navigation_next_prev(assigns) do
     ~H"""
-    <nav aria-label="Page navigation example" class="float-right m-6">
-      <ul class="inline-flex -space-x-px text-sm">
-        <li>
-          <a
-            href="#"
-            class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-          >
-            Previous
-          </a>
-        </li>
+    <div class="flex flex-col items-center mt-4">
+      <div>
+        <span :for={item <- @item} class="">
+          <span class="text-sm text-gray-700 dark:text-gray-400">
+            <span><%= item.title %></span>
+            <span class="font-semibold text-gray-900 dark:text-white"><%= render_slot(item) %></span>
+          </span>
+        </span>
+      </div>
+      <div class="inline-flex mt-2 xs:mt-0">
+        <button
+          phx-click="prev_page"
+          class="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-gray-800 rounded-s hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+        >
+          <%= render_slot(@prev_btn) %>
+        </button>
 
-        <%= for i <- 1..5 do %>
-          <li>
-            <a
-              href="#"
-              class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-            >
-              <%= i %>
-            </a>
-          </li>
-        <% end %>
-
-        <li>
-          <a
-            href="#"
-            class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-          >
-            Next
-          </a>
-        </li>
-      </ul>
-    </nav>
+        <button
+          phx-click="next_page"
+          class="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-gray-800 border-0 border-s border-gray-700 rounded-e hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+        >
+          <%= render_slot(@next_btn) %>
+        </button>
+      </div>
+    </div>
     """
   end
 
