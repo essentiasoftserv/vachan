@@ -11,7 +11,7 @@
 
 <.table
   id="people"
-  rows={@streams.people}
+  rows={@streams.current_page_people}
   row_click={fn {_id, person} -> JS.navigate(~p"/people/#{person}") end}
 >
   <:col :let={{_id, person}} label="First Name"><%= person.first_name %></:col>
@@ -37,7 +37,31 @@
     </.link>
   </:action>
 </.table>
-
+<div class="flex flex-col items-center">
+    <span class="text-sm text-gray-700 dark:text-gray-400">
+      Showing
+      <span class="font-semibold text-gray-900 dark:text-white"><%= @current_page %></span>
+      to <span class="font-semibold text-gray-900 dark:text-white"><%= @page_limit %></span>
+      of <span class="font-semibold text-gray-900 dark:text-white"><%= @total_count %></span>
+      Entries
+    </span>
+    <div class="inline-flex mt-2 xs:mt-0">
+      <button
+        phx-click="prev_page"
+        disabled={@current_page == 1}
+        class="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-gray-800 rounded-s hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+      >
+        Previous
+      </button>
+      <button
+        phx-click="next_page"
+        disabled={@current_page * @page_limit >= @total_count}
+        class="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-gray-800 border-0 border-s border-gray-700 rounded-e hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+      >
+        Next
+      </button>
+    </div>
+  </div>
 <.modal
   :if={@live_action in [:new, :edit]}
   id="person-modal"
