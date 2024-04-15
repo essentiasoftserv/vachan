@@ -67,6 +67,7 @@ defmodule VachanWeb.CoreComponents do
               phx-key="escape"
               phx-click-away={JS.exec("data-cancel", to: "##{@id}")}
               class="shadow-zinc-700/10 ring-zinc-700/10 relative hidden rounded-2xl bg-white p-14 shadow-lg ring-1 transition"
+              style="background: #EDEDD0;"
             >
               <div class="absolute top-6 right-5">
                 <button
@@ -202,7 +203,7 @@ defmodule VachanWeb.CoreComponents do
   def simple_form(assigns) do
     ~H"""
     <.form :let={f} for={@for} as={@as} {@rest}>
-      <div class="mt-10 space-y-8 bg-white p-4">
+      <div class="mt-10 space-y-8 bg-white p-4" style="background: #EDEDD0;">
         <%= render_slot(@inner_block, f) %>
         <div :for={action <- @actions} class="mt-2 flex items-center justify-between gap-6">
           <%= render_slot(action, f) %>
@@ -231,8 +232,7 @@ defmodule VachanWeb.CoreComponents do
     <button
       type={@type}
       class={[
-        "phx-submit-loading:opacity-75 rounded-lg bg-zinc-900 hover:bg-zinc-700 py-2 px-3",
-        "text-sm font-semibold leading-6 text-white active:text-white/80",
+        "phx-submit-loading:opacity-75 text-white bg-gray-800 hover:bg-gray-900 w-24 h-10	 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700",
         @class
       ]}
       {@rest}
@@ -378,7 +378,7 @@ defmodule VachanWeb.CoreComponents do
         value={Phoenix.HTML.Form.normalize_value(@type, @value)}
         class={[
           "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6",
-          "phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400",
+          "phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400 bg-customBackground_header",
           @errors == [] && "border-zinc-300 focus:border-zinc-400",
           @errors != [] && "border-rose-400 focus:border-rose-400"
         ]}
@@ -429,18 +429,21 @@ defmodule VachanWeb.CoreComponents do
   def header(assigns) do
     ~H"""
     <header class={[
-      @actions != [] && "flex items-center justify-between gap-6 bg-white -mt-1 py-3 px-12 shadow",
+      @actions != [] && "flex sm:gap-8 px-6 py-3 shadow-md gap-2.5",
       @class
     ]}>
-      <div>
-        <h1 class="text-lg font-semibold leading-8 text-zinc-800">
+      <div class="flex-none w-0 sm:visible sm:w-2/5 invisible">
+        <h1 class="text-xl font-bold	mt-2">
           <%= render_slot(@inner_block) %>
         </h1>
-        <p :if={@subtitle != []} class="mt-2 text-sm leading-6 text-zinc-600">
-          <%= render_slot(@subtitle) %>
-        </p>
       </div>
-      <div class="flex gap-12"><%= render_slot(@actions) %></div>
+      <p :if={@subtitle != []} class="mt-2 text-sm leading-6 text-zinc-600">
+        <%= render_slot(@subtitle) %>
+      </p>
+      <%!-- </div> --%>
+      <%!-- <div class="flex-1 w-1/5"> --%>
+      <%= render_slot(@actions) %>
+      <%!-- </div> --%>
     </header>
     """
   end
@@ -477,46 +480,41 @@ defmodule VachanWeb.CoreComponents do
       end
 
     ~H"""
-    <div class="container mx-auto  pt-5 shadow">
-      <table class="min-w-full divide-y divide-gray-200">
-        <thead>
+    <div class="relative overflow-x-auto shadow-md pt-8">
+      <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-customBackground_header dark:bg-gray-700 dark:text-gray-400">
           <tr>
-            <th
-              :for={col <- @col}
-              class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
-            >
+            <th :for={col <- @col} scope="col" class="px-6 py-3">
               <%= col[:label] %>
             </th>
-            <th
-              :if={@action != []}
-              class="relative px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
-            >
+            <th scope="col" class="px-6 py-4">
+              <span class="sr-only">Edit</span>
+            </th>
+            <th :if={@action != []} scope="col" class="px-6 py-3">
               <span class="sr-only"><%= gettext("Actions") %></span>
             </th>
+            <th></th>
           </tr>
         </thead>
         <tbody
           id={@id}
           phx-update={match?(%Phoenix.LiveView.LiveStream{}, @rows) && "stream"}
-          class="bg-white divide-y divide-gray-200"
+          class=""
         >
-          <tr :for={row <- @rows} id={@row_id && @row_id.(row)} class="group hover:bg-zinc-50">
+          <tr
+            :for={row <- @rows}
+            id={@row_id && @row_id.(row)}
+            class="bg-customBackground border-b dark:bg-gray-800 border-zinc-200 text-black	dark:border-gray-700 hover:bg-customBackground_hover dark:hover:bg-gray-600"
+          >
             <td
               :for={{col, i} <- Enum.with_index(@col)}
               phx-click={@row_click && @row_click.(row)}
-              class={["relative px-8 py-2", @row_click && "hover:cursor-pointer"]}
+              class={["px-8 py-3", @row_click && "hover:cursor-pointer"]}
             >
-              <span class={["relative text-sm", i == 0 && "font text-sm text-zinc-900"]}>
-                <%= render_slot(col, @row_item.(row)) %>
-              </span>
+              <%= render_slot(col, @row_item.(row)) %>
             </td>
-            <td :if={@action != []}>
-              <span
-                :for={action <- @action}
-                class="relative ml-4 font-bold text-sm text-zinc-900 hover:text-zinc-700"
-              >
-                <%= render_slot(action, @row_item.(row)) %>
-              </span>
+            <td :for={action <- @action} :if={@action != []} class="px-8 py-3 text-right font-bold">
+              <%= render_slot(action, @row_item.(row)) %>
             </td>
           </tr>
         </tbody>
@@ -543,9 +541,9 @@ defmodule VachanWeb.CoreComponents do
 
   def list(assigns) do
     ~H"""
-    <div class="justify-center bg-white mt-10 shadow space-y-4 w-2/4 translate-x-12">
+    <div class="justify-center bg-customBackground_header mt-10 shadow space-y-4 translate-x-12 w-4/6 sm:w-2/4">
       <dl class="pt-2 pb-2 w-4/5">
-        <div :for={item <- @item} class="flex items-center mx-4">
+        <div :for={item <- @item} class="flex items-center ml-6 -mr-12 sm:mx-4">
           <dt class="font-semibold mb-2 mr-0 w-2/5">
             <%= item.title %>
           </dt>
@@ -584,33 +582,31 @@ defmodule VachanWeb.CoreComponents do
 
   def search_bar(assigns) do
     ~H"""
-    <div class="relative">
-      <form phx-submit="search" phx-change="search">
-        <input
-          type="text"
-          name="query"
-          placeholder="Search..."
-          class="border border-gray-300 focus:outline-none focus:border-blue-500 rounded-md py-2 pl-14 pr-6 block w-full appearance-none leading-normal"
-        />
-        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-          <svg
-            class="w-4 h-4 text-gray-500 dark:text-gray-400"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 20 20"
-          >
-            <path
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-            />
-          </svg>
-        </div>
-      </form>
-    </div>
+    <form phx-submit="search" phx-change="search">
+      <input
+        type="text"
+        name="query"
+        placeholder="Search..."
+        class="bg-customBackground_header border border-gray-300 focus:outline-none focus:border-gray-400 rounded-md py-2 pl-14 pr-6 block w-full appearance-none leading-normal"
+      />
+      <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+        <svg
+          class="w-4 h-4 text-gray-500 dark:text-gray-400"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 20 20"
+        >
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+          />
+        </svg>
+      </div>
+    </form>
     """
   end
 

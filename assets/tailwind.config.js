@@ -18,7 +18,9 @@ module.exports = {
     extend: {
       colors: {
         brand: "#FD4F00",
-        customBackground: "#FEF9F7",
+        customBackground: "#EDEDD0",
+        customBackground_hover: "rgb(238 238 220)",
+        customBackground_header: "rgb(246 246 229)",
       },
     },
   },

@@ -1,13 +1,16 @@
 <.header>
   Listing People
   <:actions>
-    <.search_bar></.search_bar>
-    <.link patch={~p"/people/new"}>
-      <.button>New Person</.button>
-    </.link>
+    <div class="flex-none sm:w-2/5	w-4/5">
+      <.search_bar></.search_bar>
+    </div>
+    <div class="flex-1 w-1/5">
+      <.link patch={~p"/people/new"} class="flex-1 w-1/5">
+        <.button>New Person</.button>
+      </.link>
+    </div>
   </:actions>
 </.header>
-
 <.table
   id="people"
   rows={@streams.current_page_people}
