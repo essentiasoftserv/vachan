@@ -33,12 +33,18 @@ defmodule Vachan.Crm.Person do
   end
 
   actions do
-    defaults [:create, :read, :update, :destroy]
+    defaults [:create, :update, :destroy]
 
     read :by_id do
       argument :id, :uuid, allow_nil?: false
       get? true
       filter expr(id == ^arg(:id))
+    end
+  end
+
+  actions do
+    read :read do
+      pagination offset?: true, default_limit: 10, countable: true
     end
   end
 
