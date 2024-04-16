@@ -504,7 +504,7 @@ defmodule VachanWeb.CoreComponents do
             <td
               :for={{col, i} <- Enum.with_index(@col)}
               phx-click={@row_click && @row_click.(row)}
-              class={["relative px-8 py-2", @row_click && "hover:cursor-pointer"]}
+              class={["relative break-all px-8 py-2", @row_click && "hover:cursor-pointer"]}
             >
               <span class={["relative text-sm", i == 0 && "font text-sm text-zinc-900"]}>
                 <%= render_slot(col, @row_item.(row)) %>
@@ -549,7 +549,7 @@ defmodule VachanWeb.CoreComponents do
           <dt class="font-semibold mb-2 mr-0 w-2/5">
             <%= item.title %>
           </dt>
-          <dd class="text-gray-700 mb-4 w-full">
+          <dd class="break-all text-gray-700 mb-4 w-full">
             <%= render_slot(item) %>
           </dd>
         </div>
