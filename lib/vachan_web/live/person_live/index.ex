@@ -4,17 +4,20 @@ defmodule VachanWeb.PersonLive.Index do
   use VachanWeb, :live_view
 
   alias Vachan.Crm.Person
-  alias Vachan.Crm.List
 
 
   @impl true
   def mount(_params, _session, socket) do
     {:ok, page} = Person.read_all()
-    peple =  page.results
+    last_record = List.last(page.results)
+    prev_record = List.first(page.results)
      {:ok,
      assign(socket,
-       :page, page)
-     |> stream(:page, peple)}
+       :last_record, last_record)
+      |> assign(:people, page)
+      |> assign(:prev_record, prev_record)
+      |> stream(:page, page.results)
+    }
   end
 
   @impl true
@@ -64,31 +67,30 @@ defmodule VachanWeb.PersonLive.Index do
     {:noreply, socket}
   end
 
-  # def handle_event("next_page", _params, socket) do
-  #   %{current_page: current_page, total_count: total_count, page_limit: page_limit} =
-  #     socket.assigns
+  def handle_event("next_page", %{"key_id" => key_id}, socket) do
+    {:ok, people} = Person.read_all(page: [after: key_id])
+    last_record = List.last(people.results)
+    prev_record = List.first(people.results)
+    {:noreply,
+     assign(socket,:last_record, last_record )
+      |> assign(:people, people)
+      |> assign(:prev_record, prev_record)
+      |> stream(:page, people.results,reset: true)
+    }
 
-  #   new_page = min(current_page + 1, div(total_count, page_limit) + 1)
-  #   new_page_people = get_page(socket.assigns.people, new_page)
+  end
 
-  #   {:noreply,
-  #    assign(socket, current_page: new_page)
-  #    |> stream(:current_page_people, new_page_people, reset: true)}
-  # end
-
-  # def handle_event("prev_page", _params, socket) do
-  #   %{current_page: current_page} = socket.assigns
-  #   new_page = max(current_page - 1, 1)
-  #   new_page_people = get_page(socket.assigns.people, new_page)
-
-  #   {:noreply,
-  #    assign(socket, current_page: new_page)
-  #    |> stream(:current_page_people, new_page_people, reset: true)}
-  # end
-
-  # defp get_page(people, page) do
-  #   Enum.slice(people, ((page - 1) * @page_limit)..(page * @page_limit))
-  # end
+  def handle_event("prev_page", %{"key_id" => key_id}, socket) do
+    {:ok, people} = Person.read_all(page: [before: key_id])
+    prev_record = List.first(people.results)
+    last_record = List.last(people.results)
+     {:noreply,
+     assign(socket,:last_record, last_record )
+      |> assign(:people, people)
+      |> assign(:prev_record, prev_record)
+      |> stream(:page, people.results,reset: true)
+    }
+  end
 
   @impl true
   def handle_event("search", %{"query" => query}, socket) do
@@ -101,13 +103,13 @@ defmodule VachanWeb.PersonLive.Index do
     end
   end
 
-  # defp search_people_by_first_name(query) when is_binary(query) do
-  #   {:ok, people} = Person.read_all()
-  #   capitalized_query = String.capitalize(query)
+  defp search_people_by_first_name(query) when is_binary(query) do
+    {:ok, people} = Person.read_all()
+    capitalized_query = String.capitalize(query)
 
-  #   matching_people_data =
-  #     Enum.filter(people, fn person ->
-  #       String.contains?(String.capitalize(person.first_name), capitalized_query)
-  #     end)
-  # end
+    matching_people_data =
+      Enum.filter(people, fn person ->
+        String.contains?(String.capitalize(person.first_name), capitalized_query)
+      end)
+  end
 end

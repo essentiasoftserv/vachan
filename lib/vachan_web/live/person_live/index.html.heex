@@ -11,7 +11,6 @@
     </div>
   </:actions>
 </.header>
-<%= @page.limit %>
 <.table
   id="people"
   rows={@streams.page}
@@ -40,19 +39,26 @@
     </.link>
   </:action>
 </.table>
-<%!-- <.page_navigation_next_prev>
-  <:item title="Showing"><%= @current_page %></:item>
-  <:item title="to"><%= @current_page %></:item>
-  <:item title="of"><%= @page_limit %></:item>
-  <:item title="Entries"><%= @total_count %></:item>
-  <:prev_btn disabled={@current_page == 1}>
-    Previous
-  </:prev_btn>
-  <:next_btn disabled={@current_page * @page_limit >= @total_count}>
-    Next
-  </:next_btn>
-</.page_navigation_next_prev> --%>
-
+<div class="flex flex-col items-center float-right m-2">
+  <div class="inline-flex mt-2 xs:mt-0">
+    <%= if @people.after || @people.more? do %>
+      <.link
+        phx-click={JS.push("prev_page", value: %{key_id: @prev_record.__metadata__.keyset})}
+        class="flex items-center justify-center px-3 h-8 text-sm font-medium text-white bg-gray-800 rounded-s hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+      >
+        Previous
+      </.link>
+    <% end %>
+    <%= if  @people.before || @people.more? do %>
+      <.link
+        phx-click={JS.push("next_page", value: %{key_id: @last_record.__metadata__.keyset})}
+        class="flex items-center justify-center px-3 h-8 text-sm font-medium text-white bg-gray-800 border-0 border-s border-gray-700 rounded-e hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+      >
+        Next
+      </.link>
+    <% end %>
+  </div>
+</div>
 <.modal
   :if={@live_action in [:new, :edit]}
   id="person-modal"
