@@ -231,7 +231,7 @@ defmodule VachanWeb.CoreComponents do
     <button
       type={@type}
       class={[
-        "phx-submit-loading:opacity-75 text-white bg-gray-800 hover:bg-gray-900 w-24 h-10	 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700",
+        "phx-submit-loading:opacity-75 text-white bg-gray-800 hover:bg-gray-900 w-24 h-10	focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700",
         @class
       ]}
       {@rest}
