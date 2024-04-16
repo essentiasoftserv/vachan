@@ -13,9 +13,8 @@ defmodule VachanWeb.DashLive do
                 <a href="https://vaaak.com" class="flex items-center">
                   <img
                     src="/images/vaak-logo.svg"
-                    class="mr-3 sm:h-24"
+                    class="mr-3 sm:h-24 w-full h-auto"
                     alt="Vaak Logo"
-                    class="w-full h-auto"
                   />
                 </a>
               </div>
@@ -143,9 +142,8 @@ defmodule VachanWeb.DashLive do
                 <a href="https://vaaak.com" class="flex items-center">
                   <img
                     src="/images/vaak-logo.svg"
-                    class="mr-3 sm:h-24"
+                    class="mr-3 sm:h-24 w-full h-auto"
                     alt="Vaak Logo"
-                    class="w-full h-auto"
                   />
                 </a>
               </div>
