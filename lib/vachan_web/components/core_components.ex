@@ -510,7 +510,7 @@ defmodule VachanWeb.CoreComponents do
                 <%= render_slot(col, @row_item.(row)) %>
               </span>
             </td>
-            <td :if={@action != []}>
+            <td :if={@action != []} class="text-right px-2">
               <span
                 :for={action <- @action}
                 class="relative ml-4 font-bold text-sm text-zinc-900 hover:text-zinc-700"
