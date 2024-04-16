@@ -7,7 +7,6 @@
     </.link>
   </:actions>
 </.header>
-<%= @page.limit %>
 <.table
   id="people"
   rows={@streams.page}
@@ -36,6 +35,16 @@
     </.link>
   </:action>
 </.table>
+<%= if @people.after || @people.more? do %>
+  <button phx-click={JS.push("prev_page", value: %{key_id: @prev_record.__metadata__.keyset})}>
+    Prev
+  </button>
+<% end %>
+<%= if  @people.before || @people.more? do %>
+  <button phx-click={JS.push("next_page", value: %{key_id: @last_record.__metadata__.keyset})}>
+    Next
+  </button>
+<% end %>
 <%!-- <.page_navigation_next_prev>
   <:item title="Showing"><%= @current_page %></:item>
   <:item title="to"><%= @current_page %></:item>
