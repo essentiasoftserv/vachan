@@ -18,7 +18,7 @@ module.exports = {
     extend: {
       colors: {
         brand: "#FD4F00",
-        customBackground: "#FEF9F7",
+        customBackground: "#EDEDD0",
       },
     },
   },
