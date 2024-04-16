@@ -7,10 +7,10 @@
     </.link>
   </:actions>
 </.header>
-
+<%= @page.limit %>
 <.table
   id="people"
-  rows={@streams.current_page_people}
+  rows={@streams.page}
   row_click={fn {_id, person} -> JS.navigate(~p"/people/#{person}") end}
 >
   <:col :let={{_id, person}} label="First Name"><%= person.first_name %></:col>
@@ -36,7 +36,7 @@
     </.link>
   </:action>
 </.table>
-<.page_navigation_next_prev>
+<%!-- <.page_navigation_next_prev>
   <:item title="Showing"><%= @current_page %></:item>
   <:item title="to"><%= @current_page %></:item>
   <:item title="of"><%= @page_limit %></:item>
@@ -47,7 +47,7 @@
   <:next_btn disabled={@current_page * @page_limit >= @total_count}>
     Next
   </:next_btn>
-</.page_navigation_next_prev>
+</.page_navigation_next_prev> --%>
 
 <.modal
   :if={@live_action in [:new, :edit]}

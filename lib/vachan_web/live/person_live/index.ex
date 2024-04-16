@@ -10,12 +10,11 @@ defmodule VachanWeb.PersonLive.Index do
   @impl true
   def mount(_params, _session, socket) do
     {:ok, page} = Person.read_all()
-    IO.inspect(page)
-    # {:ok,stream(socket, :page, page)}
-    {:ok,
-     socket
-     |> stream(:page, page)}
-
+    peple =  page.results
+     {:ok,
+     assign(socket,
+       :page, page)
+     |> stream(:page, peple)}
   end
 
   @impl true
