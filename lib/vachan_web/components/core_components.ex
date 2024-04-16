@@ -428,7 +428,7 @@ defmodule VachanWeb.CoreComponents do
   def header(assigns) do
     ~H"""
     <header class={[
-      @actions != [] && "flex sm:gap-8 px-6 py-3 shadow-md gap-2.5",
+      @actions != [] && "flex sm:gap-24 px-6 py-3 shadow-md gap-2.5",
       @class
     ]}>
       <div class="flex-none w-0 sm:visible sm:w-2/5 invisible">
@@ -439,10 +439,7 @@ defmodule VachanWeb.CoreComponents do
       <p :if={@subtitle != []} class="mt-2 text-sm leading-6 text-zinc-600">
         <%= render_slot(@subtitle) %>
       </p>
-      <%!-- </div> --%>
-      <%!-- <div class="flex-1 w-1/5"> --%>
-      <%= render_slot(@actions) %>
-      <%!-- </div> --%>
+      <div class="flex gap-8"><%= render_slot(@actions) %></div>
     </header>
     """
   end
