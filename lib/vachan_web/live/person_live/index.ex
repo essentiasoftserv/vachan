@@ -1,16 +1,21 @@
 defmodule VachanWeb.PersonLive.Index do
+  import Ash.Page.Offset
+
   use VachanWeb, :live_view
 
   alias Vachan.Crm.Person
   alias Vachan.Crm.List
 
-  @page_limit 10
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, people} = Person.read_all()
-    IO.inspect(people)
-    {:ok,stream(socket, :people, people)}
+    {:ok, page} = Person.read_all()
+    IO.inspect(page)
+    # {:ok,stream(socket, :page, page)}
+    {:ok,
+     socket
+     |> stream(:page, page)}
+
   end
 
   @impl true
@@ -86,19 +91,19 @@ defmodule VachanWeb.PersonLive.Index do
   #   Enum.slice(people, ((page - 1) * @page_limit)..(page * @page_limit))
   # end
 
-  @impl true
-  def handle_event("search", %{"query" => query}, socket) do
-    people = search_people_by_first_name(query)
-    {:noreply, stream(socket, :people, people, reset: true)}
-  end
+  # @impl true
+  # def handle_event("search", %{"query" => query}, socket) do
+  #   people = search_people_by_first_name(query)
+  #   {:noreply, stream(socket, :people, people, reset: true)}
+  # end
 
-  defp search_people_by_first_name(query) when is_binary(query) do
-    {:ok, people} = Person.read_all()
-    capitalized_query = String.capitalize(query)
+  # defp search_people_by_first_name(query) when is_binary(query) do
+  #   {:ok, people} = Person.read_all()
+  #   capitalized_query = String.capitalize(query)
 
-    matching_people_data =
-      Enum.filter(people, fn person ->
-        String.contains?(String.capitalize(person.first_name), capitalized_query)
-      end)
-  end
+  #   matching_people_data =
+  #     Enum.filter(people, fn person ->
+  #       String.contains?(String.capitalize(person.first_name), capitalized_query)
+  #     end)
+  # end
 end
