@@ -22,7 +22,7 @@ defmodule VachanWeb.Router do
 
     get "/demo", PageController, :home
 
-    # get "/", PageController, :home
+    get "/", PageController, :home
     # Leave out `register_path` and `reset_path` if you don't want to support
     # user registration and/or password resets respectively.
     sign_in_route(register_path: "/register", reset_path: "/reset")
@@ -33,7 +33,7 @@ defmodule VachanWeb.Router do
 
     ash_authentication_live_session :authentication_required,
       on_mount: {VachanWeb.LiveUserAuth, :live_user_required} do
-      live "/", DashLive
+      live "/dashboard", DashLive
 
       # live "people", Crm.People
       live "/people", PersonLive.Index, :index
