@@ -75,7 +75,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - name: deploying to fly.io
-        if: ${{ github.ref_name == 'main' }}
+        if: ${{ github.ref_name == 'main' && contains(github.ref, 'refs/tags/') }}
         run: flyctl deploy --remote-only
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
