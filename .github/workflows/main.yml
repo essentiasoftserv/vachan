@@ -74,6 +74,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: superfly/flyctl-actions/setup-flyctl@master
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
       - name: deploying to fly.io
         if: ${{ github.ref_name == 'main' && contains(github.ref, 'refs/tags/') }}
         run: flyctl deploy --remote-only
