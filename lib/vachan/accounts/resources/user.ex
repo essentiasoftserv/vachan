@@ -9,13 +9,28 @@ defmodule Vachan.Accounts.User do
     attribute :hashed_password, :string, allow_nil?: false, sensitive?: true
   end
 
+  actions do
+    defaults [:read]
+  end
+
   authentication do
     api Vachan.Accounts
+
+    add_ons do
+      confirmation :confirm do
+        monitor_fields([:email])
+        sender(Vachan.Accounts.Senders.SendEmailConfirmationEmail)
+      end
+    end
 
     strategies do
       password :password do
         identity_field :email
         sign_in_tokens_enabled? true
+
+        resettable do
+          sender(Vachan.Accounts.Senders.SendPasswordResetEmail)
+        end
       end
     end
 
@@ -33,7 +48,23 @@ defmodule Vachan.Accounts.User do
   end
 
   identities do
-    identity :unique_email, [:email]
+    identity :unique_email, [:email] do
+    eager_check_with Vachan.Accounts
+    end
+  end
+
+  validations do
+    validate match(:email, ~r/^[^\s]+@[^\s]+$/), on: [:create, :update], message: "invalid email"
+  end
+
+  relationships do
+    belongs_to :tenant, Vachan.Organization.Tenant, api: Vachan.Organization
+
+    has_one :profile, Vachan.Profiles.Profile do
+      api Vachan.Profiles
+      source_attribute :id
+      destination_attribute :id
+    end
   end
 
   # If using policies, add the following bypass:

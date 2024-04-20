@@ -12,7 +12,9 @@ config :vachan,
     Vachan.Accounts,
     Vachan.Crm,
     Vachan.Massmail,
-    Vachan.Prelaunch
+    Vachan.Prelaunch,
+    Vachan.Organization,
+    Vachan.Profiles
   ]
 
 config :ash, :compatible_foreign_key_types, [
