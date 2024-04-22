@@ -2,24 +2,20 @@ defmodule VachanWeb.ListLive.Index do
   use VachanWeb, :live_view
 
   alias Vachan.Crm
-  alias Vachan.Crm.List
-
-  @page_limit 10
+  # alias Vachan.Crm.List
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, lists} = List.read_all()
-    total_count = length(lists)
-    initial_page = get_page(lists, 1)
-
+    {:ok, page} = Crm.List.read_all()
+    last_record = List.last(page.results)
+    prev_record = List.first(page.results)
     {:ok,
-     assign(socket,
-       lists: lists,
-       total_count: total_count,
-       page_limit: @page_limit,
-       current_page: 1
-     )
-     |> stream(:current_page_list, initial_page)}
+    assign(socket,
+      :last_record, last_record)
+     |> assign(:lists, page)
+     |> assign(:prev_record, prev_record)
+     |> stream(:page, page.results)
+   }
   end
 
   @impl true
@@ -30,13 +26,13 @@ defmodule VachanWeb.ListLive.Index do
   defp apply_action(socket, :edit, %{"id" => id}) do
     socket
     |> assign(:page_title, "Edit List")
-    |> assign(:list, List.get_by_id!(id))
+    |> assign(:list, Crm.List.get_by_id!(id))
   end
 
   defp apply_action(socket, :new, _params) do
     socket
     |> assign(:page_title, "New List")
-    |> assign(:list, %List{})
+    |> assign(:list, %Crm.List{})
   end
 
   defp apply_action(socket, :index, _params) do
@@ -52,50 +48,47 @@ defmodule VachanWeb.ListLive.Index do
 
   @impl true
   def handle_event("delete", %{"id" => id}, socket) do
-    list = List.get_by_id!(id)
-    {:ok, _} = List.destroy(List)
+    list = Crm.List.get_by_id!(id)
+    {:ok, _} = Crm.List.destroy(List)
 
     {:noreply, stream_delete(socket, :lists, list)}
   end
 
-  def handle_event("next_page", _params, socket) do
-    %{current_page: current_page, total_count: total_count, page_limit: page_limit} =
-      socket.assigns
-
-    new_page = min(current_page + 1, div(total_count, page_limit) + 1)
-    new_page_list = get_page(socket.assigns.lists, new_page)
-
+  def handle_event("next_page", %{"key_id" => key_id}, socket) do
+    {:ok, lists} = Crm.List.read_all(page: [after: key_id])
+    last_record = List.last(lists.results)
+    prev_record = List.first(lists.results)
     {:noreply,
-     assign(socket, current_page: new_page)
-     |> stream(:current_page_list, new_page_list, reset: true)}
+     assign(socket,:last_record, last_record )
+      |> assign(:lists, lists)
+      |> assign(:prev_record, prev_record)
+      |> stream(:page, lists.results,reset: true)
+    }
   end
 
-  def handle_event("prev_page", _params, socket) do
-    %{current_page: current_page} = socket.assigns
-    new_page = max(current_page - 1, 1)
-    new_page_list = get_page(socket.assigns.lists, new_page)
-
-    {:noreply,
-     assign(socket, current_page: new_page)
-     |> stream(:current_page_list, new_page_list, reset: true)}
-  end
-
-  defp get_page(lists, page) do
-    Enum.slice(lists, ((page - 1) * @page_limit)..(page * @page_limit))
+  def handle_event("prev_page", %{"key_id" => key_id}, socket) do
+    {:ok, lists} = Crm.List.read_all(page: [before: key_id])
+    prev_record = List.first(lists.results)
+    last_record = List.last(lists.results)
+     {:noreply,
+     assign(socket,:last_record, last_record )
+      |> assign(:lists, lists)
+      |> assign(:prev_record, prev_record)
+      |> stream(:page, lists.results,reset: true)
+    }
   end
 
   @impl true
   def handle_event("search", %{"query" => query}, socket) do
     lists = search_list_by_first_name(query)
-    {:noreply, stream(socket, :current_page_list, lists, reset: true)}
+    {:noreply, stream(socket, :page, lists, reset: true)}
   end
 
   defp search_list_by_first_name(query) when is_binary(query) do
-    {:ok, lists} = List.read_all()
+    {:ok, lists} = Crm.List.read_all()
     capitalized_query = String.capitalize(query)
-
     matching_list_data =
-      Enum.filter(lists, fn list ->
+      Enum.filter(lists.results, fn list ->
         String.contains?(String.capitalize(list.name), capitalized_query)
       end)
   end

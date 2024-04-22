@@ -35,7 +35,7 @@ defmodule Vachan.Crm.List do
   end
 
   actions do
-    defaults [:create, :read, :update, :destroy]
+    defaults [:create, :update, :destroy]
 
     update :add_person do
       argument :person_id, :uuid, allow_nil?: false
@@ -53,6 +53,13 @@ defmodule Vachan.Crm.List do
       argument :id, :integer, allow_nil?: false
       get? true
       filter expr(id == ^arg(:id))
+    end
+  end
+
+
+  actions do
+    read :read do
+      pagination keyset?: true, default_limit: 50, countable: true
     end
   end
 
