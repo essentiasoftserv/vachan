@@ -44,7 +44,7 @@ defmodule Vachan.Crm.Person do
 
   actions do
     read :read do
-      pagination keyset?: true, default_limit: 10, countable: true
+      pagination keyset?: true, default_limit: 50, countable: true
     end
   end
 
