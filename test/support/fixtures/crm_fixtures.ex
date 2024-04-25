@@ -24,4 +24,22 @@ defmodule Vachan.CrmFixtures do
 
     person
   end
+
+  @doc """
+  Generate a list record for testing.
+  """
+  def list_fixture(attrs \\ %{}) do
+    list_attrs =
+      attrs
+      |> Enum.into(%{
+        name: "new_list"
+      })
+
+    {:ok, list} =
+      Vachan.Crm.List
+      |> Ash.Changeset.for_create(:create, list_attrs)
+      |> Vachan.Crm.create()
+
+    list
+  end
 end
