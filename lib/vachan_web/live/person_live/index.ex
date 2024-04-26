@@ -7,15 +7,11 @@ defmodule VachanWeb.PersonLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
-    page = Person.read_all!(ash_opts(socket))
-    last_record = List.last(page.results)
-    prev_record = List.first(page.results)
+    {:ok, people} = Person.read_all(ash_opts(socket))
 
     {:ok,
-     assign(socket, :last_record, last_record)
-     |> assign(:people, page)
-     |> assign(:prev_record, prev_record)
-     |> stream(:page, page.results)}
+     socket
+     |> stream(:people, people)}
   end
 
   def ash_opts(socket, opts \\ []) do
@@ -72,49 +68,49 @@ defmodule VachanWeb.PersonLive.Index do
     {:noreply, socket}
   end
 
-  def handle_event("next_page", %{"key_id" => key_id}, socket) do
-    {:ok, people} = Person.read_all(ash_opts(socket, page: [after: key_id]))
-    last_record = List.last(people.results)
-    prev_record = List.first(people.results)
+  # def handle_event("next_page", %{"key_id" => key_id}, socket) do
+  #   {:ok, people} = Person.read_all(ash_opts(socket, page: [after: key_id]))
+  #   last_record = List.last(people.results)
+  #   prev_record = List.first(people.results)
 
-    {:noreply,
-     assign(socket, :last_record, last_record)
-     |> assign(:people, people)
-     |> assign(:prev_record, prev_record)
-     |> stream(:page, people.results, reset: true)}
-  end
+  #   {:noreply,
+  #    assign(socket, :last_record, last_record)
+  #    |> assign(:people, people)
+  #    |> assign(:prev_record, prev_record)
+  #    |> stream(:page, people.results, reset: true)}
+  # end
 
-  def handle_event("prev_page", %{"key_id" => key_id}, socket) do
-    {:ok, people} = Person.read_all(ash_opts(socket, page: [before: key_id]))
-    prev_record = List.first(people.results)
-    last_record = List.last(people.results)
+  # def handle_event("prev_page", %{"key_id" => key_id}, socket) do
+  #   {:ok, people} = Person.read_all(ash_opts(socket, page: [before: key_id]))
+  #   prev_record = List.first(people.results)
+  #   last_record = List.last(people.results)
 
-    {:noreply,
-     assign(socket, :last_record, last_record)
-     |> assign(:people, people)
-     |> assign(:prev_record, prev_record)
-     |> stream(:page, people.results, reset: true)}
+  #   {:noreply,
+  #    assign(socket, :last_record, last_record)
+  #    |> assign(:people, people)
+  #    |> assign(:prev_record, prev_record)
+  #    |> stream(:page, people.results, reset: true)}
 
-  end
+  # end
 
-  @impl true
-  def handle_event("search", %{"query" => query}, socket) do
-    people = search_people_by_first_name(query, socket)
+  # @impl true
+  # def handle_event("search", %{"query" => query}, socket) do
+  #   people = search_people_by_first_name(query, socket)
 
-    if String.trim(query) == "" do
-      {:noreply, assign(socket, people: people)}
-    else
-      {:noreply, stream(socket, :current_page_people, people, reset: true)}
-    end
-  end
+  #   if String.trim(query) == "" do
+  #     {:noreply, assign(socket, people: people)}
+  #   else
+  #     {:noreply, stream(socket, :current_page_people, people, reset: true)}
+  #   end
+  # end
 
-  defp search_people_by_first_name(query, socket) when is_binary(query) do
-    {:ok, people} = Person.read_all(ash_opts(socket))
-    capitalized_query = String.capitalize(query)
+  # defp search_people_by_first_name(query, socket) when is_binary(query) do
+  #   {:ok, people} = Person.read_all(ash_opts(socket))
+  #   capitalized_query = String.capitalize(query)
 
-    matching_people_data =
-      Enum.filter(people, fn person ->
-        String.contains?(String.capitalize(person.first_name), capitalized_query)
-      end)
-  end
+  #   matching_people_data =
+  #     Enum.filter(people, fn person ->
+  #       String.contains?(String.capitalize(person.first_name), capitalized_query)
+  #     end)
+  # end
 end

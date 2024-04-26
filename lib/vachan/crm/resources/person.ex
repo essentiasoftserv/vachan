@@ -38,7 +38,7 @@ defmodule Vachan.Crm.Person do
   end
 
   actions do
-    defaults [:create, :update, :destroy]
+    defaults [:read, :create, :update, :destroy]
 
     read :by_id do
       argument :id, :uuid, allow_nil?: false
@@ -47,11 +47,12 @@ defmodule Vachan.Crm.Person do
     end
   end
 
-  actions do
-    read :read do
-      pagination keyset?: true, default_limit: 50, countable: true
-    end
-  end
+  # TODO: implement pagination
+  # actions do
+  #   read :read do
+  #     pagination keyset?: true, default_limit: 10, countable: true
+  #   end
+  # end
 
   attributes do
     uuid_primary_key :id
