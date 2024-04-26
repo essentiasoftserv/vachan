@@ -68,49 +68,23 @@ defmodule VachanWeb.PersonLive.Index do
     {:noreply, socket}
   end
 
-  # def handle_event("next_page", %{"key_id" => key_id}, socket) do
-  #   {:ok, people} = Person.read_all(ash_opts(socket, page: [after: key_id]))
-  #   last_record = List.last(people.results)
-  #   prev_record = List.first(people.results)
+  @impl true
+  def handle_event("search", %{"query" => query}, socket) do
+    people = search_people_by_first_name(query, socket)
 
-  #   {:noreply,
-  #    assign(socket, :last_record, last_record)
-  #    |> assign(:people, people)
-  #    |> assign(:prev_record, prev_record)
-  #    |> stream(:page, people.results, reset: true)}
-  # end
+    if String.trim(query) == "" do
+      {:noreply, assign(socket, people: people)}
+    else
+      {:noreply, stream(socket, :people, people, reset: true)}
+    end
+  end
 
-  # def handle_event("prev_page", %{"key_id" => key_id}, socket) do
-  #   {:ok, people} = Person.read_all(ash_opts(socket, page: [before: key_id]))
-  #   prev_record = List.first(people.results)
-  #   last_record = List.last(people.results)
+  defp search_people_by_first_name(query, socket) when is_binary(query) do
+    {:ok, people} = Person.read_all(ash_opts(socket))
+    capitalized_query = String.capitalize(query)
 
-  #   {:noreply,
-  #    assign(socket, :last_record, last_record)
-  #    |> assign(:people, people)
-  #    |> assign(:prev_record, prev_record)
-  #    |> stream(:page, people.results, reset: true)}
-
-  # end
-
-  # @impl true
-  # def handle_event("search", %{"query" => query}, socket) do
-  #   people = search_people_by_first_name(query, socket)
-
-  #   if String.trim(query) == "" do
-  #     {:noreply, assign(socket, people: people)}
-  #   else
-  #     {:noreply, stream(socket, :current_page_people, people, reset: true)}
-  #   end
-  # end
-
-  # defp search_people_by_first_name(query, socket) when is_binary(query) do
-  #   {:ok, people} = Person.read_all(ash_opts(socket))
-  #   capitalized_query = String.capitalize(query)
-
-  #   matching_people_data =
-  #     Enum.filter(people, fn person ->
-  #       String.contains?(String.capitalize(person.first_name), capitalized_query)
-  #     end)
-  # end
+    Enum.filter(people, fn person ->
+      String.contains?(String.capitalize(person.first_name), capitalized_query)
+    end)
+  end
 end
