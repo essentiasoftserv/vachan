@@ -35,6 +35,7 @@ defmodule Vachan.Crm.Person do
     define :destroy, action: :destroy
     define :read_all, action: :read
     define :get_by_id, args: [:id], action: :by_id
+    define :list, action: :list
   end
 
   actions do
@@ -45,14 +46,15 @@ defmodule Vachan.Crm.Person do
       get? true
       filter expr(id == ^arg(:id))
     end
-  end
 
-  # TODO: implement pagination
-  # actions do
-  #   read :read do
-  #     pagination keyset?: true, default_limit: 10, countable: true
-  #   end
-  # end
+    read :list do
+      pagination do
+        default_limit 5
+        offset? true
+        countable :by_default
+      end
+    end
+  end
 
   attributes do
     uuid_primary_key :id

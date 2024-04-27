@@ -39,6 +39,14 @@
     </.link>
   </:action>
 </.table>
+<%= if @pages > 1 do %>
+  <.live_component
+    module={VachanWeb.PaginationComponent}
+    id="pagination-component"
+    pages={@pages}
+    active_page={@active_page}
+  />
+<% end %>
 <.modal
   :if={@live_action in [:new, :edit]}
   id="person-modal"
