@@ -35,17 +35,17 @@ defmodule VachanWeb.CampaignLive.Index do
     |> assign(:pages, ceil(page.count / socket.assigns.page_limit))
   end
 
-  defp list_campaigns(socket) do
-    page_count = [limit: socket.assigns.page_limit, offset: socket.assigns.page_offset]
-    Campaign.list!(ash_opts(socket, page: page_count))
-  end
-
   @impl true
   def handle_event("search", %{"query" => query}, socket) do
     campaigns = search_campaign_name(query, socket)
     {:noreply, stream(socket, :campaigns, campaigns, reset: true)}
     campaigns = search_campaign_name(query, socket)
     {:noreply, stream(socket, :campaigns, campaigns, reset: true)}
+  end
+
+  defp list_campaigns(socket) do
+    page_count = [limit: socket.assigns.page_limit, offset: socket.assigns.page_offset]
+    Campaign.list!(ash_opts(socket, page: page_count))
   end
 
   defp search_campaign_name(query, socket) when is_binary(query) do
