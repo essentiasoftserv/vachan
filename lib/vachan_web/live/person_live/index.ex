@@ -14,7 +14,7 @@ defmodule VachanWeb.PersonLive.Index do
      |> assign(:pages, 0)
      |> assign(:active_page, 1)
      |> assign(:page_offset, 0)
-     |> assign(:page_limit, 5)
+     |> assign(:page_limit, 50)
      |> stream(:people, [])}
   end
 
