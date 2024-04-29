@@ -61,15 +61,15 @@ defmodule VachanWeb.ListLive.Index do
     {:noreply, stream_delete(socket, :lists, list)}
   end
 
-  defp pagination_count_list(socket) do
-    page_count = [limit: socket.assigns.page_limit, offset: socket.assigns.page_offset]
-    List.list!(ash_opts(socket, page: page_count))
-  end
-
   @impl true
   def handle_event("search", %{"query" => query}, socket) do
     lists = search_list_by_first_name(query, socket)
     {:noreply, stream(socket, :lists, lists, reset: true)}
+  end
+
+  defp pagination_count_list(socket) do
+    page_count = [limit: socket.assigns.page_limit, offset: socket.assigns.page_offset]
+    List.list!(ash_opts(socket, page: page_count))
   end
 
   defp search_list_by_first_name(query, socket) when is_binary(query) do
