@@ -3,20 +3,12 @@ defmodule VachanWeb.ListLive.Index do
 
   alias Vachan.Crm.List
 
-  @page_limit 10
-
   @impl true
   def mount(_params, _session, socket) do
     {:ok, lists} = List.read_all(ash_opts(socket))
-    total_count = length(lists)
-    initial_page = get_page(lists, 1)
 
     {:ok,
      socket
-     |> assign(:total_count, total_count)
-     |> assign(:page_limit, @page_limit)
-     |> assign(:current_page, 1)
-     |> stream(:current_page_list, initial_page)
      |> stream(:lists, lists)}
   end
 
@@ -57,45 +49,17 @@ defmodule VachanWeb.ListLive.Index do
   end
 
   @impl true
-  def handle_event("next_page", _params, socket) do
-    %{current_page: current_page, total_count: total_count, page_limit: page_limit} =
-      socket.assigns
-
-    new_page = min(current_page + 1, div(total_count, page_limit) + 1)
-    new_page_list = get_page(socket.assigns.lists, new_page)
-
-    {:noreply,
-     assign(socket, current_page: new_page)
-     |> stream(:current_page_list, new_page_list, reset: true)}
-  end
-
-  @impl true
-  def handle_event("prev_page", _params, socket) do
-    %{current_page: current_page} = socket.assigns
-    new_page = max(current_page - 1, 1)
-    new_page_list = get_page(socket.assigns.lists, new_page)
-
-    {:noreply,
-     assign(socket, current_page: new_page)
-     |> stream(:current_page_list, new_page_list, reset: true)}
-  end
-
-  @impl true
   def handle_event("search", %{"query" => query}, socket) do
     lists = search_list_by_first_name(query, socket)
-    {:noreply, stream(socket, :current_page_list, lists, reset: true)}
-  end
-
-  defp get_page(lists, page) do
-    Enum.slice(lists, ((page - 1) * @page_limit)..(page * @page_limit))
+    {:noreply, stream(socket, :lists, lists, reset: true)}
   end
 
   defp search_list_by_first_name(query, socket) when is_binary(query) do
     {:ok, lists} = List.read_all(ash_opts(socket))
     capitalized_query = String.capitalize(query)
 
-      Enum.filter(lists, fn list ->
-        String.contains?(String.capitalize(list.name), capitalized_query)
-      end)
+    Enum.filter(lists, fn list ->
+      String.contains?(String.capitalize(list.name), capitalized_query)
+    end)
   end
 end
