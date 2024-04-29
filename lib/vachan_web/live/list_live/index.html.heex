@@ -11,7 +11,6 @@
 <.table
   id="lists"
   rows={@streams.lists}
-  rows={@streams.lists}
   row_click={fn {_id, list} -> JS.navigate(~p"/lists/#{list}") end}
 >
   <:col :let={{_id, list}} label="List Name"><%= list.name %></:col>
