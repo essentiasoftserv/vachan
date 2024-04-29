@@ -39,8 +39,6 @@ defmodule VachanWeb.CampaignLive.Index do
   def handle_event("search", %{"query" => query}, socket) do
     campaigns = search_campaign_name(query, socket)
     {:noreply, stream(socket, :campaigns, campaigns, reset: true)}
-    campaigns = search_campaign_name(query, socket)
-    {:noreply, stream(socket, :campaigns, campaigns, reset: true)}
   end
 
   defp list_campaigns(socket) do
@@ -52,9 +50,6 @@ defmodule VachanWeb.CampaignLive.Index do
     {:ok, campaigns} = Campaign.read_all(ash_opts(socket))
     capitalized_query = String.capitalize(query)
 
-    Enum.filter(campaigns, fn campaign ->
-      String.contains?(String.capitalize(campaign.name), capitalized_query)
-    end)
     Enum.filter(campaigns, fn campaign ->
       String.contains?(String.capitalize(campaign.name), capitalized_query)
     end)
