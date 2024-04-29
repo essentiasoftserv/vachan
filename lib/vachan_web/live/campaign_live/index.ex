@@ -6,8 +6,6 @@ defmodule VachanWeb.CampaignLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
-    Campaign.read_all!(ash_opts(socket))
-
     {:ok,
      socket
      |> assign(:pages, 0)

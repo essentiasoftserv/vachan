@@ -60,6 +60,12 @@ defmodule VachanWeb.Router do
       live "/campaigns/new", CampaignLive.Edit, :new
       live "/campaigns/:id/edit", CampaignLive.Edit, :edit
       live "/campaigns/:id/", CampaignLive.Show, :show
+
+      live "/sender-profiles", SenderProfileLive.Index, :index
+      live "/sender-profiles/new", SenderProfileLive.Index, :new
+      live "/sender-profiles/:id/edit", SenderProfileLive.Index, :edit
+      live "/sender-profiles/:id", SenderProfileLive.Show, :show
+      live "/sender-profiles/:id/show/edit", SenderProfileLive.Show, :edit
     end
   end
 

@@ -34,8 +34,6 @@ defmodule Vachan.Massmail.Campaign do
 
       accept [
         :name,
-        :sender_name,
-        :sender_email,
         :reply_to_email,
         :reply_to_name,
         :subject,
@@ -55,8 +53,6 @@ defmodule Vachan.Massmail.Campaign do
 
       accept [
         :name,
-        :sender_name,
-        :sender_email,
         :subject,
         :text_body
       ]
@@ -88,8 +84,6 @@ defmodule Vachan.Massmail.Campaign do
 
     attribute :name, :string, allow_nil?: false
 
-    attribute :sender_name, :string, allow_nil?: false
-    attribute :sender_email, :string, allow_nil?: false
     attribute :reply_to_email, :string, allow_nil?: true
     attribute :reply_to_name, :string, allow_nil?: true
 
@@ -114,6 +108,10 @@ defmodule Vachan.Massmail.Campaign do
 
     belongs_to :organization, Vachan.Organizations.Organization do
       api Vachan.Organizations
+    end
+
+    belongs_to :sender_profile, Vachan.SenderProfiles.SenderProfile do
+      api Vachan.SenderProfiles
     end
   end
 

@@ -23,6 +23,8 @@ ee<.header>
     title={@page_title}
     action={@live_action}
     list={@list}
+    current_user={@current_user}
+    current_org={@current_org}
     patch={~p"/lists/#{@list}"}
   />
 </.modal>

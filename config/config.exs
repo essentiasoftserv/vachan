@@ -14,7 +14,8 @@ config :vachan,
     Vachan.Massmail,
     Vachan.Prelaunch,
     Vachan.Organizations,
-    Vachan.Profiles
+    Vachan.Profiles,
+    Vachan.SenderProfiles
   ]
 
 config :ash, :compatible_foreign_key_types, [

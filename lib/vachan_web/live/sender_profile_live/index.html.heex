@@ -1,0 +1,47 @@
+<.header>
+  Sender Profiles
+  <:actions>
+    <.search_bar></.search_bar>
+    <.link patch={~p"/sender-profiles/new"}>
+      <.button class="w-36 h-10">Create New Sender Profile</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="sender_profiles"
+  rows={@streams.sender_profiles}
+  row_click={fn {_id, sender_profile} -> JS.navigate(~p"/sender-profiles/#{sender_profile}") end}
+>
+  <:col :let={{_id, sender_profile}} label="Profile Name"><%= sender_profile.title %></:col>
+  <:col :let={{_id, sender_profile}} label="Sender's Name"><%= sender_profile.name %></:col>
+  <:col :let={{_id, sender_profile}} label="Sender's Email"><%= sender_profile.email %></:col>
+
+  <:col :let={{_id, sender_profile}} label="SMTP Username"><%= sender_profile.username %></:col>
+  <:col :let={{_id, sender_profile}} label="SMTP Password"><%= sender_profile.password %></:col>
+  <:col :let={{_id, sender_profile}} label="SMTP Hostname"><%= sender_profile.smtp_host %></:col>
+  <:col :let={{_id, sender_profile}} label="SMTP Port"><%= sender_profile.smtp_port %></:col>
+  <:action :let={{_id, sender_profile}}>
+    <div class="sr-only">
+      <.link navigate={~p"/sender-profiles/#{sender_profile}"}>Show</.link>
+    </div>
+    <.link patch={~p"/sender-profiles/#{sender_profile}/edit"}>Edit</.link>
+  </:action>
+</.table>
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="sender-profile-modal"
+  show
+  on_cancel={JS.patch(~p"/sender-profiles")}
+>
+  <.live_component
+    module={VachanWeb.SenderProfileLive.FormComponent}
+    id={@sender_profile.id || :new}
+    title={@page_title}
+    action={@live_action}
+    sender_profile={@sender_profile}
+    current_user={@current_user}
+    current_org={@current_org}
+    patch={~p"/sender-profiles"}
+  />
+</.modal>

@@ -3,6 +3,7 @@ defmodule VachanWeb.CampaignLive.Edit do
 
   alias Vachan.Massmail.Campaign
   alias Vachan.Crm.List
+  alias Vachan.SenderProfiles.SenderProfile
 
   @impl true
   def mount(%{"id" => id}, _session, socket) do
@@ -12,6 +13,7 @@ defmodule VachanWeb.CampaignLive.Edit do
      socket
      |> assign(campaign: campaign)
      |> assign(list_options: list_options(socket))
+     |> assign(sender_profile_options: sender_profile_options(socket))
      |> assign(patch: ~p"/campaigns")
      |> assign(form: update_form(socket, campaign))}
   end
@@ -22,6 +24,7 @@ defmodule VachanWeb.CampaignLive.Edit do
      socket
      |> assign(patch: ~p"/campaigns")
      |> assign(list_options: list_options(socket))
+     |> assign(sender_profile_options: sender_profile_options(socket))
      |> assign(form: create_form(socket))}
   end
 
@@ -50,6 +53,11 @@ defmodule VachanWeb.CampaignLive.Edit do
 
   defp list_options(socket) do
     List.read_all!(ash_opts(socket))
+    |> Enum.map(&{&1.name, &1.id})
+  end
+
+  defp sender_profile_options(socket) do
+    SenderProfile.read_all!(ash_opts(socket))
     |> Enum.map(&{&1.name, &1.id})
   end
 

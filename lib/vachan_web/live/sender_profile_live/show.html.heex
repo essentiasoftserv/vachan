@@ -1,0 +1,42 @@
+<.header>
+  Person <%= @sender_profile.id %>
+  <:subtitle>This is a Sender Profile record from your database.</:subtitle>
+  <:actions>
+    <.link patch={~p"/sender-profiles/#{@sender_profile}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit Sender Profile</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Profile Name"><%= @sender_profile.title %></:item>
+  <:item title="Sender's Name"><%= @sender_profile.name %></:item>
+  <:item title="Sender's Email"><%= @sender_profile.email %></:item>
+
+  <:item title="SMTP Username"><%= @sender_profile.username %></:item>
+  <:item title="SMTP Password"><%= @sender_profile.password %></:item>
+  <:item title="SMTP Hostname"><%= @sender_profile.smtp_host %></:item>
+  <:item title="SMTP Port"><%= @sender_profile.smtp_port %></:item>
+</.list>
+
+<.back navigate={~p"/sender-profiles"}>
+  <.button class="w-36 h-10">Back to people</.button>
+</.back>
+
+<.modal
+  :if={@live_action == :edit}
+  id="sender-profile-modal"
+  show
+  on_cancel={JS.patch(~p"/sender-profiles/#{@sender_profile}")}
+>
+  <.live_component
+    module={VachanWeb.SenderProfileLive.FormComponent}
+    id={@sender_profile.id}
+    title={@page_title}
+    action={@live_action}
+    sender_profile={@sender_profile}
+    current_user={@current_user}
+    current_org={@current_org}
+    patch={~p"/sender-profile/#{@sender_profile}"}
+  />
+</.modal>

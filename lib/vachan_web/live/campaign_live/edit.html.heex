@@ -1,9 +1,14 @@
+<.header class="text-center">
+  <%= if @live_action==:edit do %>
+    Edit Campaign
+  <% else %>
+    New Campaign
+  <% end %>
+</.header>
+
 <div class="w-5/6 m-auto">
   <div class="p-0">
     <.simple_form for={@form} phx-change="validate" phx-submit="save" class="p-4">
-      <.header class="text-center">
-        edit / new view <%= @live_action %>
-      </.header>
       <div class="grid grid-cols-1 gap-x-8 gap-y-10 border-b border-gray-900/10 pb-12 md:grid-cols-2">
         <.input field={@form[:name]} type="text" label="Campaign Name" placeholder="CTOs 1">
         </.input>
@@ -13,20 +18,6 @@
           type="text"
           label="Subject Template"
           placeholder="Are you facing touble with X."
-        >
-        </.input>
-        <.input
-          field={@form[:sender_name]}
-          type="text"
-          label="Sender's Name"
-          placeholder="Mr Awesome Mishra"
-        >
-        </.input>
-        <.input
-          field={@form[:sender_email]}
-          type="email"
-          label="Sender's Email"
-          placeholder="awesome.mishra@example.com"
         >
         </.input>
 
@@ -39,6 +30,23 @@
           >
           </.input>
         </div>
+
+        <%= if @live_action==:edit do %>
+          <.input
+            field={@form[:sender_profile_id]}
+            type="select"
+            options={@sender_profile_options}
+            value={@campaign.sender_profile_id}
+          >
+          </.input>
+        <% else %>
+          <.input
+            field={@form[:sender_profile_id]}
+            type="select"
+            options={@sender_profile_options}
+          >
+          </.input>
+        <% end %>
 
         <%= if @live_action==:edit do %>
           <.input
