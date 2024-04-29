@@ -63,7 +63,7 @@ defmodule Vachan.Crm.List do
 
     read :list do
       pagination do
-        default_limit 5
+        default_limit 50
         offset? true
         countable :by_default
       end
