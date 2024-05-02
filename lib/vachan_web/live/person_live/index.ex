@@ -73,12 +73,8 @@ defmodule VachanWeb.PersonLive.Index do
   @impl true
   def handle_event("search", %{"query" => query}, socket) do
     people = search_people_by_first_name(query, socket)
-
-    if String.trim(query) == "" do
-      {:noreply, assign(socket, people: people)}
-    else
-      {:noreply, stream(socket, :people, people, reset: true)}
-    end
+    {:noreply, stream(socket, :people, people, reset: true)}
+    
   end
 
   defp list_people(socket) do
