@@ -22,6 +22,7 @@ defmodule Vachan.AccountsFixtures do
     {:ok, user} = register(%{@valid_attrs | "email" => email})
     {:ok, confirmed_user} = confirm(user)
     confirmed_user
+    |> Vachan.Accounts.load!(:orgs)
   end
 
   def profiled_user(email \\ "test@test", _name \\ "Test Name") do
