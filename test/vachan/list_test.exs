@@ -27,7 +27,7 @@ defmodule Vachan.ListTest do
     test "Test-2: list should be created with invalid attributes" do
       user = confirmed_user()
       invalid_list = create_list(@invalid_attrs, user)
-      # assert invalid_list.name == @invalid_attrs["name"]
+      assert invalid_list.name == @invalid_attrs["name"]
     end
 
     test "Test-3: list should be updated with valid attributes" do
