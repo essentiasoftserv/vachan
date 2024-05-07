@@ -52,6 +52,8 @@ defmodule Vachan.PersonTest do
 
   test "should not be updated with invalid attributes" do
     user=confirmed_user()
+    tenant = user.orgs |> hd |> then(fn x -> x.id end)
+    {:ok, person} = create_person(@valid_attrs, user)
     {:error, err} = update_person(person, @invalid_attrs, user, tenant)
   end
 
