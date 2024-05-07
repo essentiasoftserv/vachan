@@ -50,6 +50,12 @@ defmodule Vachan.PersonTest do
 
   end
 
+  test "should not be updated with invalid attributes" do
+    user=confirmed_user()
+    {:error, err} = update_person(@invalid_attrs, user)
+  end
+
+
   defp update_person(person, attrs, user, tenant)do
    person
    |> Ash.Changeset.for_update(:update, attrs, actor: user, tenant: tenant )
