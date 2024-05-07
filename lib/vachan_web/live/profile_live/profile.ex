@@ -57,13 +57,14 @@ defmodule VachanWeb.ProfileLive.Profile do
 
     case AshPhoenix.Form.submit(form) do
       {:ok, result} ->
-        form =
-          result
-          |> AshPhoenix.Form.for_update(:update,
-            api: Profiles,
-            actor: socket.assigns.current_user,
-            forms: [auto?: true]
-          )
+        assign(socket,
+          form:
+            AshPhoenix.Form.for_update(result, :update,
+              api: Profiles,
+              actor: socket.assigns.current_user,
+              forms: [auto?: true]
+            )
+        )
 
         {:noreply, assign(socket, form: form)}
 
