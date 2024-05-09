@@ -40,63 +40,92 @@ defmodule VachanWeb.SidebarMenuLiveComponent do
 
   def render(assigns) do
     ~H"""
-    <aside
-      id="logo-sidebar"
-      class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-customBackground border-r border-gray-300 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
-      aria-label="Sidebar"
+    <div
+      id="drawer-navigation"
+      class="fixed top-0 left-0 z-40 h-screen overflow-y-auto transition-transform bg-customBackground w-60 dark:bg-gray-800 -translate-x-full"
+      tabindex="-1"
+      aria-labelledby="drawer-navigation-label"
+      aria-modal="true"
+      role="dialog"
     >
-      <div class="h-full px-3 pb-4 overflow-y-auto bg-customBackground dark:bg-gray-800">
-        <ul class="space-y-2 font-medium">
-          <li>
-            <.menu_item label="People" path={~p"/people"}>
-              <VachanWeb.Common.Icons.people />
-            </.menu_item>
-          </li>
-
-          <li>
-            <.menu_item label="Lists" path={~p"/lists"}>
-              <svg
-                aria-hidden="true"
-                class="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
-                <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
-              </svg>
-            </.menu_item>
-          </li>
-          <li>
-            <.menu_item label="Sender Profiles" path={~p"/sender-profiles"}>
-              <svg
-                aria-hidden="true"
-                class="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
-                <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
-              </svg>
-            </.menu_item>
-          </li>
-          <li>
-            <.menu_item label="Campaigns" path={~p"/campaigns"}>
-              <svg
-                aria-hidden="true"
-                class="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
-                <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
-              </svg>
-            </.menu_item>
-          </li>
-        </ul>
+      <div class=" border-b border-gray-300">
+        <img src="/images/vaak-logo.svg" class="mrw-3 h-14 w-fusll" alt="Vaak Logo" />
       </div>
+      <button
+        type="button"
+        data-drawer-hide="drawer-navigation"
+        aria-controls="drawer-navigation"
+        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 absolute top-2.5 end-2.5 inline-flex items-center justify-center dark:hover:bg-gray-600 dark:hover:text-white"
+      >
+        <svg
+          class="w-3 h-3"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 14 14"
+        >
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+          >
+          </path>
+        </svg>
+        <span class="sr-only">Close menu</span>
+      </button>
+      <div class="py-4 overflow-y-auto"></div>
+      <ul class="space-y-2 font-medium">
+        <li>
+          <.menu_item label="People" path={~p"/people"}>
+            <VachanWeb.Common.Icons.people />
+          </.menu_item>
+        </li>
+        <li>
+          <.menu_item label="Lists" path={~p"/lists"}>
+            <svg
+              aria-hidden="true"
+              class="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
+              <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
+            </svg>
+          </.menu_item>
+        </li>
+        <li>
+          <.menu_item label="Sender Profiles" path={~p"/sender-profiles"}>
+            <svg
+              aria-hidden="true"
+              class="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
+              <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
+            </svg>
+          </.menu_item>
+        </li>
+        <li>
+          <.menu_item label="Campaigns" path={~p"/campaigns"}>
+            <svg
+              aria-hidden="true"
+              class="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
+              <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
+            </svg>
+          </.menu_item>
+        </li>
+      </ul>
+
       <div class="hidden absolute bottom-0 left-0 justify-center p-4 space-x-4 w-full lg:flex bg-customBackground dark:bg-gray-800 z-20">
         <a
           href="#"
@@ -142,7 +171,7 @@ defmodule VachanWeb.SidebarMenuLiveComponent do
           <div class="tooltip-arrow" data-popper-arrow></div>
         </div>
       </div>
-    </aside>
+    </div>
     """
   end
 

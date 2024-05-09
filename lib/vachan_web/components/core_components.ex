@@ -579,28 +579,27 @@ defmodule VachanWeb.CoreComponents do
   def search_bar(assigns) do
     ~H"""
     <form phx-submit="search" phx-change="search">
-      <input
-        type="text"
-        name="query"
-        placeholder="Search..."
-        class="bg-customBackground_header border border-gray-300 focus:outline-none focus:border-gray-400 rounded-md py-2 pl-14 pr-6 block w-full appearance-none leading-normal"
-      />
-      <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-        <svg
-          class="w-4 h-4 text-gray-500 dark:text-gray-400"
-          aria-hidden="true"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 20 20"
-        >
-          <path
+      <div class="relative text-gray-900 focus-within:text-gray-600">
+        <span class="absolute inset-y-0 left-0 flex items-center pl-2 text-gray-600">
+          <svg
+            fill="none"
             stroke="currentColor"
             stroke-linecap="round"
             stroke-linejoin="round"
             stroke-width="2"
-            d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-          />
-        </svg>
+            viewBox="0 0 24 24"
+            class="w-6 h-6"
+          >
+            <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+          </svg>
+        </span>
+        <input
+          type="search"
+          name="query"
+          class="bg-customBackground_header border border-gray-300 focus:outline-none focus:border-gray-400 rounded-md py-2 pl-14 pr-6 block w-full appearance-none leading-normal"
+          placeholder="Search..."
+          autocomplete="off"
+        />
       </div>
     </form>
     """
