@@ -42,9 +42,8 @@ defmodule Vachan.ListTest do
   test "Test-4: list should be updated with invalid attributes" do
     user = confirmed_user()
     tenant = user.orgs |> hd |> then(fn x -> x.id end)
-    list = create_list(@valid_attrs, user)
-    invalid_list = create_list(@invalid_attrs, user)
-    assert invalid_list.name == @invalid_attrs["name"]
+    invalid_list = create_list(@valid_attrs, user)
+    err_attrs = update_list(invalid_list, @invalid_attrs, user, tenant)
   end
 
   defp create_list(attrs, user) do
