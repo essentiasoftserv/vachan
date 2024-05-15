@@ -1,5 +1,6 @@
 defmodule VachanWeb.Plugs.RedirectIfAuthenticated do
   import Plug.Conn
+  import Phoenix.Controller, only: [put_flash: 3, redirect: 2]
 
   def init(_opts), do: nil
 
