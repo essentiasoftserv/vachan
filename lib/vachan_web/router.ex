@@ -11,7 +11,7 @@ defmodule VachanWeb.Router do
     plug :put_root_layout, html: {VachanWeb.Layouts, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
-    plug :load_from_session
+    plug VachanWeb.Plugs.LoadUser  # Line 15: Add LoadUser plug
   end
 
   pipeline :api do
@@ -19,8 +19,12 @@ defmodule VachanWeb.Router do
     plug :load_from_bearer
   end
 
+  pipeline :auth_check do
+    plug VachanWeb.Plugs.RedirectIfAuthenticated  # Line 23: Add RedirectIfAuthenticated plug
+  end
+
   scope "/", VachanWeb do
-    pipe_through :browser
+    pipe_through [:browser, :auth_check]  # Line 26: Use both browser and auth_check pipelines
 
     get "/demo", PageController, :home
 
@@ -39,6 +43,10 @@ defmodule VachanWeb.Router do
     sign_out_route AuthController
     auth_routes_for Vachan.Accounts.User, to: AuthController
     reset_route []
+  end
+
+  scope "/", VachanWeb do
+    pipe_through :browser  # Line 42: Separate scope without auth_check
 
     ash_authentication_live_session :confirmed_user_required,
       on_mount: {VachanWeb.LiveUserAuth, :live_confirmed_user_required} do
@@ -105,3 +113,4 @@ defmodule VachanWeb.Router do
     end
   end
 end
+
