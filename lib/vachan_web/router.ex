@@ -11,6 +11,7 @@ defmodule VachanWeb.Router do
     plug :put_root_layout, html: {VachanWeb.Layouts, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug VachanWeb.Plugs.RedirectIfAuthenticated
     plug VachanWeb.Plugs.LoadUser  # Add LoadUser plug
   end
 

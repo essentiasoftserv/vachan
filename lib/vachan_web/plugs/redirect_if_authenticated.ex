@@ -1,17 +1,23 @@
 defmodule VachanWeb.Plugs.RedirectIfAuthenticated do
   import Plug.Conn
-  import Phoenix.Controller
-  alias VachanWeb.Router.Helpers, as: Routes
 
-  def init(default), do: default
+  def init(_opts), do: nil
 
-  def call(conn, _default) do
-    if conn.assigns[:current_user] do
+  def call(conn, _) do
+    if is_authenticated(conn) do
       conn
-      |> redirect(to: Routes.person_path(conn, :index))
+      |> put_flash(:info, "You are already signed in.")
+      |> redirect(to: "/people") # Redirect to the desired page
       |> halt()
     else
       conn
     end
+  end
+
+  defp is_authenticated(conn) do
+    # Implement your logic to check if the user is authenticated here
+    # For example, you can check if a user is present in the session
+    user_id = get_session(conn, :user_id)
+    !is_nil(user_id)
   end
 end
