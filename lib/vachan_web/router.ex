@@ -11,7 +11,7 @@ defmodule VachanWeb.Router do
     plug :put_root_layout, html: {VachanWeb.Layouts, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
-    plug VachanWeb.Plugs.LoadUser  # Line 15: Add LoadUser plug
+    plug VachanWeb.Plugs.LoadUser  # Add LoadUser plug
   end
 
   pipeline :api do
@@ -20,20 +20,16 @@ defmodule VachanWeb.Router do
   end
 
   pipeline :auth_check do
-    plug VachanWeb.Plugs.RedirectIfAuthenticated  # Line 23: Add RedirectIfAuthenticated plug
+    plug VachanWeb.Plugs.RedirectIfAuthenticated  # Add RedirectIfAuthenticated plug
   end
 
   scope "/", VachanWeb do
-    pipe_through [:browser, :auth_check]  # Line 26: Use both browser and auth_check pipelines
+    pipe_through [:browser, :auth_check]  # Use both browser and auth_check pipelines
 
     get "/demo", PageController, :home
 
     live "/", PrelaunchLive.Homepage
     live "/verify-email", VerifyEmailLive
-    # Leave out `register_path` and `reset_path` if you don't want to support
-    # user registration and/or password resets respectively.
-    # sign_in_route(register_path: "/register", reset_path: "/reset")
-    # Define your authentication routes with overrides
     sign_in_route(
       register_path: "/register",
       reset_path: "/reset",
@@ -46,7 +42,7 @@ defmodule VachanWeb.Router do
   end
 
   scope "/", VachanWeb do
-    pipe_through :browser  # Line 42: Separate scope without auth_check
+    pipe_through :browser  # Separate scope without auth_check
 
     ash_authentication_live_session :confirmed_user_required,
       on_mount: {VachanWeb.LiveUserAuth, :live_confirmed_user_required} do
@@ -108,7 +104,6 @@ defmodule VachanWeb.Router do
           oban: Oban.LiveDashboard
         ]
 
-      # live_dashboard "/dashboard", metrics: VachanWeb.Telemetry
       forward "/mailbox", Plug.Swoosh.MailboxPreview
     end
   end
