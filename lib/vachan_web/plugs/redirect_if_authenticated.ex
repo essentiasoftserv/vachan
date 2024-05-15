@@ -1,17 +1,12 @@
-defmodule VachanWeb.Plugs.RedirectIfAuthenticated do
-  import Plug.Conn
-  import Phoenix.Controller
-  alias VachanWeb.Router.Helpers, as: Routes
-
-  def init(default), do: default
-
-  def call(conn, _default) do
-    if conn.assigns[:current_user] do
-      conn
-      |> redirect(to: Routes.person_path(conn, :index))
-      |> halt()
-    else
-      conn
-    end
+def call(conn, _default) do
+  IO.inspect(conn.assigns[:current_user], label: "Current User") # Check if current_user assign is set
+  if conn.assigns[:current_user] do
+    IO.puts("Redirecting authenticated user") # Debug statement to verify redirection
+    conn
+    |> redirect(to: "/people") # Hardcoded redirection for testing
+    |> halt()
+  else
+    IO.puts("User not authenticated") # Debug statement if user is not authenticated
+    conn
   end
 end
