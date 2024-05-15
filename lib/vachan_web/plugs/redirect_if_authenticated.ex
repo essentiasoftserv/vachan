@@ -7,7 +7,7 @@ defmodule VachanWeb.Plugs.RedirectIfAuthenticated do
   def call(conn, _opts) do
     if conn.assigns[:current_user] do
       conn
-      |> redirect(to: "/people")
+      |> redirect(to: "/verify-email")
       |> halt()
     else
       conn
