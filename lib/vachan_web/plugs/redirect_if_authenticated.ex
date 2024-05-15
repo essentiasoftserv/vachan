@@ -8,7 +8,7 @@ defmodule VachanWeb.Plugs.RedirectIfAuthenticated do
     if is_authenticated(conn) do
       conn
       |> put_flash(:info, "You are already signed in.")
-      |> redirect(to: "/people") # Redirect to the desired page
+      |> redirect(to: "/verify-email") # Redirect to the desired page
       |> halt()
     else
       conn
