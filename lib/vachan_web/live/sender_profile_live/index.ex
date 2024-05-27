@@ -35,4 +35,22 @@ defmodule VachanWeb.SenderProfileLive.Index do
     |> assign(:page_title, "New Sender Profile")
     |> assign(:sender_profile, %SenderProfile{})
   end
+
+  @impl true
+  def handle_event("search", %{"query" => query}, socket) do
+    sender_profiles = search_people_by_sender_profile_name(query, socket)
+    if String.trim(query) == "" do
+      {:noreply, assign(socket, sender_profiles: sender_profiles)}
+    else
+      {:noreply, stream(socket, :sender_profiles, sender_profiles, reset: true)}
+    end
+  end
+
+  defp search_people_by_sender_profile_name(query, socket) when is_binary(query) do
+    {:ok, sender_profiles} = SenderProfile.read_all(ash_opts(socket))
+    capitalized_query = String.capitalize(query)
+    Enum.filter(sender_profiles, fn sender_profile ->
+      String.contains?(String.capitalize(sender_profile.title), capitalized_query)
+    end)
+  end
 end
