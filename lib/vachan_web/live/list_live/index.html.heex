@@ -30,14 +30,6 @@
     </.link>
   </:action>
 </.table>
-<%= if @pages > 1 do %>
-  <.live_component
-    module={VachanWeb.PaginationComponent}
-    id="pagination-component-list"
-    pages={@pages}
-    active_page={@active_page}
-  />
-<% end %>
 <.modal :if={@live_action in [:new, :edit]} id="list-modal" show on_cancel={JS.patch(~p"/lists")}>
   <.live_component
     module={VachanWeb.ListLive.FormComponent}
