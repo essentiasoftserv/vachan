@@ -1,5 +1,3 @@
-import VachanWeb.AuthOverrides
-
 defmodule VachanWeb.Router do
   use VachanWeb, :router
   use AshAuthentication.Phoenix.Router
@@ -74,6 +72,20 @@ defmodule VachanWeb.Router do
       live "/sender-profiles/:id/edit", SenderProfileLive.Index, :edit
       live "/sender-profiles/:id", SenderProfileLive.Show, :show
       live "/sender-profiles/:id/show/edit", SenderProfileLive.Show, :edit
+
+      live "/wizard", CampaignWizard.CampaignWizardLive, :new
+      live "/wizard/:id/add-content", CampaignWizard.CampaignWizardLive, :add_content
+      live "/wizard/:id/add-recepients", CampaignWizard.CampaignWizardLive, :add_recepients
+
+      live "/wizard/:id/add-sender-profile",
+           CampaignWizard.CampaignWizardLive,
+           :add_sender_profile
+
+      live "/wizard/:id/review", CampaignWizard.CampaignWizardLive, :review
+
+      live "/wizard/:id/add-sender-profile/create",
+           CampaignWizard.CampaignWizardLive,
+           :create_sender_profile
     end
   end
 

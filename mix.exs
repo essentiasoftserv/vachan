@@ -67,7 +67,8 @@ defmodule Vachan.MixProject do
       {:oban_live_dashboard, "~> 0.1.0"},
       {:gen_smtp, "~> 1.2"},
       {:tls_certificate_check, "~> 1.22"},
-      {:certifi, "~> 2.13"}
+      {:certifi, "~> 2.13"},
+      {:ash_state_machine, "~> 0.2.2"}
     ]
   end
 

@@ -284,3 +284,36 @@ Vachan.Accounts.User |> Ash.Query.filter(id: user.id)
 require Ash.Query
 Ash.Query.filter(Vachan.Accounts.User, id: user.id) |> Vachan.Accounts.read!()
 ```
+
+## content
+
+
+
+```elixir
+1
+```
+
+```elixir
+user =
+  Vachan.Accounts.User
+  |> Vachan.Accounts.read!()
+  |> hd
+  |> Vachan.Accounts.load!(:orgs)
+
+org = user.orgs |> hd
+
+campaign = Vachan.Massmail.Campaign.read_all!(actor: user, tenant: org.id) |> hd
+
+attrs = %{subject: "blah", text_body: "bleh", campaign_id: campaign.id}
+
+Vachan.Massmail.Content
+|> Ash.Changeset.for_create(:create, attrs, actor: user, tenant: org.id)
+|> Vachan.Massmail.create()
+
+1
+```
+
+```elixir
+error = x.errors |> hd
+error.stacktrace
+```

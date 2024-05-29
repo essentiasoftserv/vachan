@@ -14,8 +14,6 @@
   row_click={fn {_id, campaign} -> JS.navigate(~p"/campaigns/#{campaign}") end}
 >
   <:col :let={{_id, campaign}} label="Campaign Name"><%= campaign.name %></:col>
-  <:col :let={{_id, campaign}} label="Subject"><%= campaign.subject %></:col>
-  <:col :let={{_id, campaign}} label="Status"><%= campaign.status %></:col>
 
   <:action :let={{_id, campaign}}>
     <div class="sr-only">
@@ -28,11 +26,3 @@
     </.link>
   </:action>
 </.table>
-<%= if @pages > 1 do %>
-  <.live_component
-    module={VachanWeb.PaginationComponent}
-    id="pagination-component-campaigns"
-    pages={@pages}
-    active_page={@active_page}
-  />
-<% end %>

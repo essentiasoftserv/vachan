@@ -6,6 +6,8 @@ defmodule Vachan.Massmail do
     resource Vachan.Massmail.Message
     resource Vachan.Massmail.Template
     resource Vachan.Massmail.Event
+    resource Vachan.Massmail.Content
+    resource Vachan.Massmail.Recepients
   end
 
   authorization do

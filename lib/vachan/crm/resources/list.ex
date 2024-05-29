@@ -37,7 +37,6 @@ defmodule Vachan.Crm.List do
     define :get_by_id, args: [:id], action: :by_id
     define :add_person, args: [:person_id], action: :add_person
     define :remove_person, args: [:person_id], action: :remove_person
-    define :list, action: :list
   end
 
   actions do
@@ -59,14 +58,6 @@ defmodule Vachan.Crm.List do
       argument :id, :integer, allow_nil?: false
       get? true
       filter expr(id == ^arg(:id))
-    end
-
-    read :list do
-      pagination do
-        default_limit 50
-        offset? true
-        countable :by_default
-      end
     end
   end
 

@@ -40,28 +40,26 @@ defmodule Vachan.PersonTest do
   end
 
   test "should be updated with valid attributes" do
-    user=confirmed_user()
+    user = confirmed_user()
     tenant = user.orgs |> hd |> then(fn x -> x.id end)
     {:ok, person} = create_person(@valid_attrs, user)
-    {:ok,updated} = update_person(person, @update_attrs, user, tenant)
+    {:ok, updated} = update_person(person, @update_attrs, user, tenant)
     assert updated.first_name == @update_attrs["first_name"]
     assert updated.last_name == @update_attrs["last_name"]
     assert updated.email |> to_string == @update_attrs["email"]
-
   end
 
   test "should not be updated with invalid attributes" do
-    user=confirmed_user()
+    user = confirmed_user()
     tenant = user.orgs |> hd |> then(fn x -> x.id end)
     {:ok, person} = create_person(@valid_attrs, user)
     {:error, err} = update_person(person, @invalid_attrs, user, tenant)
   end
 
-
-  defp update_person(person, attrs, user, tenant)do
-   person
-   |> Ash.Changeset.for_update(:update, attrs, actor: user, tenant: tenant )
-   |> Crm.update()
+  defp update_person(person, attrs, user, tenant) do
+    person
+    |> Ash.Changeset.for_update(:update, attrs, actor: user, tenant: tenant)
+    |> Crm.update()
   end
 
   defp create_person(attrs, user) do

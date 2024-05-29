@@ -1,0 +1,10 @@
+stateDiagram-v2
+new --> content_added: add_content
+content_added --> recepients_added: add_recepients
+recepients_added --> sender_added: add_sender
+sender_added --> test_mail_sent: send_test_mail
+test_mail_sent --> sending_started: start_sending
+sending_started --> error: error
+sending_started --> sending_finished: complete
+sender_added --> error: error
+new --> error: error

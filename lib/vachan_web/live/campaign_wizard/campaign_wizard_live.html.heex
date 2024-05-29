@@ -1,0 +1,29 @@
+<div>
+  <.live_component
+    module={@current_step.module}
+    id={@current_step.live_action}
+    next_f={@current_step.next}
+    current_user={@current_user}
+    current_org={@current_org}
+    campaign={@campaign}
+
+  >
+  </.live_component>
+</div>
+<.modal
+  :if={@live_action in [:create_sender_profile]}
+  id="sender-profile-modal"
+  show
+  on_cancel={JS.patch(~p"/wizard/#{@campaign_id}/add-sender-profile")}
+>
+  <.live_component
+    module={VachanWeb.SenderProfileLive.FormComponent}
+    id={:new}
+    title="Create Sender Profile"
+    action={:new}
+    sender_profile={nil}
+    current_user={@current_user}
+    current_org={@current_org}
+    patch={~p"/wizard/#{@campaign_id}/add-sender-profile"}
+  />
+</.modal>
