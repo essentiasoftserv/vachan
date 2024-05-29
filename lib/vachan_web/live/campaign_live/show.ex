@@ -19,8 +19,8 @@ defmodule VachanWeb.CampaignLive.Show do
       </.header>
       <.list>
         <:item title="Campaign Name"><%= @campaign.name %></:item>
-        <:item title="Email Subject"><%= @campaign.subject %></:item>
-        <:item title="list"><%= @campaign.list.name %></:item>
+        <%!-- <:item title="Email Subject"><%= @campaign.subject %></:item>
+        <:item title="list"><%= @campaign.list.name %></:item> --%>
       </.list>
       <.back navigate={~p"/campaigns"}>
         <.button>Back to campaigns</.button>
