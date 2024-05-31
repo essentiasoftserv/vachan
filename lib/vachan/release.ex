@@ -77,7 +77,7 @@ defmodule Vachan.Release do
     domains()
     |> Enum.flat_map(fn api ->
       api
-      |> Ash.Api.Info.resources()
+      |> Ash.Domain.Info.resources()
       |> Enum.map(&AshPostgres.DataLayer.Info.repo/1)
     end)
     |> Enum.uniq()
