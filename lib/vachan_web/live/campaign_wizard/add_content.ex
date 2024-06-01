@@ -37,6 +37,13 @@ defmodule VachanWeb.CampaignWizard.ContentStep do
           </:actions>
         </.simple_form>
       </div>
+
+      <div>
+        <h1>extracted variables:</h1>
+        <%= for variable <- @extracted_variables do %>
+          <%= variable %>
+        <% end %>
+      </div>
     </div>
     """
   end
@@ -46,13 +53,21 @@ defmodule VachanWeb.CampaignWizard.ContentStep do
     {:ok,
      socket
      |> assign(assigns)
+     |> assign(:extracted_variables, [])
      |> assign(form: create_form(assigns))}
   end
 
   @impl true
   def handle_event("validate", %{"form" => params}, socket) do
     form = AshPhoenix.Form.validate(socket.assigns.form, params)
-    {:noreply, assign(socket, form: to_form(form))}
+
+    extracted_variables =
+      extract_strings(params["text_body"]) ++ extract_strings(params["subject"])
+
+    {:noreply,
+     socket
+     |> assign(:form, to_form(form))
+     |> assign(:extracted_variables, extracted_variables)}
   end
 
   @impl true
@@ -81,6 +96,12 @@ defmodule VachanWeb.CampaignWizard.ContentStep do
       ash_opts(assigns, domain: Vachan.Massmail)
     )
     |> to_form()
+  end
+
+  defp extract_strings(input_string) do
+    ~r/{{(.*?)}}/s
+    |> Regex.scan(input_string)
+    |> Enum.map(&List.first(&1))
   end
 
   defp notify_parent(msg), do: send(self(), {__MODULE__, msg})

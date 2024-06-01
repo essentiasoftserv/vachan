@@ -92,7 +92,7 @@ defmodule VachanWeb.CampaignWizard.AddSenderProfile do
 
     case AshPhoenix.Form.submit(form) do
       {:ok, content} ->
-        # notify_parent({:success, content})
+        notify_parent({:success, content})
 
         {
           :noreply,
