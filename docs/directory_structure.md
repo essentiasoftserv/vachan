@@ -2,7 +2,7 @@
 
 
 ~~~bash 
-	Vachan/ 
+Vachan/ 
 │ ├── assets/  
 │ 	├── css/  
 │ 	├── js/  
