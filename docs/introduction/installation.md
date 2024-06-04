@@ -125,8 +125,8 @@ config :vachan, Vachan.Repo,
 Create and migrate the database:
 
 ```sh
-mix ash_ecto.create
-mix ash_ecto.migrate
+mix ash_postgres.create
+mix ash_postgres.migrate
 ```
 
 ## Running the Application
