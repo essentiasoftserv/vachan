@@ -108,7 +108,7 @@ GRANT ALL PRIVILEGES ON DATABASE vachan_dev TO postgres;
 
 #### Update Configuration
 
-Update the `config/dev.exs` file with your database credentials:
+Make sure  `config/dev.exs` file looks like this:
 
 ```elixir
 config :vachan, Vachan.Repo,
@@ -125,16 +125,8 @@ config :vachan, Vachan.Repo,
 Create and migrate the database:
 
 ```sh
-mix ecto.create
-mix ecto.migrate
-```
-
-### 5. Install Additional Tools (Optional)
-
-If you need any additional tools or dependencies like Phoenix LiveDashboard or Ash Admin, install them as follows:
-
-```sh
-mix archive.install hex phx_new
+mix ash_ecto.create
+mix ash_ecto.migrate
 ```
 
 ## Running the Application
