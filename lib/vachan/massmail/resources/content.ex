@@ -78,4 +78,37 @@ defmodule Vachan.Massmail.Content do
       on: [:create, :update],
       message: "Invalid email"
   end
+
+  calculations do
+    calculate :template_variables,
+              {:array, :string},
+              {Vachan.Calculations.ExtractVariables, keys: [:subject, :text_body]}
+  end
+end
+
+defmodule Vachan.Calculations.ExtractVariables do
+  use Ash.Resource.Calculation
+
+  @impl true
+  def init(opts) do
+    {:ok, opts}
+  end
+
+  @impl true
+  def load(_query, opts, _context) do
+    opts[:keys]
+  end
+
+  defp extract_variables(input_string) do
+    ~r/{{(.*?)}}/s
+    |> Regex.scan(input_string)
+    |> Enum.map(&List.first(&1))
+  end
+
+  @impl true
+  def calculate(records, opts) do
+    Enum.map(records, fn record ->
+      List.flatten(Enum.map(opts[:keys], fn key -> extract_variables(Map.get(record, key)) end))
+    end)
+  end
 end

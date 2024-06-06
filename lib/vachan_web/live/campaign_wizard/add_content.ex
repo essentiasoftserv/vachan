@@ -101,7 +101,7 @@ defmodule VachanWeb.CampaignWizard.ContentStep do
   defp extract_strings(input_string) do
     ~r/{{(.*?)}}/s
     |> Regex.scan(input_string)
-    |> Enum.map(&List.first(&1))
+    |> Enum.map(&List.last(&1))
   end
 
   defp notify_parent(msg), do: send(self(), {__MODULE__, msg})
