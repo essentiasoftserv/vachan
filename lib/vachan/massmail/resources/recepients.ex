@@ -25,6 +25,18 @@ defmodule Vachan.Massmail.Recepients do
   actions do
     defaults [:read, :destroy]
 
+    update :update do
+      primary? true
+      require_atomic? false
+
+      accept [
+        :blob
+      ]
+
+      argument :campaign_id, :integer
+      change manage_relationship(:campaign_id, :campaign, type: :append)
+    end
+
     create :create do
       primary? true
 
@@ -56,5 +68,47 @@ defmodule Vachan.Massmail.Recepients do
     belongs_to :organization, Vachan.Organizations.Organization do
       domain(Vachan.Organizations)
     end
+  end
+
+  calculations do
+    calculate :columns,
+              {:array, :string},
+              {Vachan.Calculations.ExtractColumnNames, keys: [:blob]}
+  end
+end
+
+defmodule Vachan.Calculations.ExtractColumnNames do
+  use Ash.Resource.Calculation
+
+  @impl true
+  def init(opts) do
+    {:ok, opts}
+  end
+
+  @impl true
+  def load(_query, opts, _context) do
+    opts[:keys]
+  end
+
+  defp csv_to_array(blob) do
+    blob
+    |> String.trim()
+    |> String.split("\n")
+    |> Stream.map(&String.trim/1)
+    |> Stream.map(fn line ->
+      String.split(line, ",")
+      |> Stream.map(&String.trim/1)
+      |> Enum.to_list()
+    end)
+    |> Enum.to_list()
+  end
+
+  @impl true
+  def calculate(records, opts, _params) do
+    Enum.map(records, fn record ->
+      List.flatten(
+        Enum.map(opts[:keys], fn key -> List.first(csv_to_array(Map.get(record, key))) end)
+      )
+    end)
   end
 end
