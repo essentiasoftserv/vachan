@@ -35,16 +35,16 @@ defmodule VachanWeb.CampaignWizard.CampaignWizardLive do
       %{
         live_action: :new,
         module: VachanWeb.CampaignWizard.NewCampaign,
-        next: fn campaign_id -> "/wizard/#{campaign_id}/add-content/" end
-      },
-      %{
-        live_action: :add_content,
-        module: VachanWeb.CampaignWizard.ContentStep,
         next: fn campaign_id -> "/wizard/#{campaign_id}/add-recepients/" end
       },
       %{
         live_action: :add_recepients,
         module: VachanWeb.CampaignWizard.AddRecepients,
+        next: fn campaign_id -> "/wizard/#{campaign_id}/add-content/" end
+      },
+      %{
+        live_action: :add_content,
+        module: VachanWeb.CampaignWizard.ContentStep,
         next: fn campaign_id -> "/wizard/#{campaign_id}/add-sender-profile/" end
       },
       %{
