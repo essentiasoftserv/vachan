@@ -19,13 +19,29 @@ defmodule Vachan.Massmail.Content do
 
   code_interface do
     define :create, action: :create
-    define :destroy, action: :destroy
+    define :update, action: :update
     define :read_all, action: :read
     define :get_by_id, args: [:id], action: :by_id
   end
 
   actions do
-    defaults [:read, :destroy]
+    defaults [:read]
+    default_accept :*
+
+    update :update do
+      primary? true
+      require_atomic? false
+
+      accept [
+        :reply_to_email,
+        :reply_to_name,
+        :subject,
+        :text_body
+      ]
+
+      argument :campaign_id, :integer
+      change manage_relationship(:campaign_id, :campaign, type: :append)
+    end
 
     create :create do
       primary? true
@@ -34,11 +50,11 @@ defmodule Vachan.Massmail.Content do
         :reply_to_email,
         :reply_to_name,
         :subject,
-        :text_body,
-        :campaign_id
+        :text_body
       ]
 
-      # change manage_relationship(:campaign_id, :campaign, type: :append)
+      argument :campaign_id, :integer
+      change manage_relationship(:campaign_id, :campaign, type: :append)
     end
 
     read :by_id do
@@ -52,8 +68,8 @@ defmodule Vachan.Massmail.Content do
 
   attributes do
     integer_primary_key :id
-    attribute :reply_to_email, :string, allow_nil?: true
-    attribute :reply_to_name, :string, allow_nil?: true
+    attribute :reply_to_email, :string, allow_nil?: true, public?: true
+    attribute :reply_to_name, :string, allow_nil?: true, public?: true
 
     attribute :kind, :atom do
       constraints one_of: @possible_kinds
@@ -80,7 +96,7 @@ defmodule Vachan.Massmail.Content do
   end
 
   calculations do
-    calculate :template_variables,
+    calculate :columns,
               {:array, :string},
               {Vachan.Calculations.ExtractVariables, keys: [:subject, :text_body]}
   end
@@ -102,11 +118,11 @@ defmodule Vachan.Calculations.ExtractVariables do
   defp extract_variables(input_string) do
     ~r/{{(.*?)}}/s
     |> Regex.scan(input_string)
-    |> Enum.map(&List.first(&1))
+    |> Enum.map(&List.last(&1))
   end
 
   @impl true
-  def calculate(records, opts) do
+  def calculate(records, opts, _params) do
     Enum.map(records, fn record ->
       List.flatten(Enum.map(opts[:keys], fn key -> extract_variables(Map.get(record, key)) end))
     end)

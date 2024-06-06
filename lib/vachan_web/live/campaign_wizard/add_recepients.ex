@@ -88,12 +88,12 @@ defmodule VachanWeb.CampaignWizard.AddRecepients do
 
     case AshPhoenix.Form.submit(form) do
       {:ok, recepients} ->
-        notify_parent({:success, recepients})
+        notify_parent({:recepients, recepients})
 
         {
           :noreply,
           socket
-          |> put_flash(:info, "Content Saved")
+          |> put_flash(:info, "Recepients Saved")
           |> push_patch(to: socket.assigns.next_f.(socket.assigns.campaign.id))
         }
 
@@ -104,12 +104,23 @@ defmodule VachanWeb.CampaignWizard.AddRecepients do
   end
 
   defp create_form(assigns) do
-    Vachan.Massmail.Recepients
-    |> AshPhoenix.Form.for_create(
-      :create,
-      ash_opts(assigns, domain: Vachan.Massmail)
-    )
-    |> to_form()
+    case assigns.recepients do
+      nil ->
+        Vachan.Massmail.Recepients
+        |> AshPhoenix.Form.for_create(
+          :create,
+          ash_opts(assigns, domain: Vachan.Massmail)
+        )
+        |> to_form()
+
+      recepients ->
+        recepients
+        |> AshPhoenix.Form.for_update(
+          :update,
+          ash_opts(assigns, domain: Vachan.Massmail)
+        )
+        |> to_form()
+    end
   end
 
   defp notify_parent(msg), do: send(self(), {__MODULE__, msg})

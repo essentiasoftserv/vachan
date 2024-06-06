@@ -40,7 +40,7 @@ defmodule VachanWeb.CampaignWizard.ContentStep do
 
       <div>
         <h1>extracted variables:</h1>
-        <%= for variable <- @extracted_variables do %>
+        <%= for variable <- @column_names do %>
           <%= variable %>
         <% end %>
       </div>
@@ -53,7 +53,7 @@ defmodule VachanWeb.CampaignWizard.ContentStep do
     {:ok,
      socket
      |> assign(assigns)
-     |> assign(:extracted_variables, [])
+     |> assign(:column_names, extract_column_names(assigns))
      |> assign(form: create_form(assigns))}
   end
 
@@ -61,13 +61,13 @@ defmodule VachanWeb.CampaignWizard.ContentStep do
   def handle_event("validate", %{"form" => params}, socket) do
     form = AshPhoenix.Form.validate(socket.assigns.form, params)
 
-    extracted_variables =
+    column_names =
       extract_strings(params["text_body"]) ++ extract_strings(params["subject"])
 
     {:noreply,
      socket
      |> assign(:form, to_form(form))
-     |> assign(:extracted_variables, extracted_variables)}
+     |> assign(:column_names, column_names)}
   end
 
   @impl true
@@ -76,7 +76,7 @@ defmodule VachanWeb.CampaignWizard.ContentStep do
 
     case AshPhoenix.Form.submit(form) do
       {:ok, content} ->
-        # notify_parent({:content, content})
+        notify_parent({:content, content})
 
         {:noreply,
          socket
@@ -90,12 +90,35 @@ defmodule VachanWeb.CampaignWizard.ContentStep do
   end
 
   defp create_form(assigns) do
-    Vachan.Massmail.Content
-    |> AshPhoenix.Form.for_create(
-      :create,
-      ash_opts(assigns, domain: Vachan.Massmail)
-    )
-    |> to_form()
+    case assigns.content do
+      nil ->
+        Vachan.Massmail.Content
+        |> AshPhoenix.Form.for_create(
+          :create,
+          ash_opts(assigns, domain: Vachan.Massmail)
+        )
+        |> to_form()
+
+      content ->
+        content
+        |> AshPhoenix.Form.for_update(
+          :update,
+          ash_opts(assigns, domain: Vachan.Massmail)
+        )
+        |> to_form()
+    end
+  end
+
+  defp extract_column_names(assigns) do
+    case assigns.content do
+      nil ->
+        []
+
+      content ->
+        content
+        |> Ash.load!(:columns, ash_opts(assigns, domain: Vachan.Massmail))
+        |> then(fn c -> c.columns end)
+    end
   end
 
   defp extract_strings(input_string) do
