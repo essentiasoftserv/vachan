@@ -12,28 +12,28 @@ defmodule VachanWeb.CampaignWizard.AddSenderProfile do
   def render(assigns) do
     ~H"""
     <div>
-      <.header>
-        Choose a Sender Profile
-        <:subtitle>
-          Or <.link patch={~p"/wizard/#{@campaign.id}/add-sender-profile/create"}> create one </.link>
-        </:subtitle>
-      </.header>
-      <.table id="sender_profiles" rows={@sender_profiles}>
-        <:col :let={profile} label="Profile's Name"><%= profile.title %></:col>
-        <:col :let={profile} label="Profile's Name"><%= profile.name %></:col>
-        <:action :let={profile}>
-          <.button
-            phx-target={@myself}
-            phx-click={
-              JS.push("add_sender_profile",
-                value: %{sender_profile_id: profile.id, campaign_id: @campaign.id}
-              )
-            }
-          >
-            Select
-          </.button>
-        </:action>
-      </.table>
+      <%= if @sender_profiles != [] do %>
+        <.table id="sender_profiles" rows={@sender_profiles}>
+          <:col :let={profile} label="Profile's Name"><%= profile.title %></:col>
+          <:col :let={profile} label="Profile's Name"><%= profile.name %></:col>
+          <:action :let={profile}>
+            <.button
+              phx-target={@myself}
+              phx-click={
+                JS.push("add_sender_profile",
+                  value: %{sender_profile_id: profile.id, campaign_id: @campaign.id}
+                )
+              }
+            >
+              Select
+            </.button>
+          </:action>
+        </.table>
+      <% else %>
+        <.link patch={~p"/wizard/#{@campaign.id}/add-sender-profile/create"}>
+          <.button>New Sender Profile</.button>
+        </.link>
+      <% end %>
       <.modal
         :if={@live_action in [:create_sender_profile]}
         id="sender-profile-modal"

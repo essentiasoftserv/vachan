@@ -44,6 +44,10 @@ defmodule Vachan.Massmail.Recepients do
         :blob
       ]
 
+      change fn changeset, _context ->
+        nil
+      end
+
       argument :campaign_id, :integer, allow_nil?: false
       change manage_relationship(:campaign_id, :campaign, type: :append)
     end
@@ -58,9 +62,12 @@ defmodule Vachan.Massmail.Recepients do
   attributes do
     integer_primary_key :id
     attribute :blob, :string
+    attribute :column_names, {:array, string}
   end
 
   relationships do
+    embeds_many :people, Vachan.Massmail.Person
+
     belongs_to :campaign, Vachan.Massmail.Campaign,
       attribute_writable?: true,
       attribute_type: :integer
@@ -69,11 +76,36 @@ defmodule Vachan.Massmail.Recepients do
       domain(Vachan.Organizations)
     end
   end
+end
 
-  calculations do
-    calculate :columns,
-              {:array, :string},
-              {Vachan.Calculations.ExtractColumnNames, keys: [:blob]}
+defmodule Vachan.Massmail.Changes.ParseBlob do
+  use Ash.Resource.Change
+
+  @impl true
+  def init(opts) do
+    {:ok, opts}
+  end
+
+  @impl true
+  def change(changeset, opts, _context) do
+    case Ash.Changeset.fetch_change(changeset, opts[:attribute]) do
+      {:ok, new_value} ->
+        nil
+
+      :error ->
+        changeset
+    end
+  end
+end
+
+defmodule Vachan.Massmail.Person do
+  use Ash.Resource,
+    data_layer: :embedded
+
+  attributes do
+    attribute :email, :ci_string, allow_nil?: false, public?: true
+    attribute :name, :string, allow_nil?: false, public?: true
+    attribute :extras, :map
   end
 end
 
