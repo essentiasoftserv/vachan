@@ -6,10 +6,12 @@ defmodule Vachan.Massmail.Workers.EnqueueEmails do
   alias Vachan.Crm
 
   @impl true
-  def perform(%Oban.Job{args: %{"campaign_id" => campaign_id} = _args}) do
+  def perform(%Oban.Job{
+        args: %{"campaign_id" => campaign_id, "actor" => actor, tenant: tenant} = _args
+      }) do
     campaign =
-      Massmail.Campaign.get_by_id!(campaign_id, actor: nil, authorize?: false)
-      |> Ash.load!(:list, actor: nil, authorize?: false)
+      Massmail.Campaign.get_by_id!(campaign_id, actor: actor, tenant: tenant)
+      |> Ash.load!(:recepients, actor: actor, tenant: tenant)
 
     recepients = Ash.load!(campaign.list, :people, authorize?: false, actor: nil)
 

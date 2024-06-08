@@ -16,6 +16,10 @@ defmodule VachanWeb.CampaignWizard.CampaignWizardLive do
   def render(assigns) do
     ~H"""
     <div>
+      <.header>
+        <%= @current_step.title %>
+        <:subtitle><%= @current_step.subtitle %></:subtitle>
+      </.header>
       <.live_component
         module={@current_step.module}
         id={@current_step.live_action}
@@ -63,31 +67,43 @@ defmodule VachanWeb.CampaignWizard.CampaignWizardLive do
     [
       %{
         live_action: :new,
+        title: "New Campaign",
+        subtitle: "Create a new campaign",
         module: VachanWeb.CampaignWizard.NewCampaign,
         next: fn campaign_id -> "/wizard/#{campaign_id}/add-recepients/" end
       },
       %{
+        title: "Recepients",
+        subtitle: "Paste a csv file containing the emails, names etc in the textbox.",
         live_action: :add_recepients,
         module: VachanWeb.CampaignWizard.AddRecepients,
         next: fn campaign_id -> "/wizard/#{campaign_id}/add-content/" end
       },
       %{
         live_action: :add_content,
+        title: "Email Content",
+        subtitle: "What should the email campaign say?",
         module: VachanWeb.CampaignWizard.ContentStep,
         next: fn campaign_id -> "/wizard/#{campaign_id}/add-sender-profile/" end
       },
       %{
         live_action: :add_sender_profile,
+        title: "Sender Profile",
+        subtitle: "Select an existing profile or create a new one.",
         module: VachanWeb.CampaignWizard.AddSenderProfile,
         next: fn campaign_id -> "/wizard/#{campaign_id}/review/" end
       },
       %{
         live_action: :create_sender_profile,
+        title: "Create Sender Profile",
+        subtitle: "Provide email server details and account credentials.",
         module: VachanWeb.CampaignWizard.AddSenderProfile,
         next: fn campaign_id -> "/wizard/#{campaign_id}/add-sender-profile/" end
       },
       %{
         live_action: :review,
+        title: "Review",
+        subtitle: "Please review all the details and hit send.",
         module: VachanWeb.CampaignWizard.Review,
         next: fn campaign_id -> "/campaigns/#{campaign_id}/show/" end
       }
