@@ -26,7 +26,7 @@ defmodule Vachan.SenderProfiles.SenderProfile do
 
   actions do
     defaults [:read, :create, :update, :destroy]
-
+    defalut_accept :*
     read :by_id do
       argument :id, :uuid, allow_nil?: false
       get? true
@@ -52,16 +52,16 @@ defmodule Vachan.SenderProfiles.SenderProfile do
       default :smtp
     end
 
-    attribute :username, :string, allow_nil?: true
-    attribute :password, :string, allow_nil?: true
-    attribute :api_key, :string, allow_nil?: true
-    attribute :smtp_host, :string, allow_nil?: true
-    attribute :smtp_port, :string, allow_nil?: true
+    attribute :username, :string, allow_nil?: true, public?: true
+    attribute :password, :string, allow_nil?: true, public?: true
+    attribute :api_key, :string, allow_nil?: true, public?: true
+    attribute :smtp_host, :string, allow_nil?: true, public?: true
+    attribute :smtp_port, :string, allow_nil?: true, public?: true
 
-    attribute :name, :string, allow_nil?: false
-    attribute :email, :ci_string, allow_nil?: false
+    attribute :name, :string, allow_nil?: false, public?: true
+    attribute :email, :ci_string, allow_nil?: false, public?: true
 
-    attribute :title, :string, allow_nil?: false
+    attribute :title, :string, allow_nil?: false, public?: true
   end
 
   identities do
