@@ -7,9 +7,9 @@ defmodule VachanWeb.VerifyEmailLive do
 
   def render(assigns) do
     ~H"""
-    <div class="flex justify-center items-center min-h-screen" style="background-color: rgb(237, 237, 208);">
-      <div class="bg-white p-8 rounded shadow-md text-center max-w-md w-full">
-        <h1 class="text-3xl font-bold text-red-600 mb-4">Verify Your Email</h1>
+    <div class="flex justify-center items-center min-h-screen bg-customBackground">
+      <div class="bg-customBackground_header p-8 rounded shadow-md text-justify max-w-md w-full">
+        <h1 class="text-3xl font-bold text-red-600 mb-4 text-center">Verify Your Email</h1>
         <p class="text-lg">
           You must verify your email before proceeding.
         </p>
