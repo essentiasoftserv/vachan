@@ -43,14 +43,16 @@ defmodule Vachan.Crm.List do
     default_accept :*
 
     update :add_person do
+      accept []
       argument :person_id, :uuid, allow_nil?: false
-
+      require_atomic? false
       change manage_relationship(:person_id, :people, type: :append)
     end
 
     update :remove_person do
+      accept []
       argument :person_id, :uuid, allow_nil?: false
-
+      require_atomic? false
       change manage_relationship(:person_id, :people, type: :remove)
     end
 
