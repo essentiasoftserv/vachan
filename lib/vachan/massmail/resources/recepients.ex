@@ -62,12 +62,9 @@ defmodule Vachan.Massmail.Recepients do
   attributes do
     integer_primary_key :id
     attribute :blob, :string
-    attribute :column_names, {:array, string}
   end
 
   relationships do
-    embeds_many :people, Vachan.Massmail.Person
-
     belongs_to :campaign, Vachan.Massmail.Campaign,
       attribute_writable?: true,
       attribute_type: :integer

@@ -9,7 +9,7 @@ defmodule VachanWeb.CampaignWizard.AddRecepients do
       <.simple_form for={@form} phx-change="validate" phx-submit="save" phx-target={@myself}>
         <.input
           label="Recepients csv"
-          placeholder="Paste a csv file containing your recepients here"
+          placeholder="email, first_name, last_name\n james@mi5.gov.uk, James, Bond"
           field={@form[:blob]}
           type="textarea"
         >
