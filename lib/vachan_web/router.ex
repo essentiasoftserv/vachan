@@ -1,4 +1,5 @@
 defmodule VachanWeb.Router do
+  alias VachanWeb.CampaignBuilder
   use VachanWeb, :router
   use AshAuthentication.Phoenix.Router
 
@@ -66,6 +67,7 @@ defmodule VachanWeb.Router do
       live "/campaigns/new", CampaignLive.Edit, :new
       live "/campaigns/:id/edit", CampaignLive.Edit, :edit
       live "/campaigns/:id/", CampaignLive.Show, :show
+      live "/campaigns/:id/builder", CampaignBuilderLive, :build
 
       live "/sender-profiles", SenderProfileLive.Index, :index
       live "/sender-profiles/new", SenderProfileLive.Index, :new

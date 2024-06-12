@@ -24,5 +24,6 @@
     <.link phx-click={JS.push("run", value: %{id: campaign.id})}>
       Run Campaign
     </.link>
+    | <.link navigate={~p"/campaigns/#{campaign}/builder"}>Open Builder</.link>
   </:action>
 </.table>

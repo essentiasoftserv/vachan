@@ -1,0 +1,64 @@
+<.header>
+  Builder UI
+  <:actions></:actions>
+</.header>
+
+<div class="m-2">
+  <div class="text-2xl">Content</div>
+  <div>insert the content component here</div>
+  <.live_component
+    module={VachanWeb.CampaignBuilder.ContentComponent}
+    id="content-step"
+    current_user={@current_user}
+    current_org={@current_org}
+    campaign={@campaign}
+    live_action={@live_action}
+    content={@content}
+  >
+  </.live_component>
+</div>
+
+<div class="mt-10">
+  <div class="text-2xl">Contacts</div>
+  <div>options to choose existing or show modal to add more.</div>
+  <div :if={@contact_list}>
+    <%= @contact_list.name %>
+    <%= @contact_list.count %>
+  </div>
+
+  <.live_component
+    module={VachanWeb.CampaignBuilder.ContactsComponent}
+    id="contact-step"
+    current_user={@current_user}
+    current_org={@current_org}
+    campaign={@campaign}
+    live_action={@live_action}
+    contact_list={@contact_list}
+  >
+  </.live_component>
+</div>
+
+<div class="mt-10">
+  <div class="text-2xl">Credentials</div>
+  <div>choose existing or add new</div>
+</div>
+
+<div class="border-black border-2">
+  Specify
+  Content
+  - empty - specified.
+  - add / modify
+  - show the variables the content expects
+  Contacts
+  - choose an existing list.
+  - choose individual contacts
+  - add contacts
+  - select all existing contacts.
+  - show the number of contacts associated.
+  - show health of the data.
+  Credentials
+  - choose existing
+  - add new credentials.
+  Review
+  -
+</div>

@@ -54,7 +54,7 @@ defmodule Vachan.Massmail.Campaign do
         allow_nil? true
       end
 
-      change manage_relationship(:list_id, :list, type: :append)
+      change manage_relationship(:list_id, :contact_list, type: :append)
     end
 
     update :update do
@@ -68,7 +68,7 @@ defmodule Vachan.Massmail.Campaign do
         allow_nil? false
       end
 
-      change manage_relationship(:list_id, :list, type: :append)
+      change manage_relationship(:list_id, :contact_list, type: :append)
     end
 
     read :by_id do
@@ -111,7 +111,8 @@ defmodule Vachan.Massmail.Campaign do
     has_one :content, Vachan.Massmail.Content
     has_many :messages, Vachan.Massmail.Message
 
-    belongs_to :list, Vachan.Crm.List,
+    belongs_to :contact_list, Vachan.Crm.List,
+      source_attribute: :list_id,
       domain: Vachan.Crm,
       attribute_type: :integer,
       allow_nil?: true
