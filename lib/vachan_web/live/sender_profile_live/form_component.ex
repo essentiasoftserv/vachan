@@ -19,14 +19,14 @@ defmodule VachanWeb.SenderProfileLive.FormComponent do
         phx-change="validate"
         phx-submit="save"
       >
-        <.input field={@form[:title]} type="text" label="Sender Profile's title" />
-        <.input field={@form[:name]} type="text" label="Sender's Name" />
-        <.input field={@form[:email]} type="email" label="Sender's Email" />
+        <.input field={@form[:title]} type="text" label="Sender Profile's title" placeholder="Marketing Campaign"/>
+        <.input field={@form[:name]} type="text" label="Sender's Name" placeholder="John Doe"/>
+        <.input field={@form[:email]} type="email" label="Sender's Email" placeholder="john.doe@example.com" />
 
-        <.input field={@form[:smtp_host]} type="text" label="SMTP Server's Address" />
-        <.input field={@form[:smtp_port]} type="number" label="SMTP Server's Port" />
-        <.input field={@form[:username]} type="text" label="SMTP username" />
-        <.input field={@form[:password]} type="text" label="SMTP password" />
+        <.input field={@form[:smtp_host]} type="text" label="SMTP Server's Address" placeholder="smtp.example.com" />
+        <.input field={@form[:smtp_port]} type="number" label="SMTP Server's Port" placeholder="587" />
+        <.input field={@form[:username]} type="text" label="SMTP username"  placeholder="smtp_user"/>
+        <.input field={@form[:password]} type="text" label="SMTP password" placeholder="*********"/>
 
         <:actions>
           <.button phx-disable-with="Saving...">Save Sender Profile</.button>
