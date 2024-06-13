@@ -41,7 +41,8 @@ defmodule VachanWeb.ListLive.Show do
 
     {:noreply,
      socket
-     |> assign(:person_details, person_details)}
+     |> assign(:person_details, person_details)
+     |> put_flash(:info, "Person details removed successfully")}
   end
 
   defp get_person_details_for_list(list, socket) do
