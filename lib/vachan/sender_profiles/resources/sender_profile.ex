@@ -26,6 +26,7 @@ defmodule Vachan.SenderProfiles.SenderProfile do
   actions do
     defaults [:read, :create, :update, :destroy]
     default_accept :*
+
     read :by_id do
       argument :id, :uuid, allow_nil?: false
       get? true

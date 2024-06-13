@@ -63,6 +63,10 @@ defmodule Vachan.Crm.List do
     end
   end
 
+  aggregates do
+    count :people_count, :people
+  end
+
   attributes do
     integer_primary_key :id
     attribute :name, :string, allow_nil?: false, public?: true

@@ -20,7 +20,7 @@ defmodule VachanWeb.CampaignWizard.AddSenderProfile do
             <.button
               phx-target={@myself}
               phx-click={
-                JS.push("add_sender_profile",
+                JS.push("associate_sender_profile",
                   value: %{sender_profile_id: profile.id, campaign_id: @campaign.id}
                 )
               }
@@ -67,12 +67,15 @@ defmodule VachanWeb.CampaignWizard.AddSenderProfile do
 
   @impl true
   def handle_event(
-        "add_sender_profile",
+        "associate_sender_profile",
         %{"sender_profile_id" => sender_profile_id, "campaign_id" => campaign_id},
         socket
       ) do
     Vachan.Massmail.Campaign.get_by_id!(campaign_id, ash_opts(socket.assigns))
-    |> Vachan.Massmail.Campaign.add_sender_profile(sender_profile_id, ash_opts(socket.assigns))
+    |> Vachan.Massmail.Campaign.associate_sender_profile(
+      sender_profile_id,
+      ash_opts(socket.assigns)
+    )
 
     {:noreply,
      socket

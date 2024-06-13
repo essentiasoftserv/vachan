@@ -87,7 +87,7 @@ defmodule VachanWeb.CampaignWizard.CampaignWizardLive do
         next: fn campaign_id -> "/wizard/#{campaign_id}/add-sender-profile/" end
       },
       %{
-        live_action: :add_sender_profile,
+        live_action: :associate_sender_profile,
         title: "Sender Profile",
         subtitle: "Select an existing profile or create a new one.",
         module: VachanWeb.CampaignWizard.AddSenderProfile,

@@ -19,46 +19,62 @@
 </div>
 
 <div class="mt-10">
-  <div class="text-2xl">Contacts</div>
+  <div class="text-2xl">Contacts List</div>
   <div>options to choose existing or show modal to add more.</div>
   <div :if={@contact_list}>
     <%= @contact_list.name %>
-    <%= @contact_list.count %>
+    <%= @contact_list.people_count %>
   </div>
-
-  <.live_component
-    module={VachanWeb.CampaignBuilder.ContactsComponent}
-    id="contact-step"
-    current_user={@current_user}
-    current_org={@current_org}
-    campaign={@campaign}
-    live_action={@live_action}
-    contact_list={@contact_list}
-  >
-  </.live_component>
+  <.button phx-click={JS.push("show_modal", value: %{modal: :list_selector})}>
+    Select contact list
+  </.button>
 </div>
 
 <div class="mt-10">
   <div class="text-2xl">Credentials</div>
   <div>choose existing or add new</div>
+  <.button phx-click={JS.push("show_modal", value: %{modal: :sender_profile_selector})}>
+    Select contact list
+  </.button>
 </div>
 
-<div class="border-black border-2">
-  Specify
-  Content
-  - empty - specified.
-  - add / modify
-  - show the variables the content expects
-  Contacts
-  - choose an existing list.
-  - choose individual contacts
-  - add contacts
-  - select all existing contacts.
-  - show the number of contacts associated.
-  - show health of the data.
-  Credentials
-  - choose existing
-  - add new credentials.
-  Review
-  -
+<div class="mt-10">
+  <div class="text-2xl">Send</div>
+  <div>Send</div>
 </div>
+
+<.modal :if={@modal == :list_selector} id="select_list_modal" show>
+  <div>
+    <span class="text-xl">Select a list</span>
+    <.table id="list_select_table" rows={@contact_lists}>
+      <:col :let={list} label="List name"><%= list.name %></:col>
+      <:col :let={list} label="People count"><%= list.people_count %></:col>
+      <:action :let={list}>
+        <%= if list.people_count > 0 do %>
+          <.button phx-click={JS.push("select_list", value: %{list_id: list.id})}>Select</.button>
+        <% else %>
+          -
+        <% end %>
+      </:action>
+    </.table>
+  </div>
+</.modal>
+
+<.modal :if={@modal == :sender_profile_selector} id="select_sender_profile_modal" show>
+  <div>
+    <span class="text-xl">Select a Sender Profile</span>
+    <.table id="select_sender_profile_table" rows={@sender_profiles}>
+      <:col :let={sp} label="List name"><%= sp.name %></:col>
+      <:action :let={sp}>
+        <.button phx-click={JS.push("select_sender_profile", value: %{sender_profile_id: sp.id})}>
+          Select
+        </.button>
+      </:action>
+    </.table>
+  </div>
+</.modal>
+
+<.modal :if={@modal == :contact_list_creator} id="contact_list_creator" show>
+  <.live_component id="add_contacts_component" module={VachanWeb.CampaignBuilder.AddContact}>
+  </.live_component>
+</.modal>
