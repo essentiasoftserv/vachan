@@ -4,7 +4,7 @@
 
 ### `password`
 - Must be at least 6 characters long.
-- Cannot be more than 25 characters long.
+- Cannot be more than 255 characters long.
 
 ### `smtp_host`
 - Must be at least 5 characters long.
@@ -14,6 +14,7 @@
 
 ### `smtp_port`
 - Must be a valid port number (only digits).
+- Between 0 and 65535
 
 ### `name`
 - Cannot be left blank.
