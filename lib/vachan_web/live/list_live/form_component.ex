@@ -19,7 +19,7 @@ defmodule VachanWeb.ListLive.FormComponent do
         phx-change="validate"
         phx-submit="save"
       >
-        <.input field={@form[:name]} type="text" label="Name" placeholder="Enter list name" />
+        <.input field={@form[:name]} type="text" label="Name" placeholder="List name" />
 
         <:actions>
           <.button phx-disable-with="Saving...">Save list</.button>
