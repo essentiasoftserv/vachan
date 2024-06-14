@@ -170,6 +170,13 @@ defmodule VachanWeb.SidebarMenuLiveComponent do
           Settings page
           <div class="tooltip-arrow" data-popper-arrow></div>
         </div>
+        <a
+          href="/sign-out"
+          data-tooltip-target="tooltip-settings"
+          class="inline-flex justify-center p-2 text-gray-500 rounded cursor-pointer dark:text-gray-400 dark:hover:text-white hover:text-gray-900 hover:bg-customBackground_header dark:hover:bg-gray-600"
+        >
+          Logout
+        </a>
       </div>
     </div>
     """
