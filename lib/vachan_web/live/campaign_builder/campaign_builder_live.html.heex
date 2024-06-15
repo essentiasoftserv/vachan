@@ -25,9 +25,14 @@
     <%= @contact_list.name %>
     <%= @contact_list.people_count %>
   </div>
-  <.button phx-click={JS.push("show_modal", value: %{modal: :list_selector})}>
+  <.button :if={@contact_lists != []} phx-click={JS.push("show_modal", value: %{modal: :list_selector})}>
     Select contact list
   </.button>
+
+  <.button phx-click={JS.push("show_modal", value: %{modal: :contact_list_creator})}>
+    Add contacts
+  </.button>
+
 </div>
 
 <div class="mt-10">
@@ -43,7 +48,7 @@
   <div>Send</div>
 </div>
 
-<.modal :if={@modal == :list_selector} id="select_list_modal" show>
+<.modal :if={@modal == :list_selector} id="select_list_modal" show on_cancel={JS.push("hide_modal")}>
   <div>
     <span class="text-xl">Select a list</span>
     <.table id="list_select_table" rows={@contact_lists}>
@@ -60,11 +65,11 @@
   </div>
 </.modal>
 
-<.modal :if={@modal == :sender_profile_selector} id="select_sender_profile_modal" show>
+<.modal :if={@modal == :sender_profile_selector} id="select_sender_profile_modal" show on_cancel={JS.push("hide_modal")}>
   <div>
     <span class="text-xl">Select a Sender Profile</span>
     <.table id="select_sender_profile_table" rows={@sender_profiles}>
-      <:col :let={sp} label="List name"><%= sp.name %></:col>
+      <:col :let={sp} label="Sender Profile name"><%= sp.name %></:col>
       <:action :let={sp}>
         <.button phx-click={JS.push("select_sender_profile", value: %{sender_profile_id: sp.id})}>
           Select
@@ -74,7 +79,7 @@
   </div>
 </.modal>
 
-<.modal :if={@modal == :contact_list_creator} id="contact_list_creator" show>
+<.modal :if={@modal == :contact_list_creator} id="contact_list_creator" show on_cancel={JS.push("hide_modal")}>
   <.live_component id="add_contacts_component" module={VachanWeb.CampaignBuilder.AddContact}>
   </.live_component>
 </.modal>

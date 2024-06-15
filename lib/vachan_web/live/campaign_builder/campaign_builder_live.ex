@@ -59,6 +59,11 @@ defmodule VachanWeb.CampaignBuilderLive do
     {:noreply, socket |> assign(:modal, modal)}
   end
 
+  @impl true
+  def handle_event("hide_modal", _params, socket) do
+    {:noreply, socket |> assign(:modal, nil)}
+  end
+
   defp apply_action(socket, _live_action, %{"id" => campaign_id} = _params) do
     campaign = get_campaign(socket, campaign_id)
 
