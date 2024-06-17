@@ -69,7 +69,8 @@ defmodule Vachan.MixProject do
       {:tls_certificate_check, "~> 1.22"},
       {:certifi, "~> 2.13"},
       {:ash_state_machine, "~> 0.2.3"},
-      {:picosat_elixir, "~> 0.2"}
+      {:picosat_elixir, "~> 0.2"},
+      {:bcrypt_elixir, "~> 3.0"}
     ]
   end
 
