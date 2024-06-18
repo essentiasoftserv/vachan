@@ -19,9 +19,9 @@ defmodule VachanWeb.PersonLive.FormComponent do
         phx-change="validate"
         phx-submit="save"
       >
-        <.input field={@form[:first_name]} type="text" label="First name" pattern="[A-Za-z]+" minlength="2" />
-        <.input field={@form[:last_name]} type="text" label="Last name" pattern="[A-Za-z]+" minlength="2"/>
-        <.input field={@form[:email]} type="email" label="Email" />
+        <.input field={@form[:first_name]} type="text" label="First name" placeholder="First Name" pattern="[A-Za-z]+" minlength="2" />
+        <.input field={@form[:last_name]} type="text" label="Last name" placeholder="Last Name" pattern="[A-Za-z]+" minlength="2"/>
+        <.input field={@form[:email]} type="email" placeholder="E-mail" label="Email" />
 
         <:actions>
           <.button phx-disable-with="Saving...">Save Person</.button>
