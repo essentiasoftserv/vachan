@@ -21,6 +21,7 @@ defmodule Vachan.SenderProfiles.SenderProfile do
     define :destroy, action: :destroy
     define :read_all, action: :read
     define :get_by_id, args: [:id], action: :by_id
+    define :list, action: :list
   end
 
   actions do
@@ -31,6 +32,14 @@ defmodule Vachan.SenderProfiles.SenderProfile do
       argument :id, :uuid, allow_nil?: false
       get? true
       filter expr(id == ^arg(:id))
+    end
+
+    read :list do
+      pagination do
+        default_limit 50
+        offset? true
+        countable :by_default
+      end
     end
   end
 
@@ -44,16 +53,58 @@ defmodule Vachan.SenderProfiles.SenderProfile do
       default :smtp
     end
 
-    attribute :username, :string, allow_nil?: true, public?: true
-    attribute :password, :string, allow_nil?: true, public?: true
-    attribute :api_key, :string, allow_nil?: true, public?: true
-    attribute :smtp_host, :string, allow_nil?: true, public?: true
-    attribute :smtp_port, :string, allow_nil?: true, public?: true
+    attribute :username, :string do
+      allow_nil? false
+      public? true
+      constraints min_length: 3, max_length: 100
+    end
 
-    attribute :name, :string, allow_nil?: false, public?: true
-    attribute :email, :ci_string, allow_nil?: false, public?: true
+    attribute :password, :string do
+      allow_nil? false
+      public? true
+      constraints min_length: 6, max_length: 100
+    end
 
-    attribute :title, :string, allow_nil?: false, public?: true
+    attribute :api_key, :string do
+      allow_nil? true
+      public? true
+      constraints min_length: 10,
+                  max_length: 100
+    end
+
+    attribute :smtp_host, :string do
+      allow_nil? false
+      public? true
+      constraints min_length: 5,
+                  max_length: 100
+    end
+
+    attribute :smtp_port, :string do
+      allow_nil? true
+      public? true
+      constraints match: ~r/^\d+$/
+    end
+
+    attribute :name, :string do
+      allow_nil? false
+      public? true
+      constraints [
+        min_length: 1, max_length: 100,
+        match: ~r/^[a-zA-Z\s]+$/,
+      ]
+    end
+
+    attribute :email, :ci_string do
+      allow_nil? false
+      public? true
+      constraints match: ~r/^[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/
+    end
+
+    attribute :title, :string do
+      allow_nil? false
+      public? true
+      constraints min_length: 1, max_length: 100
+    end
   end
 
   identities do
