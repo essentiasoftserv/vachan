@@ -72,8 +72,23 @@ defmodule VachanWeb.SenderProfileLive.FormComponent do
 
   @impl true
   def handle_event("save", %{"form" => sender_profile_params}, socket) do
-    save_sender_profile(socket, socket.assigns.action, sender_profile_params)
+    updated_params = hash_password_if_present(sender_profile_params)
+    save_sender_profile(socket, socket.assigns.action, updated_params)
   end
+
+  defp hash_password_if_present(params) do
+    case Map.get(params, "password", "") do
+      "" -> params
+      plain_password ->
+        hashed_password = hash_password(plain_password)
+        Map.put(params, "password", hashed_password)
+    end
+  end
+
+  defp hash_password(password) do
+    Bcrypt.hash_pwd_salt(password)
+  end
+
 
   defp save_sender_profile(socket, :edit, sender_profile_params) do
     form = AshPhoenix.Form.validate(socket.assigns.form, sender_profile_params)
