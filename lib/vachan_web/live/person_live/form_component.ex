@@ -77,10 +77,13 @@ defmodule VachanWeb.PersonLive.FormComponent do
       {:ok, person} ->
         notify_parent({:saved, person})
 
-        {:noreply,
-         socket
-         |> put_flash(:info, "Person updated successfully")
-         |> push_patch(to: socket.assigns.patch)}
+        socket =
+          socket
+          |> put_flash(:info, "Person updated successfully")
+          |> push_patch(to: socket.assigns.patch)
+
+        Process.send_after(self(), :clear_flash, 2000)
+        {:noreply, socket}
 
       {:error, form} ->
         {:noreply, assign(socket, form: form)}
@@ -94,10 +97,13 @@ defmodule VachanWeb.PersonLive.FormComponent do
       {:ok, person} ->
         notify_parent({:saved, person})
 
-        {:noreply,
-         socket
-         |> put_flash(:info, "Person created successfully")
-         |> push_patch(to: socket.assigns.patch)}
+        socket =
+          socket
+          |> put_flash(:info, "Person created successfully")
+          |> push_patch(to: socket.assigns.patch)
+
+        Process.send_after(self(), :clear_flash, 2000)
+        {:noreply, socket}
 
       {:error, form} ->
         {:noreply, assign(socket, form: form)}
