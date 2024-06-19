@@ -81,7 +81,6 @@ defmodule VachanWeb.PersonLive.FormComponent do
           socket
           |> put_flash(:info, "Person updated successfully")
           |> push_patch(to: socket.assigns.patch)
-
         Process.send_after(self(), :clear_flash, 2000)
         {:noreply, socket}
 
@@ -101,7 +100,6 @@ defmodule VachanWeb.PersonLive.FormComponent do
           socket
           |> put_flash(:info, "Person created successfully")
           |> push_patch(to: socket.assigns.patch)
-
         Process.send_after(self(), :clear_flash, 2000)
         {:noreply, socket}
 
