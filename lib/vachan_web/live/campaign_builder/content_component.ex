@@ -26,6 +26,7 @@ defmodule VachanWeb.CampaignBuilder.ContentComponent do
             <.input
               field={@form[:text_body]}
               type="textarea"
+              rows="10"
               label="Email Body"
               placeholder="The body of the email"
             >
@@ -48,11 +49,15 @@ defmodule VachanWeb.CampaignBuilder.ContentComponent do
       <% else %>
         <.list>
           <:item title="Subject"><%= @content.subject %></:item>
-          <:item title="Body"><pre><%= raw(@content.text_body) %></pre></:item>
           <:item title="Variables">
             <span>
               <%= Enum.join(@column_names, ", ") %>
             </span>
+          </:item>
+          <:item title="Body">
+            <%= for line <- String.split(@content.text_body, "\n") do %>
+              <p class="break-normal"><%= line %></p>
+            <% end %>
           </:item>
         </.list>
         <.button phx-click="edit-mode" phx-target={@myself}>Edit</.button>
