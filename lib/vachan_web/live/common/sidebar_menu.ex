@@ -20,6 +20,8 @@ end
 defmodule VachanWeb.SidebarMenuLiveComponent do
   use VachanWeb, :live_component
 
+  alias VachanWeb.CoreComponents, as: Components
+
   slot :inner_block, required: true
   attr :path, :string
   attr :label, :string
@@ -76,70 +78,35 @@ defmodule VachanWeb.SidebarMenuLiveComponent do
         <span class="sr-only">Close menu</span>
       </button>
       <div class="py-4 overflow-y-auto"></div>
-      <ul class="space-y-2 font-medium">
-        <li>
-          <.menu_item label="People" path={~p"/people"}>
-            <VachanWeb.Common.Icons.people />
-          </.menu_item>
-        </li>
-        <li>
-          <.menu_item label="Lists" path={~p"/lists"}>
-            <svg
-              aria-hidden="true"
-              class="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
-              <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
-            </svg>
-          </.menu_item>
-        </li>
-        <li>
-          <.menu_item label="Sender Profiles" path={~p"/sender-profiles"}>
-            <svg
-              aria-hidden="true"
-              class="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
-              <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
-            </svg>
-          </.menu_item>
-        </li>
-        <li>
-          <.menu_item label="Campaigns" path={~p"/campaigns"}>
-            <svg
-              aria-hidden="true"
-              class="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
-              <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
-            </svg>
-          </.menu_item>
-        </li>
+     <ul class="space-y-2 font-medium">
+    <li>
+     <.menu_item label="People" path={~p"/people"}>
+      <.icon name="hero-user-group-mini" class="size-5" />
+     </.menu_item>
+    </li>
+    <li>
+     <.menu_item label="Lists" path={~p"/lists"}>
+      <.icon name="hero-clipboard-document-list-mini" class="size-5" />
+     </.menu_item>
+    </li>
+    <li>
+     <.menu_item label="Sender Profiles" path={~p"/sender-profiles"}>
+      <.icon name="hero-user-circle-mini" class="size-5" />
+     </.menu_item>
+    </li>
+    <li>
+     <.menu_item label="Campaigns" path={~p"/campaigns"}>
+      <.icon name="hero-inbox-arrow-down-mini" class="size-5"/>
+     </.menu_item>
+    </li>
       </ul>
-
       <div class="hidden absolute bottom-0 left-0 justify-center p-4 space-x-4 w-full lg:flex bg-customBackground dark:bg-gray-800 z-20">
         <a
           href="#"
           class="inline-flex justify-center p-2 text-gray-500 rounded cursor-pointer dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-customBackground_header dark:hover:bg-gray-600"
         >
-          <svg
-            aria-hidden="true"
-            class="w-6 h-6"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path d="M5 4a1 1 0 00-2 0v7.268a2 2 0 000 3.464V16a1 1 0 102 0v-1.268a2 2 0 000-3.464V4zM11 4a1 1 0 10-2 0v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4zM16 3a1 1 0 011 1v7.268a2 2 0 010 3.464V16a1 1 0 11-2 0v-1.268a2 2 0 010-3.464V4a1 1 0 011-1z">
-            </path>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+            <path d="M18.75 12.75h1.5a.75.75 0 0 0 0-1.5h-1.5a.75.75 0 0 0 0 1.5ZM12 6a.75.75 0 0 1 .75-.75h7.5a.75.75 0 0 1 0 1.5h-7.5A.75.75 0 0 1 12 6ZM12 18a.75.75 0 0 1 .75-.75h7.5a.75.75 0 0 1 0 1.5h-7.5A.75.75 0 0 1 12 18ZM3.75 6.75h1.5a.75.75 0 1 0 0-1.5h-1.5a.75.75 0 0 0 0 1.5ZM5.25 18.75h-1.5a.75.75 0 0 1 0-1.5h1.5a.75.75 0 0 1 0 1.5ZM3 12a.75.75 0 0 1 .75-.75h7.5a.75.75 0 0 1 0 1.5h-7.5A.75.75 0 0 1 3 12ZM9 3.75a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5ZM12.75 12a2.25 2.25 0 1 1 4.5 0 2.25 2.25 0 0 1-4.5 0ZM9 15.75a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5Z" />
           </svg>
         </a>
         <a
@@ -170,6 +137,13 @@ defmodule VachanWeb.SidebarMenuLiveComponent do
           Settings page
           <div class="tooltip-arrow" data-popper-arrow></div>
         </div>
+        <a
+          href="/sign-out"
+          data-tooltip-target="tooltip-settings"
+          class="inline-flex justify-center p-2 text-gray-500 rounded cursor-pointer dark:text-gray-400 dark:hover:text-white hover:text-gray-900 hover:bg-customBackground_header dark:hover:bg-gray-600"
+        >
+          Logout
+        </a>
       </div>
     </div>
     """

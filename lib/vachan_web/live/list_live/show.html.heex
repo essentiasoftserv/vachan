@@ -1,5 +1,5 @@
 <.header>
-  List <%= @list.id %>
+  <b class="uppercase"><%= @list.name %></b>
   <:subtitle>This is a list record from your database.</:subtitle>
   <:actions>
     <.link patch={~p"/lists/#{@list}/show/edit"} phx-click={JS.push_focus()}>
@@ -7,11 +7,20 @@
     </.link>
   </:actions>
 </.header>
-
-<.list>
-  <:item title="Name"><%= @list.name %></:item>
-</.list>
-
+<.table id="add-to-list-table" rows={@person_details}>
+  <:col :let={person} label="First name"><%= person.first_name %></:col>
+  <:col :let={person} label="List name"><%= person.last_name %></:col>
+  <:col :let={person} label="Email"><%= person.email %></:col>
+  <:action :let={person}>
+    <.link phx-click={
+      JS.push("remove_from_lists",
+        value: %{id: @list.id, person_id: person.id}
+      )
+    }>
+      Remove
+    </.link>
+  </:action>
+</.table>
 <.back navigate={~p"/lists"}>
   <.button>Back to lists</.button>
 </.back>
