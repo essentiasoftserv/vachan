@@ -68,36 +68,30 @@ defmodule Vachan.SenderProfiles.SenderProfile do
     attribute :api_key, :string do
       allow_nil? true
       public? true
-      constraints min_length: 10,
-                  max_length: 100
+      constraints min_length: 10, max_length: 100
     end
 
     attribute :smtp_host, :string do
       allow_nil? false
       public? true
-      constraints min_length: 5,
-                  max_length: 100
+      constraints min_length: 5, max_length: 100
     end
 
     attribute :smtp_port, :string do
       allow_nil? true
       public? true
-      constraints match: ~r/^\d+$/
+      # constraints match: ~r/^\d+$/
     end
 
     attribute :name, :string do
       allow_nil? false
       public? true
-      constraints [
-        min_length: 1, max_length: 100,
-        match: ~r/^[a-zA-Z\s]+$/,
-      ]
+      # constraints [min_length: 1, max_length: 100, match: ~r/^[a-zA-Z\s]+$/]
     end
 
     attribute :email, :ci_string do
       allow_nil? false
       public? true
-      constraints match: ~r/^[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/
     end
 
     attribute :title, :string do
@@ -105,6 +99,17 @@ defmodule Vachan.SenderProfiles.SenderProfile do
       public? true
       constraints min_length: 1, max_length: 100
     end
+  end
+
+  validations do
+    validate match(:email, ~r/^[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/), where: [changing(:email)], message: "Must be a valid email"
+    validate match(:username, ~r/^.{3,100}$/), where: [changing(:username)], message: "Username must be between 3 and 100 characters"
+    validate match(:password, ~r/^.{6,100}$/), where: [changing(:password)], message: "Password must be between 6 and 100 characters"
+    validate match(:api_key, ~r/^.{10,100}$/), where: [changing(:api_key)], message: "API key must be between 10 and 100 characters"
+    validate match(:smtp_host, ~r/^.{5,100}$/), where: [changing(:smtp_host)], message: "SMTP host must be between 5 and 100 characters"
+    validate match(:smtp_port, ~r/^\d+$/), where: [changing(:smtp_port)], message: "SMTP port must be a valid number"
+    validate match(:name, ~r/^[a-zA-Z\s]+$/), where: [changing(:name)], message: "Name must contain only letters and spaces"
+    validate match(:title, ~r/^.{1,100}$/), where: [changing(:title)], message: "Title must be between 1 and 100 characters"
   end
 
   identities do
