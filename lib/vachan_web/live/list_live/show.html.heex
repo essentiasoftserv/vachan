@@ -9,7 +9,7 @@
     </.link>
   </:actions>
 </.header>
-<.table id="add-to-list-table" rows={@person_details}>
+<.table id="add_people_to_list_table" rows={@person_details}>
   <:col :let={person} label="First name"><%= person.first_name %></:col>
   <:col :let={person} label="List name"><%= person.last_name %></:col>
   <:col :let={person} label="Email"><%= person.email %></:col>
@@ -48,15 +48,25 @@
     patch={~p"/lists/#{@list}"}
   />
 </.modal>
-<.modal :if={@modal_visible} id="my_modal" show on_cancel={JS.push("hide_modal")}>
-  <.live_component
-    id="add_list_component"
-    module={VachanWeb.ListLive.AddListComponent}
-    person_name={@person_name}
-    mylists={@mylists}
-    person_id={@person_id}
-    person_details={@person_details}
-    list={@list.id}
-    get_list={@get_list}
-  />
+
+<.modal :if={@modal_visible} id="add_people_to_list_modal" show on_cancel={JS.push("hide_modal")}>
+  <div>
+    <b><%= @person_name %></b>
+    <.table id="add_people_to_list_table" rows={@mylists}>
+      <:col :let={list} label="List name"><%= list.name %></:col>
+      <:action :let={list}>
+        <%= if list.id in @get_list do %>
+          <b> Already added</b>
+        <% else %>
+          <.link phx-click={
+            JS.push("add_people_to_list",
+              value: %{list_id: list.id, person_id: @person_id}
+            )
+          }>
+            Add
+          </.link>
+        <% end %>
+      </:action>
+    </.table>
+  </div>
 </.modal>
