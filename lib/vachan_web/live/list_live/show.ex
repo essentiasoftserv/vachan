@@ -40,8 +40,6 @@ defmodule VachanWeb.ListLive.Show do
    def handle_event("show_modal", %{"person_id" => person_id, "person_name" => person_name}, socket) do
     person = Crm.Person.get_by_id!(person_id, ash_opts(socket))
     get_list = get_list_person(person, socket)
-    IO.inspect(get_list, label: "person_id")
-    # {:noreply, assign(socket, :modal_visible, true)}
     {:noreply,
     socket
     |> assign(:modal_visible, true)
@@ -51,7 +49,7 @@ defmodule VachanWeb.ListLive.Show do
   end
 
   @impl true
-  def handle_event("add_list", %{"person_id" => person_id, "list_id" => list_id}, socket) do
+  def handle_event("add_people_to_list", %{"person_id" => person_id, "list_id" => list_id}, socket) do
     list = Crm.List.get_by_id!(list_id, ash_opts(socket))
     {:ok, _} = Crm.List.add_person(list, person_id, ash_opts(socket))
     {:noreply, socket}
@@ -80,6 +78,20 @@ defmodule VachanWeb.ListLive.Show do
      socket
      |> assign(:person_details, person_details)
      |> put_flash(:info, "Person details removed successfully")}
+  end
+
+  @impl true
+  def handle_event("search", %{"query" => query}, socket) do
+    person_details = search_people_by_name(query, socket)
+    {:noreply, assign(socket, person_details: person_details)}
+  end
+
+  defp search_people_by_name(query, socket) when is_binary(query) do
+    person_details = get_person_details_for_list(socket.assigns.list, socket)
+    capitalized_query = String.capitalize(query)
+    Enum.filter(person_details, fn record ->
+      record[:first_name] == capitalized_query
+    end)
   end
 
   defp get_person_details_for_list(list, socket) do
