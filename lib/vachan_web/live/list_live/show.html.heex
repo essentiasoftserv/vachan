@@ -1,6 +1,8 @@
 <.header>
   <b class="uppercase"><%= @list.name %></b>
-  <:subtitle>This is a list record from your database.</:subtitle>
+  <:subtitle>
+    <.search_bar></.search_bar>
+  </:subtitle>
   <:actions>
     <.link patch={~p"/lists/#{@list}/show/edit"} phx-click={JS.push_focus()}>
       <.button>Edit list</.button>
@@ -11,6 +13,15 @@
   <:col :let={person} label="First name"><%= person.first_name %></:col>
   <:col :let={person} label="List name"><%= person.last_name %></:col>
   <:col :let={person} label="Email"><%= person.email %></:col>
+  <:action :let={person}>
+    <.link phx-click={
+      JS.push("show_modal",
+        value: %{person_id: person.id, person_name: person.first_name}
+      )
+    }>
+      Add to list
+    </.link>
+  </:action>
   <:action :let={person}>
     <.link phx-click={
       JS.push("remove_from_lists",
@@ -35,5 +46,17 @@
     current_user={@current_user}
     current_org={@current_org}
     patch={~p"/lists/#{@list}"}
+  />
+</.modal>
+<.modal :if={@modal_visible} id="my_modal" show on_cancel={JS.push("hide_modal")}>
+  <.live_component
+    id="add_list_component"
+    module={VachanWeb.ListLive.AddListComponent}
+    person_name={@person_name}
+    mylists={@mylists}
+    person_id={@person_id}
+    person_details={@person_details}
+    list={@list.id}
+    get_list={@get_list}
   />
 </.modal>
