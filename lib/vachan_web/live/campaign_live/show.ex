@@ -33,7 +33,7 @@ defmodule VachanWeb.CampaignLive.Show do
     campaign =
       id
       |> Campaign.get_by_id!(ash_opts(socket))
-      |> Ash.load!(:list, ash_opts(socket))
+      |> Ash.load!(:contact_list, ash_opts(socket))
 
     {:ok,
      socket

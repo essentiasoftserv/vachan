@@ -4,7 +4,6 @@ defmodule Vachan.Massmail do
   resources do
     resource Vachan.Massmail.Campaign
     resource Vachan.Massmail.Message
-    resource Vachan.Massmail.Template
     resource Vachan.Massmail.Event
     resource Vachan.Massmail.Content
     resource Vachan.Massmail.Recepients

@@ -1,58 +1,83 @@
-defmodule VachanWeb.CampaignWizard.ContentStep do
+defmodule VachanWeb.CampaignBuilder.ContentComponent do
   use VachanWeb, :live_component
 
   @impl true
   def render(assigns) do
     ~H"""
     <div class="">
-      <div>
-        <.simple_form
-          id="content-form"
-          for={@form}
-          phx-change="validate"
-          phx-submit="save"
-          phx-target={@myself}
-          class="p-1"
-        >
-          <.input
-            field={@form[:subject]}
-            type="text"
-            label="Subject"
-            placeholder="How is {{company}}'s marketing campaign holding up?"
+      <%= if @mode == :edit do %>
+        <div>
+          <.simple_form
+            id="content-form"
+            for={@form}
+            phx-change="validate"
+            phx-submit="save"
+            phx-target={@myself}
+            class="p-1"
           >
-          </.input>
+            <.input
+              field={@form[:subject]}
+              type="text"
+              label="Subject"
+              placeholder="How is {{company}}'s marketing campaign holding up?"
+            >
+            </.input>
 
-          <.input
-            field={@form[:text_body]}
-            type="textarea"
-            label="Email Body"
-            placeholder="The body of the email"
-          >
-          </.input>
+            <.input
+              field={@form[:text_body]}
+              type="textarea"
+              rows="10"
+              label="Email Body"
+              placeholder="The body of the email"
+            >
+            </.input>
 
-          <.input field={@form[:campaign_id]} type="hidden" value={@campaign.id}></.input>
+            <.input field={@form[:campaign_id]} type="hidden" value={@campaign.id}></.input>
 
-          <:actions>
-            <.button phx-disable-with="Saving ... ">Save content</.button>
-          </:actions>
-        </.simple_form>
-      </div>
+            <:actions>
+              <.button phx-disable-with="Saving ... ">Save content</.button>
+            </:actions>
+          </.simple_form>
+        </div>
 
-      <div>
-        <h1>extracted variables:</h1>
-        <%= for variable <- @column_names do %>
-          <%= variable %>
-        <% end %>
-      </div>
+        <div>
+          <h1>extracted variables:</h1>
+          <%= for variable <- @column_names do %>
+            <%= variable %>
+          <% end %>
+        </div>
+      <% else %>
+        <.list>
+          <:item title="Subject"><%= @content.subject %></:item>
+          <:item title="Variables">
+            <span>
+              <%= Enum.join(@column_names, ", ") %>
+            </span>
+          </:item>
+          <:item title="Body">
+            <%= for line <- String.split(@content.text_body, "\n") do %>
+              <p class="break-normal"><%= line %></p>
+            <% end %>
+          </:item>
+        </.list>
+        <.button phx-click="edit-mode" phx-target={@myself}>Edit</.button>
+      <% end %>
     </div>
     """
   end
 
   @impl true
   def update(assigns, socket) do
+    mode =
+      case assigns.content do
+        nil -> :edit
+        _ -> :show
+      end
+
     {:ok,
      socket
      |> assign(assigns)
+     |> assign(:mode, mode)
      |> assign(:column_names, extract_column_names(assigns))
      |> assign(form: create_form(assigns))}
   end
@@ -71,6 +96,11 @@ defmodule VachanWeb.CampaignWizard.ContentStep do
   end
 
   @impl true
+  def handle_event("edit-mode", _params, socket) do
+    {:noreply, socket |> assign(:mode, :edit)}
+  end
+
+  @impl true
   def handle_event("save", %{"form" => params}, socket) do
     form = AshPhoenix.Form.validate(socket.assigns.form, params)
 
@@ -81,7 +111,7 @@ defmodule VachanWeb.CampaignWizard.ContentStep do
         {:noreply,
          socket
          |> put_flash(:info, "Content Saved")
-         |> push_patch(to: socket.assigns.next_f.(socket.assigns.campaign.id))}
+         |> assign(:mode, :show)}
 
       {:error, form} ->
         IO.inspect(form)

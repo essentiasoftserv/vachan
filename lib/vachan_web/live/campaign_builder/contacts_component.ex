@@ -1,4 +1,4 @@
-defmodule VachanWeb.CampaignWizard.AddRecepients do
+defmodule VachanWeb.CampaignBuilder.ContactsComponent do
   # alias Postgrex.Extensions.Array
   use VachanWeb, :live_component
 
@@ -6,43 +6,26 @@ defmodule VachanWeb.CampaignWizard.AddRecepients do
   def render(assigns) do
     ~H"""
     <div>
-      <.simple_form for={@form} phx-change="validate" phx-submit="save" phx-target={@myself}>
-        <.input
-          label="Recepients csv"
-          placeholder="email, first_name, last_name\n james@mi5.gov.uk, James, Bond"
-          field={@form[:blob]}
-          type="textarea"
-        >
-        </.input>
-        <.input field={@form[:campaign_id]} type="hidden" value={@campaign.id}></.input>
+      <%= if @contact_list != nil do %>
+        <p>remove association</p>
+      <% else %>
+        <.button phx-click={JS.push("set_mode", value: %{mode: :choose_list})} phx-target={@myself}>
+          Choose list
+        </.button>
+        <.button phx-click={JS.push("set_mode", value: %{mode: :new_list})} phx-target={@myself}>
+          Add Contacts
+        </.button>
+      <% end %>
 
-        <:actions>
-          <.button phx-disable-with="Saving ... ">Save content</.button>
-        </:actions>
-      </.simple_form>
-
-      <div>
-        <span>Preview</span>
-        <span>Number of recepients: <%= length(@parsed_data) %></span>
-        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-          <thead class="text-xs text-gray-700 uppercase bg-customBackground_header dark:bg-gray-700 dark:text-gray-400">
-            <tr>
-              <%= for header <- @headers do %>
-                <th class="px-6 py-3"><%= header %></th>
-              <% end %>
-            </tr>
-          </thead>
-          <tbody>
-            <%= for line <- @parsed_data do %>
-              <tr class="bg-customBackground border-b dark:bg-gray-800 border-zinc-200 text-black dark:border-gray-700 hover:bg-customBackground_hover dark:hover:bg-gray-600">
-                <%= for item <- line do %>
-                  <td class="relative px-8 py-2"><%= item %></td>
-                <% end %>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-      </div>
+      <.modal
+        :if={@mode == :choose_list}
+        id="choose-list"
+        show
+        phx-target={@myself}
+        on_cancel={JS.push("set_mode", value: %{mode: :show})}
+      >
+        choose list modal
+      </.modal>
     </div>
     """
   end
@@ -52,7 +35,7 @@ defmodule VachanWeb.CampaignWizard.AddRecepients do
     {:ok,
      socket
      |> assign(assigns)
-     |> assign(:form, create_form(assigns))
+     |> assign(:mode, :show)
      |> assign(:parsed_data, [])
      |> assign(:headers, [])}
   end
@@ -94,13 +77,26 @@ defmodule VachanWeb.CampaignWizard.AddRecepients do
           :noreply,
           socket
           |> put_flash(:info, "Recepients Saved")
-          |> push_patch(to: socket.assigns.next_f.(socket.assigns.campaign.id))
         }
 
       {:error, form} ->
         IO.inspect(form)
         {:noreply, assign(socket, form: to_form(form))}
     end
+  end
+
+  def handle_event("set_mode", %{"mode" => mode}, socket) do
+    {:noreply, socket |> assign(:mode, String.to_existing_atom(mode))}
+  end
+
+  @impl true
+  def handle_event("choose-list", _params, socket) do
+    {:noreply, socket |> assign(:mode, :choose_list)}
+  end
+
+  @impl true
+  def handle_event("new-list", _params, socket) do
+    {:noreply, socket |> assign(:mode, :new_list)}
   end
 
   defp create_form(assigns) do

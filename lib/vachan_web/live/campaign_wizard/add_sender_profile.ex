@@ -12,28 +12,28 @@ defmodule VachanWeb.CampaignWizard.AddSenderProfile do
   def render(assigns) do
     ~H"""
     <div>
-      <.header>
-        Choose a Sender Profile
-        <:subtitle>
-          Or <.link patch={~p"/wizard/#{@campaign.id}/add-sender-profile/create"}> create one </.link>
-        </:subtitle>
-      </.header>
-      <.table id="sender_profiles" rows={@sender_profiles}>
-        <:col :let={profile} label="Profile's Name"><%= profile.title %></:col>
-        <:col :let={profile} label="Profile's Name"><%= profile.name %></:col>
-        <:action :let={profile}>
-          <.button
-            phx-target={@myself}
-            phx-click={
-              JS.push("add_sender_profile",
-                value: %{sender_profile_id: profile.id, campaign_id: @campaign.id}
-              )
-            }
-          >
-            Select
-          </.button>
-        </:action>
-      </.table>
+      <%= if @sender_profiles != [] do %>
+        <.table id="sender_profiles" rows={@sender_profiles}>
+          <:col :let={profile} label="Profile's Name"><%= profile.title %></:col>
+          <:col :let={profile} label="Profile's Name"><%= profile.name %></:col>
+          <:action :let={profile}>
+            <.button
+              phx-target={@myself}
+              phx-click={
+                JS.push("associate_sender_profile",
+                  value: %{sender_profile_id: profile.id, campaign_id: @campaign.id}
+                )
+              }
+            >
+              Select
+            </.button>
+          </:action>
+        </.table>
+      <% else %>
+        <.link patch={~p"/wizard/#{@campaign.id}/add-sender-profile/create"}>
+          <.button>New Sender Profile</.button>
+        </.link>
+      <% end %>
       <.modal
         :if={@live_action in [:create_sender_profile]}
         id="sender-profile-modal"
@@ -67,12 +67,15 @@ defmodule VachanWeb.CampaignWizard.AddSenderProfile do
 
   @impl true
   def handle_event(
-        "add_sender_profile",
+        "associate_sender_profile",
         %{"sender_profile_id" => sender_profile_id, "campaign_id" => campaign_id},
         socket
       ) do
     Vachan.Massmail.Campaign.get_by_id!(campaign_id, ash_opts(socket.assigns))
-    |> Vachan.Massmail.Campaign.add_sender_profile(sender_profile_id, ash_opts(socket.assigns))
+    |> Vachan.Massmail.Campaign.associate_sender_profile(
+      sender_profile_id,
+      ash_opts(socket.assigns)
+    )
 
     {:noreply,
      socket
@@ -92,7 +95,7 @@ defmodule VachanWeb.CampaignWizard.AddSenderProfile do
 
     case AshPhoenix.Form.submit(form) do
       {:ok, content} ->
-        # notify_parent({:success, content})
+        notify_parent({:success, content})
 
         {
           :noreply,
