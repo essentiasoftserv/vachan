@@ -18,18 +18,21 @@ defmodule VachanWeb.PersonLive.Index do
     socket
     |> assign(:page_title, "Edit Person")
     |> assign(:person, Person.get_by_id!(id, ash_opts(socket)))
+    |> assign(:action, :edit)
   end
 
   defp apply_action(socket, :add_to_list, %{"id" => id}) do
     socket
     |> assign(:page_title, "Add to Lists")
     |> assign(:person, Person.get_by_id!(id, ash_opts(socket)))
+    |> assign(:action, :add_to_list)
   end
 
   defp apply_action(socket, :new, _params) do
     socket
     |> assign(:page_title, "New Person")
     |> assign(:person, %Person{})
+    |> assign(:action, :new)
   end
 
   defp apply_action(socket, :index, _params) do
@@ -40,7 +43,19 @@ defmodule VachanWeb.PersonLive.Index do
 
   @impl true
   def handle_info({VachanWeb.PersonLive.FormComponent, {:saved, person}}, socket) do
-    {:noreply, stream_insert(socket, :people, person)}
+    socket =
+      socket
+      |> clear_flash()
+      |> put_flash(:info, get_flash_message(socket.assigns.action))
+      |> stream_insert(:people, person)
+
+    Process.send_after(self(), :clear_flash, 2000)
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_info(:clear_flash, socket) do
+    {:noreply, clear_flash(socket)}
   end
 
   @impl true
@@ -75,4 +90,7 @@ defmodule VachanWeb.PersonLive.Index do
       String.contains?(String.capitalize(person.first_name), capitalized_query)
     end)
   end
+  defp get_flash_message(:new), do: "Person created successfully"
+  defp get_flash_message(:edit), do: "Person updated successfully"
+  defp get_flash_message(_), do: ""
 end
