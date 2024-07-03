@@ -52,7 +52,7 @@ defmodule Vachan.Organizations.Organization do
     update :add_member do
       argument :member_id, :uuid, allow_nil?: false
       argument :role, :atom, default: :member, allow_nil?: false
-
+      require_atomic? false
       change manage_relationship(:member_id, :members, type: :append)
     end
 
