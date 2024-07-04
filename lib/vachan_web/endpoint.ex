@@ -8,6 +8,7 @@ defmodule VachanWeb.Endpoint do
     store: :cookie,
     key: "_vachan_key",
     signing_salt: "oJrZzeo5",
+    max_age: 8*60*60,
     same_site: "Lax"
   ]
 

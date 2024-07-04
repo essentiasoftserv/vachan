@@ -64,7 +64,7 @@ defmodule Vachan.Massmail.Campaign do
 
     update :update do
       primary? true
-
+      require_atomic? false
       accept [
         :name
       ]
