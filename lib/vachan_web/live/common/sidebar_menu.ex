@@ -51,7 +51,7 @@ defmodule VachanWeb.SidebarMenuLiveComponent do
       role="dialog"
     >
       <div class=" border-b border-gray-300">
-        <img src="/images/vaak-logo.svg" class="mrw-3 h-14 w-fusll" alt="Vaak Logo" />
+        <img src="/images/vaak-logo.svg" class="mrw-3 h-14 w-full" alt="Vaak Logo" />
       </div>
       <button
         type="button"
@@ -78,80 +78,95 @@ defmodule VachanWeb.SidebarMenuLiveComponent do
         <span class="sr-only">Close menu</span>
       </button>
       <div class="py-4 overflow-y-auto"></div>
-     <ul class="space-y-2 font-medium">
-    <li>
-     <.menu_item label="People" path={~p"/people"}>
-      <.icon name="hero-user-group-mini" class="size-5" />
-     </.menu_item>
-    </li>
-    <li>
-     <.menu_item label="Lists" path={~p"/lists"}>
-      <.icon name="hero-clipboard-document-list-mini" class="size-5" />
-     </.menu_item>
-    </li>
-    <li>
-     <.menu_item label="Sender Profiles" path={~p"/sender-profiles"}>
-      <.icon name="hero-user-circle-mini" class="size-5" />
-     </.menu_item>
-    </li>
-    <li>
-     <.menu_item label="Campaigns" path={~p"/campaigns"}>
-      <.icon name="hero-inbox-arrow-down-mini" class="size-5"/>
-     </.menu_item>
-    </li>
+      <ul class="space-y-2 font-medium">
+        <li>
+          <.menu_item label="People" path={~p"/people"}>
+            <.icon name="hero-user-group-mini" class="size-5" />
+          </.menu_item>
+        </li>
+        <li>
+          <.menu_item label="Lists" path={~p"/lists"}>
+            <.icon name="hero-clipboard-document-list-mini" class="size-5" />
+          </.menu_item>
+        </li>
+        <li>
+          <.menu_item label="Sender Profiles" path={~p"/sender-profiles"}>
+            <.icon name="hero-user-circle-mini" class="size-5" />
+          </.menu_item>
+        </li>
+        <li>
+          <.menu_item label="Campaigns" path={~p"/campaigns"}>
+            <.icon name="hero-inbox-arrow-down-mini" class="size-5" />
+          </.menu_item>
+        </li>
       </ul>
-      <div class="hidden absolute bottom-0 left-0 justify-center p-4 space-x-4 w-full lg:flex bg-customBackground dark:bg-gray-800 z-20">
-        <a
-          href="#"
-          class="inline-flex justify-center p-2 text-gray-500 rounded cursor-pointer dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-customBackground_header dark:hover:bg-gray-600"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
-            <path d="M18.75 12.75h1.5a.75.75 0 0 0 0-1.5h-1.5a.75.75 0 0 0 0 1.5ZM12 6a.75.75 0 0 1 .75-.75h7.5a.75.75 0 0 1 0 1.5h-7.5A.75.75 0 0 1 12 6ZM12 18a.75.75 0 0 1 .75-.75h7.5a.75.75 0 0 1 0 1.5h-7.5A.75.75 0 0 1 12 18ZM3.75 6.75h1.5a.75.75 0 1 0 0-1.5h-1.5a.75.75 0 0 0 0 1.5ZM5.25 18.75h-1.5a.75.75 0 0 1 0-1.5h1.5a.75.75 0 0 1 0 1.5ZM3 12a.75.75 0 0 1 .75-.75h7.5a.75.75 0 0 1 0 1.5h-7.5A.75.75 0 0 1 3 12ZM9 3.75a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5ZM12.75 12a2.25 2.25 0 1 1 4.5 0 2.25 2.25 0 0 1-4.5 0ZM9 15.75a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5Z" />
-          </svg>
-        </a>
-        <a
-          href="#"
-          data-tooltip-target="tooltip-settings"
-          class="inline-flex justify-center p-2 text-gray-500 rounded cursor-pointer dark:text-gray-400 dark:hover:text-white hover:text-gray-900 hover:bg-customBackground_header dark:hover:bg-gray-600"
-        >
-          <svg
-            aria-hidden="true"
-            class="w-6 h-6"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
+       <div class="absolute bottom-0 left-0 p-4 w-full bg-customBackground dark:bg-gray-800 z-20">
+        <div class="flex flex-col items-start space-y-4">
+          <h3 class="text-gray-900 dark:text-gray-400">USER</h3>
+          <a
+            href="/user-profile"
+            class="inline-flex justify-center p-2 text-gray-500 rounded cursor-pointer dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-customBackground_header dark:hover:bg-gray-600"
           >
-            <path
-              fill-rule="evenodd"
-              d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z"
-              clip-rule="evenodd"
+             <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              class="w-6 h-6 "
             >
-            </path>
+                   <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+            </svg>
+            <h2 class="ml-1">User Profile</h2>
+          </a>
+          <a
+            href="/settings"
+            data-tooltip-target="tooltip-settings"
+            class="inline-flex justify-center p-2 text-gray-500 rounded cursor-pointer dark:text-gray-400 dark:hover:text-white hover:text-gray-900 hover:bg-customBackground_header dark:hover:bg-gray-600"
+          >
+            <svg
+              aria-hidden="true"
+              class="w-6 h-6"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z"
+                clip-rule="evenodd"
+              >
+              </path>
+            </svg>
+            <div
+            id="tooltip-settings"
+            role="tooltip"
+            class="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip ml-1"
+          >
+            Settings
+            <div class="tooltip-arrow" data-popper-arrow></div>
+          </div>
+            <h2 class="ml-1">Settings</h2>
+          </a>
+          <div
+            id="tooltip-logout"
+            role="tooltip"
+            class="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip ml-1"
+          >
+            Logout
+            <div class="tooltip-arrow" data-popper-arrow></div>
+          </div>
+          <a
+            href="/sign-out"
+            data-tooltip-target="tooltip-logout"
+            class="inline-flex justify-center p-2 text-gray-500 rounded cursor-pointer dark:text-gray-400 dark:hover:text-white hover:text-gray-900 hover:bg-customBackground_header dark:hover:bg-gray-600 "
+          >
+           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+            <path d="M10 17l5-5-5-5v3H3v4h7v3zM19 3h-8a2 2 0 0 0-2 2v4h2V5h8v14h-8v-4H9v4a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2z" fill="currentColor" />
           </svg>
-        </a>
-        <div
-          id="tooltip-settings"
-          role="tooltip"
-          class="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip"
-        >
-          Settings page
-          <div class="tooltip-arrow" data-popper-arrow></div>
+              <h2 class="ml-2">Logout</h2>
+          </a>
         </div>
-        <a
-          href="/sign-out"
-          data-tooltip-target="tooltip-logout"
-          class="inline-flex justify-center p-2 text-gray-500 rounded cursor-pointer dark:text-gray-400 dark:hover:text-white hover:text-gray-900 hover:bg-customBackground_header dark:hover:bg-gray-600"
-        >
-          Logout
-        </a>
-        <div
-          id="tooltip-logout"
-          role="tooltip"
-          class="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip"
-        >
-          Logout
-          <div class="tooltip-arrow" data-popper-arrow></div>
-        </div>
+
+
       </div>
     </div>
     """

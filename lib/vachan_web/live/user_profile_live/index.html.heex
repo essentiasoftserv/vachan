@@ -1,0 +1,13 @@
+<.header>
+    User Profile
+    <:actions>
+      <.link patch={~p"/user-profile/#{@user.id}/edit"} phx-click={JS.push_focus()}>
+        <.button>Edit profile</.button>
+      </.link>
+    </:actions>
+  </.header>
+  <.list>
+    <:item title="First Name"></:item>
+    <:item title="Last Name"></:item>
+    <:item title="Email"><%= @user.email %></:item>
+  </.list>
