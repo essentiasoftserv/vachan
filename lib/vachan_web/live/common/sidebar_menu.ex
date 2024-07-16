@@ -51,7 +51,7 @@ defmodule VachanWeb.SidebarMenuLiveComponent do
       role="dialog"
     >
       <div class=" border-b border-gray-300">
-        <img src="/images/vaak-logo.svg" class="mrw-3 h-14 w-full" alt="Vaak Logo" />
+        <img src="/images/vaak-logo.svg" class="mrw-3 h-14 w-fsull" alt="Vaak Logo" />
       </div>
       <button
         type="button"
