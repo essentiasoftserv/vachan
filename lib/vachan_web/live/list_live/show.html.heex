@@ -1,10 +1,9 @@
 <.header>
-
   <b class="uppercase"><%= @list.name %></b>
   <:subtitle>This is a list record from your database.</:subtitle>
   <:actions>
     <.link patch={~p"/lists/#{@list}/show/edit"} phx-click={JS.push_focus()}>
-      <.button>Edit list</.button>
+      <.button>Add User</.button>
     </.link>
   </:actions>
 </.header>
@@ -25,9 +24,29 @@
 <.back navigate={~p"/lists"}>
   <.button>Back to lists</.button>
 </.back>
-
 <.modal :if={@live_action == :edit} id="list-modal" show on_cancel={JS.patch(~p"/lists/#{@list}")}>
-  <.live_component
+  <div class="">
+    <.search_bar></.search_bar>
+    <form phx-submit="save">
+      <.table id="add-to-list-table" rows={@search_person_detail}>
+        <:col :let={person} label="">
+          <input
+            checked
+            id="checked-checkbox"
+            type="checkbox"
+            value=""
+            phx-click={JS.push("checked_people", value: %{checked_people_id: person.id})}
+            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+          />
+        </:col>
+        <:col :let={person} label="First name"><%= person.first_name %></:col>
+        <:col :let={person} label="List name"><%= person.last_name %></:col>
+        <:col :let={person} label="Email"><%= person.email %></:col>
+      </.table>
+      <.button type="submit">Save</.button>
+    </form>
+  </div>
+  <%!-- <.live_component
     module={VachanWeb.ListLive.FormComponent}
     id={@list.id}
     title={@page_title}
@@ -36,5 +55,5 @@
     current_user={@current_user}
     current_org={@current_org}
     patch={~p"/lists/#{@list}"}
-  />
+  /> --%>
 </.modal>
