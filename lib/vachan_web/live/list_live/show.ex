@@ -5,10 +5,7 @@ defmodule VachanWeb.ListLive.Show do
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok,
-    socket
-
-  }
+    {:ok, socket}
   end
 
   @impl true
@@ -19,40 +16,63 @@ defmodule VachanWeb.ListLive.Show do
 
     list = Crm.List.get_by_id!(id, ash_opts(socket))
     person_details = get_person_details_for_list(list, socket)
+    test_me = test_me(list, socket)
 
     {:noreply,
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
      |> assign(:person_details, person_details)
-     |> assign(:search_person_detail, person_details)
-     |> assign(:checked_people_ids, [])
-     |> assign(:query, "")
+     |> assign(:person_me, test_me)
+     |> assign(:search_person_detail, [])
      |> assign(:list, Crm.List.get_by_id!(id, ash_opts(socket)))}
   end
 
   @impl true
-  def handle_event("remove_from_lists", %{"id" => id, "person_id" => person_id}, socket) do
+  def handle_event("remove_user_from_list", %{"id" => id, "person_id" => person_id}, socket) do
     list = Crm.List.get_by_id!(id, ash_opts(socket))
     {:ok, _} = Crm.List.remove_person(list, person_id, ash_opts(socket))
     {:noreply, socket}
   end
 
   @impl true
-  def handle_event("checked_people", %{"checked_people_id" => checked_people_id}, socket) do
+  def handle_event(
+        "add_to_lists",
+        %{"person_id" => person_id, "list_id" => list_id},
+        socket
+      ) do
+    list = Crm.List.get_by_id!(list_id, ash_opts(socket))
+    {:ok, _} = Crm.List.add_person(list, person_id, ash_opts(socket))
     {:noreply, socket}
   end
 
   @impl true
-  # def handle_event("save", params, socket) do
-  def handle_event("save", %{"form" => params}, socket) do
-    IO.inspect("********")
-    IO.inspect(socket.assigns.form)
+  def handle_event(
+        "remove_from_lists",
+        %{"person_id" => person_id, "list_id" => list_id},
+        socket
+      ) do
+    list = Crm.List.get_by_id!(list_id, ash_opts(socket))
+    {:ok, _} = Crm.List.remove_person(list, person_id, ash_opts(socket))
     {:noreply, socket}
   end
 
   @impl true
   def handle_info(%{topic: "person_list:destroyed", payload: _payload}, socket) do
     handle_modification(socket)
+  end
+
+  def handle_event("save", _params, socket) do
+    {:noreply, assign(socket, live_action: nil)}
+  end
+
+  def handle_event("search", %{"query" => query}, socket) do
+    search_person_detail = search_people_by(query, socket)
+
+    if String.trim(query) == "" do
+      {:noreply, socket}
+    else
+      {:noreply, assign(socket, search_person_detail: search_person_detail, reset: true)}
+    end
   end
 
   defp handle_modification(socket) do
@@ -64,17 +84,14 @@ defmodule VachanWeb.ListLive.Show do
      |> put_flash(:info, "Person details removed successfully")}
   end
 
-  @impl true
-  def handle_event("search", %{"query" => query}, socket) do
-    search_person_detail = search_people_by(query, socket)
-    if String.trim(query) == "" do
-      {:noreply, socket}
-    else
-      {:noreply, assign(socket, search_person_detail: search_person_detail, reset: true)}
-    end
+  defp get_person_details_for_list(list, socket) do
+    list
+    |> Ash.load!(:people, ash_opts(socket))
+    |> then(fn x -> x.people end)
+    |> Enum.map(fn x -> x.id end)
   end
 
-  defp get_person_details_for_list(list, socket) do
+  defp test_me(list, socket) do
     list
     |> Ash.load!(:people, ash_opts(socket))
     |> then(fn x -> x.people end)
@@ -89,14 +106,15 @@ defmodule VachanWeb.ListLive.Show do
   end
 
   defp search_people_by(query, socket) when is_binary(query) do
-    search_person_detail = get_person_details_for_list(socket.assigns.list, socket)
+    search_person_detail = test_me(socket.assigns.list, socket)
     capitalized_query = String.capitalize(query)
-    filtered_list =Enum.filter(search_person_detail, fn record ->
-      record[:first_name] == capitalized_query
-    end)
+
+    filtered_list =
+      Enum.filter(search_person_detail, fn record ->
+        record[:first_name] == capitalized_query
+      end)
+
     filtered_list
-  #   new_socket = assign(socket, :filtered_people, filtered_list)
-  # {:ok, new_socket}
   end
 
   defp page_title(:show), do: "Show List"
