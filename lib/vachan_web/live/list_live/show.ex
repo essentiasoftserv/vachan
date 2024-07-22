@@ -67,11 +67,13 @@ defmodule VachanWeb.ListLive.Show do
 
   def handle_event("search", %{"query" => query}, socket) do
     search_person_detail = search_people_by(query, socket)
+    updated_results = socket.assigns.search_person_detail ++ search_person_detail
+    IO.inspect(updated_results)
 
     if String.trim(query) == "" do
       {:noreply, socket}
     else
-      {:noreply, assign(socket, search_person_detail: search_person_detail, reset: true)}
+      {:noreply, assign(socket, search_person_detail: updated_results, reset: true)}
     end
   end
 
