@@ -64,12 +64,15 @@ defmodule VachanWeb.ListLive.Show do
   @impl true
   def handle_event("search", %{"query" => query}, socket) do
     search_person_detail = search_user_by_first_name(query, socket)
-    updated_results = socket.assigns.search_person_detail ++ search_person_detail
-    if String.trim(query) == "" do
-      {:noreply, socket}
-    else
-      {:noreply, assign(socket, search_person_detail: updated_results, reset: true)}
-    end
+    existing_person_detail = socket.assigns.search_person_detail
+    unique_new_person_detail =
+      Enum.reject(search_person_detail, fn new_record ->
+        Enum.any?(existing_person_detail, fn existing_record ->
+          existing_record.id == new_record.id
+        end)
+      end)
+    updated_results = existing_person_detail ++ unique_new_person_detail
+    {:noreply, assign(socket, search_person_detail: updated_results, query: query, reset: true)}
   end
 
   def handle_event("save", _params, socket) do
@@ -114,6 +117,7 @@ defmodule VachanWeb.ListLive.Show do
       Enum.filter(search_person_detail, fn record ->
         record[:first_name] == capitalized_query
       end)
+
     filtered_list
   end
 
