@@ -61,7 +61,7 @@ defmodule VachanWeb.Router do
       live "/lists/:id/edit", ListLive.Index, :edit
 
       live "/lists/:id", ListLive.Show, :show
-      live "/lists/:id/show/edit", ListLive.Show, :edit
+      live "/lists/:id/show/add-user", ListLive.Show, :edit
 
       live "/campaigns", CampaignLive.Index, :index
       live "/campaigns/new", CampaignLive.Edit, :new
