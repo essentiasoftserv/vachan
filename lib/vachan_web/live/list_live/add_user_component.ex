@@ -7,11 +7,11 @@ defmodule VachanWeb.ListLive.AddUserComponent do
     <div id="list-id">
       <.search_bar></.search_bar>
       <form phx-submit="save">
-        <.table id="add-to-list-table" rows={@search_person_detail}>
-          <:col :let={person} label="First name"><%= person.first_name %></:col>
-          <:col :let={person} label="List name"><%= person.last_name %></:col>
-          <:col :let={person} label="Email"><%= person.email %></:col>
-          <:action :let={person}>
+        <.table id="people" rows={@search_person_detail}>
+          <:col :let={{_id, person}} label="First Name"><%= person.first_name %></:col>
+          <:col :let={{_id, person}} label="Last Name"><%= person.last_name %></:col>
+          <:col :let={{_id, person}} label="Email"><%= person.email %></:col>
+          <:action :let={{_id, person}}>
             <%= if person.id in @person_details do %>
               <input
                 type="checkbox"
