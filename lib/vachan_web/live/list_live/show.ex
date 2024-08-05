@@ -64,9 +64,15 @@ defmodule VachanWeb.ListLive.Show do
   @impl true
   def handle_event("search", %{"query" => query}, socket) do
     filtered_list = filter_by_first_name(query, socket)
-    existing_person_detail = socket.assigns.search_person_detail
-    updated_results = merge_without_duplicates(existing_person_detail, filtered_list)
-    {:noreply, assign(socket, search_person_detail: updated_results, reset: true)}
+    current_results = socket.assigns.search_person_detail
+    new_results = merge_without_duplication(current_results, filtered_list)
+    updated_results = current_results ++ new_results
+
+    if String.trim(query) == "" do
+      {:noreply, assign(socket, search_person_detail: current_results)}
+    else
+      {:noreply, assign(socket, search_person_detail: updated_results, reset: true)}
+    end
   end
 
   def handle_event("save", _params, socket) do
@@ -106,17 +112,18 @@ defmodule VachanWeb.ListLive.Show do
   defp filter_by_first_name(query, socket) do
     search_person_detail = Crm.Person.read_all!(ash_opts(socket))
     capitalized_query = String.capitalize(query)
+
     search_person_detail
     |> Enum.filter(fn person ->
       String.contains?(String.downcase(person.first_name), String.downcase(capitalized_query))
     end)
   end
 
-  defp merge_without_duplicates(existing_list, new_list) do
-    existing_ids = MapSet.new(Enum.map(existing_list, & &1.id))
+  defp merge_without_duplication(existing_list, new_list) do
     new_list
-    |> Enum.reject(fn person -> MapSet.member?(existing_ids, person.id) end)
-    |> Enum.concat(existing_list)
+    |> Enum.filter(fn person ->
+      not Enum.any?(existing_list, &(&1.id == person.id))
+    end)
   end
 
   defp page_title(:show), do: "Show List"
