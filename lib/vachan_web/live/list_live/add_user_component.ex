@@ -6,36 +6,20 @@ defmodule VachanWeb.ListLive.AddUserComponent do
     ~H"""
     <div id="list-id">
       <.search_bar></.search_bar>
-      <form phx-submit="save">
-        <.table id="add-to-list-table" rows={@search_person_detail}>
-          <:col :let={person} label="First name"><%= person.first_name %></:col>
-          <:col :let={person} label="List name"><%= person.last_name %></:col>
-          <:col :let={person} label="Email"><%= person.email %></:col>
-          <:action :let={person}>
-            <%= if person.id in @person_details do %>
-              <input
-                type="checkbox"
-                checked={person.id in @person_details}
-                phx-click={
-                  JS.push("remove_from_user_list",
-                    value: %{person_id: person.id, list_id: @list.id}
-                  )
-                }
-              />
-            <% else %>
-              <input
-                type="checkbox"
-                phx-click={
-                  JS.push("add_to_user_list",
-                    value: %{person_id: person.id, list_id: @list.id}
-                  )
-                }
-              />
-            <% end %>
-          </:action>
-        </.table>
-        <.button type="submit">Save</.button>
-      </form>
+      <%= if @search_person_detail== [] do %>
+      <% else %>
+        <form phx-submit="save" class="mt-4">
+          <.table id="add-to-list-table" rows={@search_person_detail}>
+            <:col :let={person} label="First name"><%= person.first_name %></:col>
+            <:col :let={person} label="List name"><%= person.last_name %></:col>
+            <:col :let={person} label="Email"><%= person.email %></:col>
+            <:action :let={person}>
+              <input type="checkbox" checked={person.id in @person_details} />
+            </:action>
+          </.table>
+          <.button type="submit" class="mt-8">Save</.button>
+        </form>
+      <% end %>
     </div>
     """
   end
