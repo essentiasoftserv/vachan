@@ -19,18 +19,26 @@ defmodule Vachan.SenderProfilesTest do
   }
 
   @invalid_attrs %{
-    "title" => "",  # Invalid because it is empty (less than 1 character)
-    "name" => "John123",  # Invalid because it contains numbers
-    "email" => "john.doe@com",  # Invalid because the domain part is incorrect
-    "smtp_host" => "smtp",  # Invalid because it is too short (less than 5 characters)
-    "smtp_port" => "-85",  # Invalid because it is not a positive number
-    "username" => "jo",  # Invalid because it is too short (less than 3 characters)
-    "password" => "123"  # Invalid because it is too short (less than 6 characters)
+    # Invalid because it is empty (less than 1 character)
+    "title" => "",
+    # Invalid because it contains numbers
+    "name" => "John123",
+    # Invalid because the domain part is incorrect
+    "email" => "john.doe@com",
+    # Invalid because it is too short (less than 5 characters)
+    "smtp_host" => "smtp",
+    # Invalid because it is not a positive number
+    "smtp_port" => "-85",
+    # Invalid because it is too short (less than 3 characters)
+    "username" => "jo",
+    # Invalid because it is too short (less than 6 characters)
+    "password" => "123"
   }
 
   @update_attrs %{
     "title" => "Senior Developer",
-    "name" => "John Doe Jr",  # Updated name to meet validation: only letters and spaces
+    # Updated name to meet validation: only letters and spaces
+    "name" => "John Doe Jr",
     "email" => "john.doe.jr@example.com",
     "smtp_host" => "smtp.updated.com",
     "smtp_port" => "465",
@@ -69,6 +77,11 @@ defmodule Vachan.SenderProfilesTest do
           assert updated.title == @update_attrs["title"]
           assert to_string(updated.email) == @update_attrs["email"]
           assert updated.smtp_host == @update_attrs["smtp_host"]
+          assert updated.smtp_port == @update_attrs["smtp_port"]
+          assert updated.name == @update_attrs["name"]
+          assert updated.username == @update_attrs["username"]
+          assert updated.password == @update_attrs["password"]
+
         {:error, %Ash.Error.Invalid{errors: errors}} ->
           flunk("Expected successful update but got validation errors: #{inspect(errors)}")
       end
