@@ -75,7 +75,27 @@ defmodule VachanWeb.ListLive.Show do
     end
   end
 
-  def handle_event("save", _params, socket) do
+  def handle_event(
+        "save",
+        %{"selected_people" => selected_people, "list_id" => list_id},
+        socket
+      ) do
+    list = Crm.List.get_by_id!(list_id, ash_opts(socket))
+
+    user_detail_id =
+      list
+      |> Ash.load!(:people, ash_opts(socket))
+      |> then(fn x -> x.people end)
+      |> Enum.map(fn x -> x.id end)
+
+    Enum.each(selected_people, fn person ->
+      if selected_people in user_detail_id do
+        {:ok, _} = Crm.List.remove_person(list, person, ash_opts(socket))
+      else
+        {:ok, _} = Crm.List.add_person(list, person, ash_opts(socket))
+      end
+    end)
+
     {:noreply, assign(socket, live_action: nil)}
   end
 
