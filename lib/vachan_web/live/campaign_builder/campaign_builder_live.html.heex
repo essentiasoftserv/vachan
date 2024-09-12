@@ -18,15 +18,14 @@
   </.live_component>
 </div>
 
-<div class="mt-10">
-  <div class="text-2xl">Contacts List</div>
-  <div>options to choose existing or show modal to add more.</div>
+<div class="mt-10 m-2" >
+  <div class="text-2xl ">Contacts List</div>
   <div :if={@contact_list}>
     <%= @contact_list.name %>
     <%= @contact_list.people_count %>
   </div>
-  <.button :if={@contact_lists != []} phx-click={JS.push("show_modal", value: %{modal: :list_selector})}>
-    Select contact list
+  <.button class="mt-4 mr-10" :if={@contact_lists != [] } phx-click={JS.push("show_modal", value: %{modal: :list_selector})}>
+    Select list
   </.button>
 
   <.button phx-click={JS.push("show_modal", value: %{modal: :contact_list_creator})}>
@@ -35,7 +34,7 @@
 
 </div>
 
-<div class="mt-10">
+<div class="mt-10 ">
   <div class="text-2xl">Credentials</div>
   <div>choose existing or add new</div>
   <.button phx-click={JS.push("show_modal", value: %{modal: :sender_profile_selector})}>
@@ -55,15 +54,20 @@
       <:col :let={list} label="List name"><%= list.name %></:col>
       <:col :let={list} label="People count"><%= list.people_count %></:col>
       <:action :let={list}>
-        <%= if list.people_count > 0 do %>
-          <.button phx-click={JS.push("select_list", value: %{list_id: list.id})}>Select</.button>
-        <% else %>
-          -
-        <% end %>
+        <.button
+          class={if list.people_count == 0, do: "opacity-50 cursor-not-allowed", else: ""}
+          phx-click={JS.push("select_list", value: %{list_id: list.id})}
+          disabled={list.people_count == 0}
+        >
+          Select
+        </.button>
       </:action>
     </.table>
   </div>
 </.modal>
+
+
+
 
 <.modal :if={@modal == :sender_profile_selector} id="select_sender_profile_modal" show on_cancel={JS.push("hide_modal")}>
   <div>
