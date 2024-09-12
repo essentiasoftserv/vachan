@@ -4,31 +4,26 @@
 </.header>
 
 <div class="m-2">
-  <!-- Content Accordion (Open by default) -->
-  <div id="accordion-content" data-accordion="collapse">
-    <h2 id="accordion-collapse-heading-content">
-      <button type="button" class="flex items-center justify-between w-full p-5 font-medium text-left text-black text-2xl border border-gray-200 focus:ring-4 focus:ring-gray-200" data-accordion-target="#accordion-collapse-body-content" aria-expanded="true" aria-controls="accordion-collapse-body-content">
-        <span>Content</span>
-        <svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-          <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06-.02L10 10.8l3.71-3.61a.75.75 0 011.05 1.06l-4 3.9a.75.75 0 01-1.06 0l-4-3.9a.75.75 0 01-.02-1.05z" clip-rule="evenodd"></path>
-        </svg>
-      </button>
-    </h2>
-    <div id="accordion-collapse-body-content" class="" aria-labelledby="accordion-collapse-heading-content">
-      <div class="p-5">
-        <!-- Show Live Component Here -->
-        <.live_component
-          module={VachanWeb.CampaignBuilder.ContentComponent}
-          id="content-step"
-          current_user={@current_user}
-          current_org={@current_org}
-          campaign={@campaign}
-          live_action={@live_action}
-          content={@content}
-        >
-        </.live_component>
-      </div>
-    </div>
+  <div class="text-2xl">Content</div>
+  <div>insert the content component here</div>
+  <.live_component
+    module={VachanWeb.CampaignBuilder.ContentComponent}
+    id="content-step"
+    current_user={@current_user}
+    current_org={@current_org}
+    campaign={@campaign}
+    live_action={@live_action}
+    content={@content}
+  >
+  </.live_component>
+</div>
+
+<div class="mt-10">
+  <div class="text-2xl">Contacts List</div>
+  <div>options to choose existing or show modal to add more.</div>
+  <div :if={@contact_list}>
+    <%= @contact_list.name %>
+    <%= @contact_list.people_count %>
   </div>
 </div>
 
@@ -87,13 +82,18 @@
       <:col :let={list} label="List name"><%= list.name %></:col>
       <:col :let={list} label="People count"><%= list.people_count %></:col>
       <:action :let={list}>
-        <.button phx-click={JS.push("select_list", value: %{list_id: list.id})} disabled={list.people_count == 0}>
-          Select
-        </.button>
+        <%= if list.people_count > 0 do %>
+          <.button phx-click={JS.push("select_list", value: %{list_id: list.id})}>Select</.button>
+        <% else %>
+          -
+        <% end %>
       </:action>
     </.table>
   </div>
 </.modal>
+
+
+
 
 <.modal :if={@modal == :sender_profile_selector} id="select_sender_profile_modal" show on_cancel={JS.push("hide_modal")}>
   <div>
