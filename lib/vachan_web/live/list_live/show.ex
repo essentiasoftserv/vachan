@@ -88,12 +88,15 @@ defmodule VachanWeb.ListLive.Show do
       |> then(fn x -> x.people end)
       |> Enum.map(fn x -> x.id end)
 
-    Enum.each(selected_people, fn person ->
-      if selected_people in user_detail_id do
-        {:ok, _} = Crm.List.remove_person(list, person, ash_opts(socket))
-      else
-        {:ok, _} = Crm.List.add_person(list, person, ash_opts(socket))
-      end
+    select_person_id_to_add = selected_people -- user_detail_id
+    select_remove_id_to_remove = user_detail_id -- selected_people
+
+    Enum.each(select_person_id_to_add, fn id ->
+      Crm.List.add_person(list, id, ash_opts(socket))
+    end)
+
+    Enum.each(select_remove_id_to_remove, fn id ->
+      Crm.List.remove_person(list, id, ash_opts(socket))
     end)
 
     {:noreply, assign(socket, live_action: nil)}
