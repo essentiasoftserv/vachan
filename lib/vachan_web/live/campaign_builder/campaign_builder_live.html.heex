@@ -3,6 +3,7 @@
   <:actions></:actions>
 </.header>
 
+<<<<<<< HEAD
 <div class="m-2">
   <div class="text-2xl">Content</div>
   <div>insert the content component here</div>
@@ -67,6 +68,26 @@
           </.button>
       </div>
     </div>
+=======
+<div class="accordion m-2">
+  <div class="accordion-header cursor-pointer flex justify-between items-center p-4 border-b border-gray-300">
+    <div class="text-2xl">Content</div>
+    <svg class="w-6 h-6 transition-transform" id="content-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+    </svg>
+  </div>
+  <div class="accordion-body p-4 open">
+    <.live_component
+      module={VachanWeb.CampaignBuilder.ContentComponent}
+      id="content-step"
+      current_user={@current_user}
+      current_org={@current_org}
+      campaign={@campaign}
+      live_action={@live_action}
+      content={@content}
+    >
+    </.live_component>
+>>>>>>> 92c6b48 (accordions for campaign builder)
   </div>
 </div>
 
@@ -114,3 +135,80 @@
   <.live_component id="add_contacts_component" module={VachanWeb.CampaignBuilder.AddContact}>
   </.live_component>
 </.modal>
+
+<style>
+  .accordion-body.hidden {
+    display: none;
+  }
+  .accordion-body.open {
+    display: block;
+  }
+  .accordion-header svg {
+    transition: transform 0.3s ease;
+  }
+  .accordion-header svg.rotate-180 {
+    transform: rotate(180deg);
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const accordionHeaders = document.querySelectorAll('.accordion-header');
+    
+    accordionHeaders.forEach(header => {
+      header.addEventListener('click', () => {
+        const accordionBody = header.nextElementSibling;
+        const accordionIcon = header.querySelector('svg');
+
+        // Close all other accordions
+        document.querySelectorAll('.accordion-body').forEach(body => {
+          if (body !== accordionBody) {
+            body.classList.remove('open');
+            body.classList.add('hidden');
+          }
+        });
+
+        document.querySelectorAll('.accordion-header svg').forEach(icon => {
+          if (icon !== accordionIcon) {
+            icon.classList.remove('rotate-180');
+          }
+        });
+
+        // Toggle the clicked accordion
+        accordionBody.classList.toggle('open');
+        accordionBody.classList.toggle('hidden');
+        accordionIcon.classList.toggle('rotate-180');
+      });
+    });
+
+    // Keep the Content accordion open by default
+    const contentAccordion = document.querySelector('.accordion.m-2 .accordion-body');
+    const contentIcon = document.querySelector('#content-icon');
+    
+    if (contentAccordion) {
+      contentAccordion.classList.add('open');
+      contentAccordion.classList.remove('hidden');
+      contentIcon.classList.add('rotate-180');
+    }
+  });
+</script>
+<style>
+  .accordion-body.hidden {
+    display: none;
+  }
+  .accordion-body.open {
+    display: block;
+  }
+  .accordion-header svg {
+    transition: transform 0.3s ease;
+  }
+  .accordion-header svg.rotate-180 {
+    transform: rotate(180deg);
+  }
+  .accordion-header {
+    transition: background-color 0.3s ease;
+  }
+  .accordion-header:hover {
+    background-color: #f0f0f0; /* Lighter shade of black for hover effect */
+  }
+</style>
