@@ -88,6 +88,10 @@ defmodule VachanWeb.Router do
       live "/wizard/:id/add-sender-profile/create",
            CampaignWizard.CampaignWizardLive,
            :create_sender_profile
+
+      live "/user-profile", UserProfileLive.Index
+      live "/user-profile/:id/edit", UserProfileLive.Edit, :edit
+
     end
   end
 
