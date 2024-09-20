@@ -46,7 +46,6 @@ defmodule Vachan.SenderProfilesTest do
     "password" => "newSecurePassword456"
   }
 
-
   describe "sender profile creation" do
     test "should create new sender profile with valid attributes" do
       user = confirmed_user()
