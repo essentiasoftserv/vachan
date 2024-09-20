@@ -20,7 +20,8 @@ defmodule VachanWeb.CampaignBuilder.AddContact do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="">
+    <div class="p-6">
+    <h1 class="text-2xl font-bold text-center mb-4">Create A New List</h1>
       <.simple_form
         for={@form}
         id="list-form"
