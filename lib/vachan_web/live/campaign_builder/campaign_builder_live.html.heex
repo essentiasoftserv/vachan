@@ -4,6 +4,7 @@
 </.header>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 <div class="m-2">
   <div class="text-2xl">Content</div>
   <div>insert the content component here</div>
@@ -135,80 +136,3 @@
   <.live_component id="add_contacts_component" module={VachanWeb.CampaignBuilder.AddContact}>
   </.live_component>
 </.modal>
-
-<style>
-  .accordion-body.hidden {
-    display: none;
-  }
-  .accordion-body.open {
-    display: block;
-  }
-  .accordion-header svg {
-    transition: transform 0.3s ease;
-  }
-  .accordion-header svg.rotate-180 {
-    transform: rotate(180deg);
-  }
-</style>
-
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const accordionHeaders = document.querySelectorAll('.accordion-header');
-    
-    accordionHeaders.forEach(header => {
-      header.addEventListener('click', () => {
-        const accordionBody = header.nextElementSibling;
-        const accordionIcon = header.querySelector('svg');
-
-        // Close all other accordions
-        document.querySelectorAll('.accordion-body').forEach(body => {
-          if (body !== accordionBody) {
-            body.classList.remove('open');
-            body.classList.add('hidden');
-          }
-        });
-
-        document.querySelectorAll('.accordion-header svg').forEach(icon => {
-          if (icon !== accordionIcon) {
-            icon.classList.remove('rotate-180');
-          }
-        });
-
-        // Toggle the clicked accordion
-        accordionBody.classList.toggle('open');
-        accordionBody.classList.toggle('hidden');
-        accordionIcon.classList.toggle('rotate-180');
-      });
-    });
-
-    // Keep the Content accordion open by default
-    const contentAccordion = document.querySelector('.accordion.m-2 .accordion-body');
-    const contentIcon = document.querySelector('#content-icon');
-    
-    if (contentAccordion) {
-      contentAccordion.classList.add('open');
-      contentAccordion.classList.remove('hidden');
-      contentIcon.classList.add('rotate-180');
-    }
-  });
-</script>
-<style>
-  .accordion-body.hidden {
-    display: none;
-  }
-  .accordion-body.open {
-    display: block;
-  }
-  .accordion-header svg {
-    transition: transform 0.3s ease;
-  }
-  .accordion-header svg.rotate-180 {
-    transform: rotate(180deg);
-  }
-  .accordion-header {
-    transition: background-color 0.3s ease;
-  }
-  .accordion-header:hover {
-    background-color: #f0f0f0; /* Lighter shade of black for hover effect */
-  }
-</style>
