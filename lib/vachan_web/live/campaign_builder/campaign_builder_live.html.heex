@@ -3,60 +3,83 @@
   <:actions></:actions>
 </.header>
 
-<div class="accordion m-2">
-  <div class="accordion-header cursor-pointer flex justify-between items-center p-4 border-b border-gray-300">
-    <div class="text-2xl">Content</div>
-    <svg class="w-6 h-6 transition-transform" id="content-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-    </svg>
-  </div>
-  <div class="accordion-body p-4 open">
-    <.live_component
-      module={VachanWeb.CampaignBuilder.ContentComponent}
-      id="content-step"
-      current_user={@current_user}
-      current_org={@current_org}
-      campaign={@campaign}
-      live_action={@live_action}
-      content={@content}
-    >
-    </.live_component>
-  </div>
-</div>
-
-<div class="accordion mt-10">
-  <div class="accordion-header cursor-pointer flex justify-between items-center p-4 border-b border-gray-300">
-    <div class="text-2xl">Contacts List</div>
-    <svg class="w-6 h-6 transition-transform" id="contacts-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-    </svg>
-  </div>
-  <div class="accordion-body p-4 hidden">
-    <div :if={@contact_list}>
-      <%= @contact_list.name %>
-      <%= @contact_list.people_count %>
+<div class="m-2">
+  <!-- Content Accordion -->
+  <div id="accordion-content" data-accordion="collapse">
+    <h2 id="accordion-collapse-heading-content">
+      <button type="button" class="flex items-center justify-between w-full p-5 font-medium text-left text-black text-2xl border border-gray-200 focus:ring-4 focus:ring-gray-200" data-accordion-target="#accordion-collapse-body-content" aria-expanded="true" aria-controls="accordion-collapse-body-content">
+        <span>Content</span>
+        <svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06-.02L10 10.8l3.71-3.61a.75.75 0 011.05 1.06l-4 3.9a.75.75 0 01-1.06 0l-4-3.9a.75.75 0 01-.02-1.05z" clip-rule="evenodd"></path>
+        </svg>
+      </button>
+    </h2>
+    <div id="accordion-collapse-body-content" class="" aria-labelledby="accordion-collapse-heading-content">
+      <div class="p-5">
+        <.live_component
+          module={VachanWeb.CampaignBuilder.ContentComponent}
+          id="content-step"
+          current_user={@current_user}
+          current_org={@current_org}
+          campaign={@campaign}
+          live_action={@live_action}
+          content={@content}
+        >
+        </.live_component>
+      </div>
     </div>
-    <.button :if={@contact_lists != []} phx-click={JS.push("show_modal", value: %{modal: :list_selector})}>
-      Select contact list
-    </.button>
-
-    <.button phx-click={JS.push("show_modal", value: %{modal: :contact_list_creator})}>
-      Add contacts
-    </.button>
   </div>
 </div>
 
-<div class="accordion mt-10">
-  <div class="accordion-header cursor-pointer flex justify-between items-center p-4 border-b border-gray-300">
-    <div class="text-2xl">Credentials</div>
-    <svg class="w-6 h-6 transition-transform" id="credentials-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-    </svg>
+<div class="mt-10">
+  <!-- Contacts List Accordion -->
+  <div id="accordion-contacts" data-accordion="collapse">
+    <h2 id="accordion-collapse-heading-contacts">
+      <button type="button" class="flex items-center justify-between w-full p-5 font-medium text-left text-black text-2xl border border-gray-200 focus:ring-4 focus:ring-gray-200" data-accordion-target="#accordion-collapse-body-contacts" aria-expanded="false" aria-controls="accordion-collapse-body-contacts">
+        <span>Contacts List</span>
+        <svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06-.02L10 10.8l3.71-3.61a.75.75 0 011.05 1.06l-4 3.9a.75.75 0 01-1.06 0l-4-3.9a.75.75 0 01-.02-1.05z" clip-rule="evenodd"></path>
+        </svg>
+      </button>
+    </h2>
+    <div id="accordion-collapse-body-contacts" class="hidden" aria-labelledby="accordion-collapse-heading-contacts">
+      <div class="p-5 border border-t-0 border-gray-200">
+        <div :if={@contact_list}>
+          <%= @contact_list.name %>
+          <%= @contact_list.people_count %>
+        </div>
+        <.button :if={@contact_lists != []} phx-click={JS.push("show_modal", value: %{modal: :list_selector})}>
+          Select contact list
+        </.button>
+        
+        <.button phx-click={JS.push("show_modal", value: %{modal: :contact_list_creator})}>
+          Add contacts
+        </.button>
+      </div>
+    </div>
   </div>
-  <div class="accordion-body p-4 hidden">
-    <.button phx-click={JS.push("show_modal", value: %{modal: :sender_profile_selector})}>
-      Select contact list
-    </.button>
+</div>
+
+<div class="mt-10">
+  <!-- Collapsible Accordion for Credentials -->
+  <div id="accordion-credentials">
+    <div id="accordion-collapse" data-accordion="collapse">
+      <h2 id="accordion-collapse-heading-1">
+        <button type="button" class="flex items-center justify-between w-full p-5 font-medium text-left text-black text-2xl border border-gray-200 focus:ring-4 focus:ring-gray-200" data-accordion-target="#accordion-collapse-body-1" aria-expanded="false" aria-controls="accordion-collapse-body-1">
+          <span>Credentials</span>
+          <svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06-.02L10 10.8l3.71-3.61a.75.75 0 011.05 1.06l-4 3.9a.75.75 0 01-1.06 0l-4-3.9a.75.75 0 01-.02-1.05z" clip-rule="evenodd"></path>
+          </svg>
+        </button>
+      </h2>
+      <div id="accordion-collapse-body-1" class="hidden" aria-labelledby="accordion-collapse-heading-1">
+        <div class="p-5 border border-t-0 border-gray-200">
+          <.button phx-click={JS.push("show_modal", value: %{modal: :sender_profile_selector})}>
+            Select sender profile
+          </.button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -100,80 +123,3 @@
   <.live_component id="add_contacts_component" module={VachanWeb.CampaignBuilder.AddContact}>
   </.live_component>
 </.modal>
-
-<style>
-  .accordion-body.hidden {
-    display: none;
-  }
-  .accordion-body.open {
-    display: block;
-  }
-  .accordion-header svg {
-    transition: transform 0.3s ease;
-  }
-  .accordion-header svg.rotate-180 {
-    transform: rotate(180deg);
-  }
-</style>
-
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const accordionHeaders = document.querySelectorAll('.accordion-header');
-    
-    accordionHeaders.forEach(header => {
-      header.addEventListener('click', () => {
-        const accordionBody = header.nextElementSibling;
-        const accordionIcon = header.querySelector('svg');
-
-        // Close all other accordions
-        document.querySelectorAll('.accordion-body').forEach(body => {
-          if (body !== accordionBody) {
-            body.classList.remove('open');
-            body.classList.add('hidden');
-          }
-        });
-
-        document.querySelectorAll('.accordion-header svg').forEach(icon => {
-          if (icon !== accordionIcon) {
-            icon.classList.remove('rotate-180');
-          }
-        });
-
-        // Toggle the clicked accordion
-        accordionBody.classList.toggle('open');
-        accordionBody.classList.toggle('hidden');
-        accordionIcon.classList.toggle('rotate-180');
-      });
-    });
-
-    // Keep the Content accordion open by default
-    const contentAccordion = document.querySelector('.accordion.m-2 .accordion-body');
-    const contentIcon = document.querySelector('#content-icon');
-    
-    if (contentAccordion) {
-      contentAccordion.classList.add('open');
-      contentAccordion.classList.remove('hidden');
-      contentIcon.classList.add('rotate-180');
-    }
-  });
-</script>
-<style>
-  .accordion-body.hidden {
-    display: none;
-  }
-  .accordion-body.open {
-    display: block;
-  }
-  .accordion-header svg {
-    transition: transform 0.3s ease;
-  }
-  .accordion-header svg.rotate-180 {
-    transform: rotate(180deg);
-  }
-  .accordion-header {
-    transition: background-color 0.3s ease;
-  }
-  .accordion-header:hover {
-    background-color: #f0f0f0; /* Lighter shade of black for hover effect */
-  }
-</style>

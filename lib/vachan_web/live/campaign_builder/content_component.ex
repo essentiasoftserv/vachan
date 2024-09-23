@@ -41,7 +41,6 @@ defmodule VachanWeb.CampaignBuilder.ContentComponent do
         </div>
 
         <div>
-          <h1>extracted variables:</h1>
           <%= for variable <- @column_names do %>
             <%= variable %>
           <% end %>
