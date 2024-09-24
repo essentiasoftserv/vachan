@@ -4,43 +4,74 @@
 </.header>
 
 <div class="m-2">
-  <div class="text-2xl">Content</div>
-  <div>insert the content component here</div>
-  <.live_component
-    module={VachanWeb.CampaignBuilder.ContentComponent}
-    id="content-step"
-    current_user={@current_user}
-    current_org={@current_org}
-    campaign={@campaign}
-    live_action={@live_action}
-    content={@content}
-  >
-  </.live_component>
-</div>
-
-<div class="mt-10">
-  <div class="text-2xl">Contacts List</div>
-  <div>options to choose existing or show modal to add more.</div>
-  <div :if={@contact_list}>
-    <%= @contact_list.name %>
-    <%= @contact_list.people_count %>
+  <!-- Content Accordion (Open by default) -->
+  <div id="accordion-content" data-accordion="collapse">
+    <h2 id="accordion-collapse-heading-content">
+      <button type="button" class="flex items-center justify-between w-full p-5 font-medium text-left text-black text-2xl border border-gray-200 focus:ring-4 focus:ring-gray-200" data-accordion-target="#accordion-collapse-body-content" aria-expanded="true" aria-controls="accordion-collapse-body-content">
+        <span>Content</span>
+        <svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06-.02L10 10.8l3.71-3.61a.75.75 0 011.05 1.06l-4 3.9a.75.75 0 01-1.06 0l-4-3.9a.75.75 0 01-.02-1.05z" clip-rule="evenodd"></path>
+        </svg>
+      </button>
+    </h2>
+    <div id="accordion-collapse-body-content" class="" aria-labelledby="accordion-collapse-heading-content">
+      <div class="p-5">
+        <!-- Show Live Component Here -->
+        <.live_component
+          module={VachanWeb.CampaignBuilder.ContentComponent}
+          id="content-step"
+          current_user={@current_user}
+          current_org={@current_org}
+          campaign={@campaign}
+          live_action={@live_action}
+          content={@content}
+        >
+        </.live_component>
+      </div>
+    </div>
   </div>
-  <.button :if={@contact_lists != []} phx-click={JS.push("show_modal", value: %{modal: :list_selector})}>
-    Select contact list
-  </.button>
-
-  <.button phx-click={JS.push("show_modal", value: %{modal: :contact_list_creator})}>
-    Add contacts
-  </.button>
-
 </div>
 
-<div class="mt-10">
-  <div class="text-2xl">Credentials</div>
-  <div>choose existing or add new</div>
-  <.button phx-click={JS.push("show_modal", value: %{modal: :sender_profile_selector})}>
-    Select contact list
-  </.button>
+<div class="m-2">
+  <!-- Contacts List(Closed by default) -->
+  <div id="accordion-test-content" data-accordion="collapse">
+    <h2 id="accordion-collapse-heading-test-content">
+      <button type="button" class="flex items-center justify-between w-full p-5 font-medium text-left text-black text-2xl border border-gray-200 focus:ring-4 focus:ring-gray-200" data-accordion-target="#accordion-collapse-body-test-content" aria-expanded="false" aria-controls="accordion-collapse-body-test-content">
+        <span>Contacts List</span>
+        <svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06-.02L10 10.8l3.71-3.61a.75.75 0 011.05 1.06l-4 3.9a.75.75 0 01-1.06 0l-4-3.9a.75.75 0 01-.02-1.05z" clip-rule="evenodd"></path>
+        </svg>
+      </button>
+    </h2>
+    <div id="accordion-collapse-body-test-content" class="hidden" aria-labelledby="accordion-collapse-heading-test-content">
+      <div class="p-5">
+        <.button phx-click={JS.push("show_modal", value: %{modal: :contact_list_creator})}>
+          Add contacts
+        </.button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="m-2">
+  <!-- Credentials Accordion (Closed by default) -->
+  <div id="accordion-new-content" data-accordion="collapse">
+    <h2 id="accordion-collapse-heading-new-content">
+      <button type="button" class="flex items-center justify-between w-full p-5 font-medium text-left text-black text-2xl border border-gray-200 focus:ring-4 focus:ring-gray-200" data-accordion-target="#accordion-collapse-body-new-content" aria-expanded="false" aria-controls="accordion-collapse-body-new-content">
+        <span>Credentials</span>
+        <svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06-.02L10 10.8l3.71-3.61a.75.75 0 011.05 1.06l-4 3.9a.75.75 0 01-1.06 0l-4-3.9a.75.75 0 01-.02-1.05z" clip-rule="evenodd"></path>
+        </svg>
+      </button>
+    </h2>
+    <div id="accordion-collapse-body-new-content" class="hidden" aria-labelledby="accordion-collapse-heading-new-content">
+      <div class="p-5">
+        <.button phx-click={JS.push("show_modal", value: %{modal: :sender_profile_selector})}>
+            Select sender profile
+          </.button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div class="mt-10">
