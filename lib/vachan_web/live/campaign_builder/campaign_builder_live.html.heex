@@ -123,7 +123,6 @@
     </.table>
   </div>
 </.modal>
-
 <.modal :if={@modal == :contact_list_creator} id="contact_list_creator" show on_cancel={JS.push("hide_modal")}>
   <.live_component id="add_contacts_component" module={VachanWeb.CampaignBuilder.AddContact}>
   </.live_component>
