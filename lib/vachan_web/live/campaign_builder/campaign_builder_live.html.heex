@@ -79,6 +79,7 @@
   <div>Send</div>
 </div>
 
+<!-- Modals for List Selector, Sender Profile Selector, and Contact List Creator -->
 <.modal :if={@modal == :list_selector} id="select_list_modal" show on_cancel={JS.push("hide_modal")}>
   <div>
     <span class="text-xl">Select a list</span>
@@ -86,20 +87,13 @@
       <:col :let={list} label="List name"><%= list.name %></:col>
       <:col :let={list} label="People count"><%= list.people_count %></:col>
       <:action :let={list}>
-        <.button
-          class={if list.people_count == 0, do: "opacity-50 cursor-not-allowed", else: ""}
-          phx-click={JS.push("select_list", value: %{list_id: list.id})}
-          disabled={list.people_count == 0}
-        >
+        <.button phx-click={JS.push("select_list", value: %{list_id: list.id})} disabled={list.people_count == 0}>
           Select
         </.button>
       </:action>
     </.table>
   </div>
 </.modal>
-
-
-
 
 <.modal :if={@modal == :sender_profile_selector} id="select_sender_profile_modal" show on_cancel={JS.push("hide_modal")}>
   <div>
