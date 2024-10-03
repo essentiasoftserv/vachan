@@ -11,7 +11,7 @@ defmodule VachanWeb.CampaignBuilder.ContentComponent do
             id="content-form"
             for={@form}
             phx-change="validate"
-            phx-submit="save"
+            phx-submit="preview"
             phx-target={@myself}
             class="p-1"
           >
@@ -35,32 +35,39 @@ defmodule VachanWeb.CampaignBuilder.ContentComponent do
             <.input field={@form[:campaign_id]} type="hidden" value={@campaign.id}></.input>
 
             <:actions>
-              <.button phx-disable-with="Saving ... ">Save content</.button>
+              <.button phx-disable-with="Saving ... ">Preview and Send</.button>
             </:actions>
           </.simple_form>
         </div>
 
         <div>
-          <h1>extracted variables:</h1>
           <%= for variable <- @column_names do %>
             <%= variable %>
           <% end %>
         </div>
       <% else %>
-        <.list>
-          <:item title="Subject"><%= @content.subject %></:item>
-          <:item title="Variables">
-            <span>
-              <%= Enum.join(@column_names, ", ") %>
-            </span>
-          </:item>
-          <:item title="Body">
-            <%= for line <- String.split(@content.text_body, "\n") do %>
-              <p class="break-normal"><%= line %></p>
-            <% end %>
-          </:item>
-        </.list>
-        <.button phx-click="edit-mode" phx-target={@myself}>Edit</.button>
+        <!-- Preview Content -->
+        <div class="preview-content">
+          <.list>
+            <:item title="Subject"><%= @content.subject %></:item>
+            <:item title="Variables">
+              <span>
+                <%= Enum.join(@column_names, ", ") %>
+              </span>
+            </:item>
+            <:item title="Body">
+              <%= for line <- String.split(@content.text_body, "\n") do %>
+                <p class="break-normal"><%= line %></p>
+              <% end %>
+            </:item>
+          </.list>
+        </div>
+
+        <!-- Buttons for Back to Editing and Send -->
+        <div class="action-buttons">
+          <.button phx-click="edit-mode" phx-target={@myself}>Back to Editing</.button>
+          <.button phx-click="send-content" phx-target={@myself}>Send</.button>
+        </div>
       <% end %>
     </div>
     """
@@ -101,7 +108,7 @@ defmodule VachanWeb.CampaignBuilder.ContentComponent do
   end
 
   @impl true
-  def handle_event("save", %{"form" => params}, socket) do
+  def handle_event("preview", %{"form" => params}, socket) do
     form = AshPhoenix.Form.validate(socket.assigns.form, params)
 
     case AshPhoenix.Form.submit(form) do
@@ -110,13 +117,19 @@ defmodule VachanWeb.CampaignBuilder.ContentComponent do
 
         {:noreply,
          socket
-         |> put_flash(:info, "Content Saved")
+         |> assign(:content, content)
          |> assign(:mode, :show)}
 
       {:error, form} ->
         IO.inspect(form)
         {:noreply, assign(socket, form: to_form(form))}
     end
+  end
+
+  @impl true
+  def handle_event("send-content", _params, socket) do
+    # Logic for sending the content
+    {:noreply, socket |> put_flash(:info, "Content Sent")}
   end
 
   defp create_form(assigns) do
