@@ -13,7 +13,10 @@ defmodule VachanWeb.ProfileLive.Profile do
       </.header>
 
       <.simple_form for={@form} id="profile-form" phx-change="validate" phx-submit="save">
-        <.input field={@form[:name]} type="text" label="Name" />
+        <.input field={@form[:name]} type="text" label="First Name" />
+        <.input field={@form[:last_name]} type="text" label="Last Name" />
+        <.input field={@form[:email]} type="text" label="Email" value={@email} readonly />
+        <.input field={@form[:company]} type="text" label="Company" />
 
         <:actions>
           <.button phx-disable-with="Saving...">Save Profile</.button>
@@ -31,6 +34,7 @@ defmodule VachanWeb.ProfileLive.Profile do
       socket
       |> assign(:title, "Profile")
       |> assign(page: :profile)
+      |> assign_new(:email, fn -> user.email end)
       |> init_form(user)
 
     {:ok, socket}
@@ -50,14 +54,14 @@ defmodule VachanWeb.ProfileLive.Profile do
     case AshPhoenix.Form.submit(form) do
       {:ok, result} ->
         form =
-          result
-          |> AshPhoenix.Form.for_update(:update,
+          AshPhoenix.Form.for_update(result, :update,
             api: Profiles,
             actor: socket.assigns.current_user,
             forms: [auto?: true]
           )
+          |> to_form()
 
-        {:noreply, assign(socket, form: to_form(form))}
+        {:noreply, assign(socket, form: form)}
 
       {:error, form} ->
         {:noreply, assign(socket, form: to_form(form))}
@@ -67,26 +71,26 @@ defmodule VachanWeb.ProfileLive.Profile do
   defp init_form(socket, user) do
     case Ash.get(Profiles.Profile, user.id, actor: user) do
       {:ok, profile} ->
-        assign(socket,
-          form:
-            AshPhoenix.Form.for_update(profile, :update,
-              api: Profiles,
-              actor: user,
-              forms: [auto?: true]
-            )
-            |> to_form()
-        )
+        form =
+          AshPhoenix.Form.for_update(profile, :update,
+            api: Profiles,
+            actor: user,
+            forms: [auto?: true]
+          )
+          |> to_form()
+
+        assign(socket, form: form)
 
       {:error, _} ->
-        assign(socket,
-          form:
-            AshPhoenix.Form.for_create(Profiles.Profile, :create,
-              api: Profiles,
-              actor: user,
-              forms: [auto?: true]
-            )
-            |> to_form()
-        )
+        form =
+          AshPhoenix.Form.for_create(Profiles.Profile, :create,
+            api: Profiles,
+            actor: user,
+            forms: [auto?: true]
+          )
+          |> to_form()
+
+        assign(socket, form: form)
     end
   end
 end
