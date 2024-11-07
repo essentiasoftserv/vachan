@@ -2,56 +2,50 @@
   Builder UI
   <:actions></:actions>
 </.header>
+
 <div class="m-2">
-  <div class="text-2xl">Content</div>
-  <div>insert the content component here</div>
-  <.live_component
-    module={VachanWeb.CampaignBuilder.ContentComponent}
-    id="content-step"
-    current_user={@current_user}
-    current_org={@current_org}
-    campaign={@campaign}
-    live_action={@live_action}
-    content={@content}
-  >
-  </.live_component>
-</div>
-<div class="mt-10">
-  <div class="text-2xl">Contacts List</div>
-  <div>options to choose existing or show modal to add more.</div>
-  <div :if={@contact_list}>
-    <%= @contact_list.name %>
-    <%= @contact_list.people_count %>
+  <!-- Content Accordion (Open by default) -->
+  <div id="accordion-content" data-accordion="collapse">
+    <h2 id="accordion-collapse-heading-content">
+      <button type="button" class="text-xl flex items-center justify-between w-full p-5 font-medium text-left text-black  border border-gray-200 focus:ring-4 focus:ring-gray-200" data-accordion-target="#accordion-collapse-body-content" aria-expanded="true" aria-controls="accordion-collapse-body-content">
+        <span>Content</span>
+        <svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06-.02L10 10.8l3.71-3.61a.75.75 0 011.05 1.06l-4 3.9a.75.75 0 01-1.06 0l-4-3.9a.75.75 0 01-.02-1.05z" clip-rule="evenodd"></path>
+        </svg>
+      </button>
+    </h2>
+    <div id="accordion-collapse-body-content" class="" aria-labelledby="accordion-collapse-heading-content">
+      <div class="p-5">
+        <!-- Show Live Component Here -->
+        <.live_component
+          module={VachanWeb.CampaignBuilder.ContentComponent}
+          id="content-step"
+          current_user={@current_user}
+          current_org={@current_org}
+          campaign={@campaign}
+          live_action={@live_action}
+          content={@content}
+        >
+        </.live_component>
+      </div>
+    </div>
   </div>
 </div>
 
 <div class="m-2">
-  <!-- Contacts List Accordion (Closed by default) -->
-  <div id="accordion-contacts" data-accordion="collapse">
-    <h2 id="accordion-collapse-heading-contacts">
-      <button type="button" class="flex items-center justify-between w-full p-5 font-medium text-left text-black text-2xl border border-gray-200 focus:ring-4 focus:ring-gray-200" data-accordion-target="#accordion-collapse-body-contacts" aria-expanded="false" aria-controls="accordion-collapse-body-contacts">
+  <!-- Contacts List(Closed by default) -->
+  <div id="accordion-test-content" data-accordion="collapse">
+    <h2 id="accordion-collapse-heading-test-content">
+      <button type="button" class="text-xl flex items-center justify-between w-full p-5 font-medium text-left text-black border border-gray-200 focus:ring-4 focus:ring-gray-200" data-accordion-target="#accordion-collapse-body-test-content" aria-expanded="false" aria-controls="accordion-collapse-body-test-content">
         <span>Contacts List</span>
         <svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
           <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06-.02L10 10.8l3.71-3.61a.75.75 0 011.05 1.06l-4 3.9a.75.75 0 01-1.06 0l-4-3.9a.75.75 0 01-.02-1.05z" clip-rule="evenodd"></path>
         </svg>
       </button>
     </h2>
-    <div id="accordion-collapse-body-contacts" class="hidden" aria-labelledby="accordion-collapse-heading-contacts">
+    <div id="accordion-collapse-body-test-content" class="hidden" aria-labelledby="accordion-collapse-heading-test-content">
       <div class="p-5">
-        <div :if={@contact_list} class="bg-white rounded-lg p-4 max-w-md mb-2">
-          <div class="flex justify-between items-center">
-            <div>
-              <div class="text-xl font-semibold">List: <%= @contact_list.name %></div>
-              <div class="text-gray-600">People count: <%= @contact_list.people_count %></div>
-            </div>
-          </div>
-        </div>
-
-        <.button class="mt-4 mr-10" :if={@contact_lists != []} phx-click={JS.push("show_modal", value: %{modal: :list_selector})}>
-          Select list
-        </.button>
-
-        <.button class="mt-4" phx-click={JS.push("show_modal", value: %{modal: :contact_list_creator})}>
+        <.button phx-click={JS.push("show_modal", value: %{modal: :contact_list_creator})}>
           Add contacts
         </.button>
       </div>
@@ -61,58 +55,28 @@
 
 <div class="m-2">
   <!-- Credentials Accordion (Closed by default) -->
-  <div id="accordion-credentials" data-accordion="collapse">
-    <h2 id="accordion-collapse-heading-credentials">
-      <button type="button" class="flex items-center justify-between w-full p-5 font-medium text-left text-black text-2xl border border-gray-200 focus:ring-4 focus:ring-gray-200" data-accordion-target="#accordion-collapse-body-credentials" aria-expanded="false" aria-controls="accordion-collapse-body-credentials">
+  <div id="accordion-new-content" data-accordion="collapse">
+    <h2 id="accordion-collapse-heading-new-content">
+      <button type="button" class="text-xl flex items-center justify-between w-full p-5 font-medium text-left text-black border border-gray-200 focus:ring-4 focus:ring-gray-200" data-accordion-target="#accordion-collapse-body-new-content" aria-expanded="false" aria-controls="accordion-collapse-body-new-content">
         <span>Credentials</span>
         <svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
           <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06-.02L10 10.8l3.71-3.61a.75.75 0 011.05 1.06l-4 3.9a.75.75 0 01-1.06 0l-4-3.9a.75.75 0 01-.02-1.05z" clip-rule="evenodd"></path>
         </svg>
       </button>
     </h2>
-    <div id="accordion-collapse-body-credentials" class="hidden" aria-labelledby="accordion-collapse-heading-credentials">
+    <div id="accordion-collapse-body-new-content" class="hidden" aria-labelledby="accordion-collapse-heading-new-content">
       <div class="p-5">
-      <div :if={@sender_profile} class="bg-white rounded-lg p-4 max-w-md mb-2">
-          <div class="flex justify-between items-center">
-            <div>
-              <div class="text-xl font-semibold">Title: <%= @sender_profile.title %></div>
-              <div class="text-gray-600">Name: <%= @sender_profile.name %></div>
-              <div class="text-gray-600">Email: <%= @sender_profile.email %></div>
-              <div class="text-gray-600">Smtp Host: <%= @sender_profile.smtp_host %></div>
-              <div class="text-gray-600">Smtp Port: <%= @sender_profile.smtp_port %></div>
-              
-            </div>
-          </div>
-        </div>
-        <.button class="mt-2" phx-click={JS.push("show_modal", value: %{modal: :sender_profile_selector})}>
-          Select sender profile
-        </.button>
+        <.button phx-click={JS.push("show_modal", value: %{modal: :sender_profile_selector})}>
+            Select sender profile
+          </.button>
       </div>
     </div>
-<div class="accordion m-2">
-  <div class="accordion-header cursor-pointer flex justify-between items-center p-4 border-b border-gray-300">
-    <div class="text-2xl">Content</div>
-    <svg class="w-6 h-6 transition-transform" id="content-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-    </svg>
-  </div>
-  <div class="accordion-body p-4 open">
-    <.live_component
-      module={VachanWeb.CampaignBuilder.ContentComponent}
-      id="content-step"
-      current_user={@current_user}
-      current_org={@current_org}
-      campaign={@campaign}
-      live_action={@live_action}
-      content={@content}
-    >
-    </.live_component>
   </div>
 </div>
 
 
-<div class="mt-10">
-  <.button phx-click={JS.navigate(~p"/campaigns/#{@campaign.id}/preview")}>
+<div class="my-8 mx-8">
+  <.button phx-click={JS.navigate(~p"/campaigns/#{@campaign.id}/preview")} class="w-fit p-2">
     Preview and Send
   </.button>
 </div>
@@ -125,7 +89,11 @@
       <:col :let={list} label="List name"><%= list.name %></:col>
       <:col :let={list} label="People count"><%= list.people_count %></:col>
       <:action :let={list}>
-        <.button phx-click={JS.push("select_list", value: %{list_id: list.id})} disabled={list.people_count == 0}>
+        <.button
+          class={if list.people_count == 0, do: "opacity-50 cursor-not-allowed", else: ""}
+          phx-click={JS.push("select_list", value: %{list_id: list.id})}
+          disabled={list.people_count == 0}
+        >
           Select
         </.button>
       </:action>
