@@ -110,12 +110,14 @@
   </div>
 </div>
 
+
 <div class="mt-10">
-  <div class="text-2xl">Send</div>
-  <div>Send</div>
+  <.button phx-click={JS.navigate(~p"/campaigns/#{@campaign.id}/preview")}>
+    Preview and Send
+  </.button>
 </div>
 
-<!-- Modals for List Selector, Sender Profile Selector, and Contact List Creator -->
+
 <.modal :if={@modal == :list_selector} id="select_list_modal" show on_cancel={JS.push("hide_modal")}>
   <div>
     <span class="text-xl">Select a list</span>
@@ -149,3 +151,4 @@
   <.live_component id="add_contacts_component" module={VachanWeb.CampaignBuilder.AddContact}>
   </.live_component>
 </.modal>
+
