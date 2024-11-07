@@ -31,28 +31,16 @@
 </div>
 
 <div class="m-2">
-<<<<<<< HEAD
-  <!-- Contacts List(Closed by default) -->
-  <div id="accordion-test-content" data-accordion="collapse">
-    <h2 id="accordion-collapse-heading-test-content">
-      <button type="button" class="flex items-center justify-between w-full p-5 font-medium text-left text-black text-2xl border border-gray-200 focus:ring-4 focus:ring-gray-200" data-accordion-target="#accordion-collapse-body-test-content" aria-expanded="false" aria-controls="accordion-collapse-body-test-content">
-=======
   <!-- Contacts List Accordion (Closed by default) -->
   <div id="accordion-contacts" data-accordion="collapse">
     <h2 id="accordion-collapse-heading-contacts">
       <button type="button" class="flex items-center justify-between w-full p-5 font-medium text-left text-black text-2xl border border-gray-200 focus:ring-4 focus:ring-gray-200" data-accordion-target="#accordion-collapse-body-contacts" aria-expanded="false" aria-controls="accordion-collapse-body-contacts">
->>>>>>> ec8a550 (resolve)
         <span>Contacts List</span>
         <svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
           <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06-.02L10 10.8l3.71-3.61a.75.75 0 011.05 1.06l-4 3.9a.75.75 0 01-1.06 0l-4-3.9a.75.75 0 01-.02-1.05z" clip-rule="evenodd"></path>
         </svg>
       </button>
     </h2>
-<<<<<<< HEAD
-    <div id="accordion-collapse-body-test-content" class="hidden" aria-labelledby="accordion-collapse-heading-test-content">
-      <div class="p-5">
-        <.button phx-click={JS.push("show_modal", value: %{modal: :contact_list_creator})}>
-=======
     <div id="accordion-collapse-body-contacts" class="hidden" aria-labelledby="accordion-collapse-heading-contacts">
       <div class="p-5">
         <div :if={@contact_list} class="bg-white rounded-lg p-4 max-w-md mb-2">
@@ -69,7 +57,6 @@
         </.button>
 
         <.button class="mt-4" phx-click={JS.push("show_modal", value: %{modal: :contact_list_creator})}>
->>>>>>> ec8a550 (resolve)
           Add contacts
         </.button>
       </div>
@@ -79,34 +66,32 @@
 
 <div class="m-2">
   <!-- Credentials Accordion (Closed by default) -->
-<<<<<<< HEAD
-  <div id="accordion-new-content" data-accordion="collapse">
-    <h2 id="accordion-collapse-heading-new-content">
-      <button type="button" class="flex items-center justify-between w-full p-5 font-medium text-left text-black text-2xl border border-gray-200 focus:ring-4 focus:ring-gray-200" data-accordion-target="#accordion-collapse-body-new-content" aria-expanded="false" aria-controls="accordion-collapse-body-new-content">
-=======
   <div id="accordion-credentials" data-accordion="collapse">
     <h2 id="accordion-collapse-heading-credentials">
       <button type="button" class="flex items-center justify-between w-full p-5 font-medium text-left text-black text-2xl border border-gray-200 focus:ring-4 focus:ring-gray-200" data-accordion-target="#accordion-collapse-body-credentials" aria-expanded="false" aria-controls="accordion-collapse-body-credentials">
->>>>>>> ec8a550 (resolve)
         <span>Credentials</span>
         <svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
           <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06-.02L10 10.8l3.71-3.61a.75.75 0 011.05 1.06l-4 3.9a.75.75 0 01-1.06 0l-4-3.9a.75.75 0 01-.02-1.05z" clip-rule="evenodd"></path>
         </svg>
       </button>
     </h2>
-<<<<<<< HEAD
-    <div id="accordion-collapse-body-new-content" class="hidden" aria-labelledby="accordion-collapse-heading-new-content">
-      <div class="p-5">
-        <.button phx-click={JS.push("show_modal", value: %{modal: :sender_profile_selector})}>
-            Select sender profile
-          </.button>
-=======
     <div id="accordion-collapse-body-credentials" class="hidden" aria-labelledby="accordion-collapse-heading-credentials">
       <div class="p-5">
-        <.button phx-click={JS.push("show_modal", value: %{modal: :sender_profile_selector})}>
+      <div :if={@sender_profile} class="bg-white rounded-lg p-4 max-w-md mb-2">
+          <div class="flex justify-between items-center">
+            <div>
+              <div class="text-xl font-semibold">Title: <%= @sender_profile.title %></div>
+              <div class="text-gray-600">Name: <%= @sender_profile.name %></div>
+              <div class="text-gray-600">Email: <%= @sender_profile.email %></div>
+              <div class="text-gray-600">Smtp Host: <%= @sender_profile.smtp_host %></div>
+              <div class="text-gray-600">Smtp Port: <%= @sender_profile.smtp_port %></div>
+              
+            </div>
+          </div>
+        </div>
+        <.button class="mt-2" phx-click={JS.push("show_modal", value: %{modal: :sender_profile_selector})}>
           Select sender profile
         </.button>
->>>>>>> ec8a550 (resolve)
       </div>
     </div>
 =======
@@ -145,17 +130,9 @@
       <:col :let={list} label="List name"><%= list.name %></:col>
       <:col :let={list} label="People count"><%= list.people_count %></:col>
       <:action :let={list}>
-<<<<<<< HEAD
-        <%= if list.people_count > 0 do %>
-          <.button phx-click={JS.push("select_list", value: %{list_id: list.id})}>Select</.button>
-        <% else %>
-          -
-        <% end %>
-=======
         <.button phx-click={JS.push("select_list", value: %{list_id: list.id})} disabled={list.people_count == 0}>
           Select
         </.button>
->>>>>>> ec8a550 (resolve)
       </:action>
     </.table>
   </div>
