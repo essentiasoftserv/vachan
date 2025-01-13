@@ -28,22 +28,22 @@ import "flowbite/dist/flowbite.phoenix.js";
 
 // Initialize GrapesJS when the document is loaded
 document.addEventListener("DOMContentLoaded", () => {
-  const editor = GrapesJS.init({
-    container: "#grapesjs", // Replace this with the ID of your GrapesJS element
-    // Specify other GrapesJS options here
-    fromElement: true,
-    plugins: [grapesJSMJML],
-    pluginOpts: {
-      [grapesJSMJML]: {},
-    },
-    components: `
-      <mj-section>
-        <mj-column>
-          <mj-text>Hello, world!</mj-text>
-        </mj-column>
-      </mj-section>
-    `,
-  });
+  // const editor = GrapesJS.init({
+  //   container: "#grapesjs", // Replace this with the ID of your GrapesJS element
+  //   // Specify other GrapesJS options here
+  //   fromElement: true,
+  //   plugins: [grapesJSMJML],
+  //   pluginOpts: {
+  //     [grapesJSMJML]: {},
+  //   },
+  //   components: `
+  //     <mj-section>
+  //       <mj-column>
+  //         <mj-text>Hello, world!</mj-text>
+  //       </mj-column>
+  //     </mj-section>
+  //   `,
+  // });
 });
 
 let csrfToken = document
